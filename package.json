@@ -1,23 +1,20 @@
 {
   "name": "pfe2020_038_terra_numerica_play",
-  "version": "1.0.0",
-  "description": "\"Terra Numerica est un projet qui a pour but de faire découvrir et d'étendre la culture scientifique, au travers de différents modules tel que Terra Numerica Play, une plateforme numérique ludique répertoriant des jeux en tout genre pour découvrir les sciences numériques. Ce TER se focalise sur le thème “Graphes et Algorithmes”, et aura donc pour objectif de développer le “jeu des gendarmes et du voleur” (voir annexes) avec la possibilité de pouvoir choisir la topologie (configuration) du graphe sur lequel la partie va avoir lieu. Les joueurs aussi auront la possibilité de choisir leur camp (gendarmes ou voleurs), s’ils veulent jouer contre l’ordinateur ou un autre joueur. L'objectif des jeux est d’être une introduction ludique aux sciences du numérique. Dans notre cas, il s’agit d’une introduction aux graphes ainsi qu’à l’algorithmique au travers des stratégies à suivre selon la configuration de la partie (nombre de gendarmes, déplacement du voleur, type de graphe, …)\"",
-  "main": "index.js",
-  "dependencies": {
-    "d3": "^6.2.0"
-  },
-  "devDependencies": {},
+  "version": "0.0.1",
+  "description": "",
+  "keywords": "",
+  "license": "",
+  "author": "Romain GIUNTINI, Gregory HOAREAU, Anthony CHOQUARD",
   "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html --open",
+    "start": "npm run build && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Gregory-Hoareau/TER-TerraNumerica.git"
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
   },
-  "author": "Romain GIUNTINI, Anthony CHOQUARD, Gregory HOAREAU",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Gregory-Hoareau/TER-TerraNumerica/issues"
-  },
-  "homepage": "https://github.com/Gregory-Hoareau/TER-TerraNumerica#readme"
+  "dependencies": {
+    "d3": "^6.2.0"
+  }
 }
