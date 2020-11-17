@@ -33,31 +33,36 @@ function clearGraph() {
 function visualiseMove(graph) {
     //console.log(event);
     //reset graph's nodes color to orignal
-    const circles = document.getElementsByClassName("circle");
-    for(const c of circles) {
-        c.style.fill = originalColor
-    }
-
     const clicked =  event.target;
     console.log(clicked)
-    let edges;
-    for(let i=0; i<circles.length; i++) {
-        if(clicked === circles.item(i)) {
-            edges = graph.edges({id: i});
-        }
+    showPossibleMoves(clicked, graph)
+
+}
+
+function showPossibleMoves(event, graph){
+  const circles = document.getElementsByClassName("circle");
+  for(const c of circles) {
+    c.style.fill = originalColor
+  }
+  let edges;
+  for(let i=0; i<circles.length; i++) {
+    if(event === circles.item(i)) {
+      edges = graph.edges({id: i});
     }
-    //console.log(clicked.__data__);
-    clicked.style.fill = clickedOnColor;
-    for(const e of edges) {
-        circles.item(e.id).style.fill = nearColor;
-    }
+  }
+  //console.log(clicked.__data__);
+  event.style.fill = clickedOnColor;
+  for(const e of edges) {
+    circles.item(e.id).style.fill = nearColor;
+  }
+
+  return edges;
 }
 
 function initNodes(n) {
     for(let i=0; i<n; i++) {
         nodes.push({id: i});
     }
-    
 }
 
 function cycleGenerator(n) {
@@ -148,14 +153,19 @@ function ticked() {
         .attr("cx", function (d) { return d.x+6; })
         .attr("cy", function(d) { return d.y-6; });
 }
-const radius = 32
 
-const circles = d3.range(2).map(i => ({
-  x: Math.random() * (width - radius * 2) + radius,
-  y: Math.random() * (height - radius * 2) + radius,
+const pawn = d3.range(2).map(i => ({
+  x: 100,
+  y: 100 + 100*i,
+  firstMove: true,
+  possiblePoints: [],
+  lastSlot: [],
+
 }));
-svg.selectAll("pasteque")
-  .data(circles)
+const radius = 20;
+const detectRadius = 25;
+svg.selectAll("pawn")
+  .data(pawn)
   .join("circle")
   .attr("cx", d => d.x)
   .attr("cy", d => d.y)
@@ -165,9 +175,17 @@ svg.selectAll("pasteque")
     .on("start", dragstarted)
     .on("drag", dragged)
     .on("end", dragended));
-
+var lastPosX;
+var lastPosY;
+var settedPosition = true;
   function dragstarted(event, d) {
-  d3.select(this).raise().attr("stroke", "black");
+    lastPosX = event.x
+    lastPosY = event.y
+    settedPosition = false;
+    if(!d.firstMove) {
+      showPossibleMoves(d.lastSlot, g)
+    }
+    d3.select(this).raise().attr("stroke", "black");
 }
 
 function dragged(event, d) {
@@ -176,6 +194,41 @@ function dragged(event, d) {
 
 function dragended(event, d) {
   d3.select(this).attr("stroke", null);
+  let circles = document.getElementsByClassName("circle");
+  if(d.firstMove == true) {
+    for (const c of circles) {
+      if (c.cx.baseVal.value - detectRadius <= event.x && event.x <= c.cx.baseVal.value + detectRadius) {
+        if (c.cy.baseVal.value - detectRadius <= event.y && event.y <= c.cy.baseVal.value + detectRadius) {
+          d.possiblePoints = showPossibleMoves(c, g)
+          console.log(d.possiblePoints)
+          d.lastSlot = c;
+          d3.select(this).attr("cx", d.x = c.cx.baseVal.value).attr("cy", d.y = c.cy.baseVal.value);
+          settedPosition = true;
+          d.firstMove = false;
+          break;
+        }
+      }
+    }
+    if (settedPosition == false) {
+      d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+    }
+  }else if(d.firstMove == false){
+    for(const e of d.possiblePoints) {
+      let pos = circles.item(e.id);
+      if (pos.cx.baseVal.value - detectRadius <= event.x && event.x <= pos.cx.baseVal.value + detectRadius) {
+        if (pos.cy.baseVal.value - detectRadius <= event.y && event.y <= pos.cy.baseVal.value + detectRadius) {
+          d.possiblePoints = showPossibleMoves(pos, g)
+          d.lastSlot = pos;
+          d3.select(this).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
+          settedPosition = true;
+          break;
+        }
+      }
+    }
+    if (settedPosition == false) {
+      d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+    }
+  }
 }
 
 
