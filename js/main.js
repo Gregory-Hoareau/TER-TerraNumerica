@@ -1,4 +1,7 @@
+import {Graph} from "./Graph";
+import { Game } from "./Game";
 const d3 = require("d3");
+
 
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 40};
@@ -7,6 +10,9 @@ const height = window.innerHeight - margin.top - margin.bottom;
 
 const originalColor = "#69b3a2"
 const clickedOnColor = "rgb(0,0,255)"
+const nearColor = "rgb(255,0,0)"
+const copsColor = "rgb(0,53,136)"
+const thiefColor = "rgb(125,125,125)"
 
 // append the svg object to the body of the page
 let svg = d3.select("#visualizer")
@@ -25,9 +31,8 @@ function clearGraph() {
     links = [];
 }
 
-function test(event) {
+function visualiseMove(graph) {
     //console.log(event);
-
     //reset graph's nodes color to orignal
     const circles = document.getElementsByClassName("circle");
     for(const c of circles) {
@@ -35,8 +40,18 @@ function test(event) {
     }
 
     const clicked =  event.target;
+    console.log(clicked)
+    let edges;
+    for(let i=0; i<circles.length; i++) {
+        if(clicked === circles.item(i)) {
+            edges = graph.edges({id: i});
+        }
+    }
     //console.log(clicked.__data__);
     clicked.style.fill = clickedOnColor;
+    for(const e of edges) {
+        circles.item(e.id).style.fill = nearColor;
+    }
 }
 
 function initNodes(n) {
@@ -44,6 +59,7 @@ function initNodes(n) {
         nodes.push({id: i});
     }
     nodes.push({id: n});
+    
 }
 
 function cycleGenerator(n) {
@@ -90,6 +106,8 @@ switch(toGenerate) {
         break;
 }
 
+const g = new Graph(nodes, links);
+
 // Initialize the links
 var link = svg
     .selectAll("line")
@@ -106,8 +124,9 @@ var node = svg
     .append("circle")
         .attr("r", 20)
         .attr("class", "circle")
+        .attr("draggable", true)
         .style("fill", originalColor)
-        .on("click", test)
+        .on("click", visualiseMove.bind(this, g))
 
 // Let's list the force we wanna apply on the network
 var simulation = d3.forceSimulation(nodes)             // Force algorithm is applied to data.nodes
@@ -115,7 +134,7 @@ var simulation = d3.forceSimulation(nodes)             // Force algorithm is app
         .id(function(d) { return d.id; })                     // This provide  the id of a node
         .links(links)                                    // and this the list of links
     )
-    .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+    .force("charge", d3.forceManyBody().strength(-100))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
     .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
     .on("end", ticked);
 
@@ -161,6 +180,10 @@ function dragended(event, d) {
   d3.select(this).attr("stroke", null);
 }
 
+
+
+const game = new Game(g, 1, 1, [1])
+game.play();
 
 
 // d3.select("body").append("span")
