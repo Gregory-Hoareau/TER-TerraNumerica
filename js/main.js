@@ -1,5 +1,4 @@
 import {Graph} from "./Graph";
-import { Game } from "./Game";
 const d3 = require("d3");
 
 
@@ -58,7 +57,6 @@ function initNodes(n) {
     for(let i=0; i<n; i++) {
         nodes.push({id: i});
     }
-    nodes.push({id: n});
     
 }
 
@@ -150,7 +148,7 @@ function ticked() {
         .attr("cx", function (d) { return d.x+6; })
         .attr("cy", function(d) { return d.y-6; });
 }
-radius = 32
+const radius = 32
 
 const circles = d3.range(2).map(i => ({
   x: Math.random() * (width - radius * 2) + radius,
