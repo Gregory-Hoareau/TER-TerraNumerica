@@ -27,7 +27,7 @@ function clearGraph() {
 
 function test(event) {
     //console.log(event);
-    
+
     //reset graph's nodes color to orignal
     const circles = document.getElementsByClassName("circle");
     for(const c of circles) {
@@ -131,6 +131,37 @@ function ticked() {
         .attr("cx", function (d) { return d.x+6; })
         .attr("cy", function(d) { return d.y-6; });
 }
+radius = 32
+
+const circles = d3.range(2).map(i => ({
+  x: Math.random() * (width - radius * 2) + radius,
+  y: Math.random() * (height - radius * 2) + radius,
+}));
+svg.selectAll("pasteque")
+  .data(circles)
+  .join("circle")
+  .attr("cx", d => d.x)
+  .attr("cy", d => d.y)
+  .attr("r", radius)
+  .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
+  .call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended));
+
+  function dragstarted(event, d) {
+  d3.select(this).raise().attr("stroke", "black");
+}
+
+function dragged(event, d) {
+  d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+}
+
+function dragended(event, d) {
+  d3.select(this).attr("stroke", null);
+}
+
+
 
 // d3.select("body").append("span")
 //     .text("Hello, world!");
