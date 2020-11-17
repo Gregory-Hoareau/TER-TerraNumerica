@@ -182,10 +182,6 @@ function dragended(event, d) {
 
 
 
-const game = new Game(g, 1, 1, [1])
-game.play();
-
-
 // d3.select("body").append("span")
 //     .text("Hello, world!");
 
