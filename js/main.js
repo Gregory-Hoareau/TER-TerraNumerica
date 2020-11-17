@@ -2,8 +2,11 @@ const d3 = require("d3");
 
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 40};
-const width = 400 - margin.left - margin.right;
-const height = 400 - margin.top - margin.bottom;
+const width = window.innerWidth - margin.left - margin.right;
+const height = window.innerHeight - margin.top - margin.bottom;
+
+const originalColor = "#69b3a2"
+const clickedOnColor = "rgb(0,0,255)"
 
 // append the svg object to the body of the page
 let svg = d3.select("#visualizer")
@@ -13,92 +16,79 @@ let svg = d3.select("#visualizer")
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-const nodes = [
-    {
-        "id": 1,
-        "name": "A"
-    },
-    {
-        "id": 2,
-        "name": "B"
-    },
-    {
-        "id": 3,
-        "name": "C"
-    },
-    {
-        "id": 4,
-        "name": "D"
-    },
-    {
-        "id": 5,
-        "name": "E"
-    },
-    {
-        "id": 6,
-        "name": "F"
-    },
-    {
-        "id": 7,
-        "name": "G"
-    },
-    {
-        "id": 8,
-        "name": "H"
-    },
-    {
-        "id": 9,
-        "name": "I"
-    },
-    {
-        "id": 10,
-        "name": "J"
-    }
-];
+let nodes = [];
 
-const links = [
-    {
-        "source": 1,
-        "target": 2
-    },
-    {
-        "source": 1,
-        "target": 5
-    },
-    {
-        "source": 1,
-        "target": 6
-    },
+let links = [];
 
-    {
-        "source": 2,
-        "target": 3
-    },
-    {
-        "source": 2,
-        "target": 7
-    },
-    {
-        "source": 3,
-        "target": 4
-    },
-     {
-        "source": 8,
-        "target": 3
-    },
-    {
-        "source": 4,
-        "target": 5
-    },
-    {
-        "source": 4,
-        "target": 9
-    },
-    {
-        "source": 5,
-        "target": 10
+function clearGraph() {
+    nodes = [];
+    links = [];
+}
+
+function test(event) {
+    //console.log(event);
+    
+    //reset graph's nodes color to orignal
+    const circles = document.getElementsByClassName("circle");
+    for(const c of circles) {
+        c.style.fill = originalColor
     }
-];
+
+    const clicked =  event.target;
+    //console.log(clicked.__data__);
+    clicked.style.fill = clickedOnColor;
+}
+
+function initNodes(n) {
+    for(let i=0; i<n; i++) {
+        nodes.push({id: i});
+    }
+    nodes.push({id: n});
+}
+
+function cycleGenerator(n) {
+    clearGraph()
+    initNodes(n);
+
+    for(let i=0; i<n-1; i++) {
+        links.push({source:i, target: i+1})
+    }
+    links.push({source: n-1, target: 0})
+}
+
+function gridGenerator(long, lar) {
+    clearGraph()
+    const n = long*lar;
+    initNodes(n)
+
+    //construct grid links
+    let count = 0;
+    for(let i=0; i<lar; i++) {
+        for(let j=0; j<long-1; j++) {
+            links.push({source: count, target: count+1})
+            count++;
+        }
+        count++
+    }
+
+    for(let i=0; i<lar-1; i++) {
+        for(let j=0; j<long; j++) {
+            links.push({source: (long*i)+j, target: (long*i)+j+long});
+        }
+    }
+    console.log(links)
+}
+const toGenerate = "grid";
+switch(toGenerate) {
+    case "cycle":
+        cycleGenerator(5)
+        break;
+    case "grid":
+        gridGenerator(4,4)
+        break;
+    default:
+        break;
+}
 
 // Initialize the links
 var link = svg
@@ -115,7 +105,9 @@ var node = svg
     .enter()
     .append("circle")
         .attr("r", 20)
-        .style("fill", "#69b3a2")
+        .attr("class", "circle")
+        .style("fill", originalColor)
+        .on("click", test)
 
 // Let's list the force we wanna apply on the network
 var simulation = d3.forceSimulation(nodes)             // Force algorithm is applied to data.nodes
