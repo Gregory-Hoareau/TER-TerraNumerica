@@ -7,6 +7,10 @@ const margin = {top: 10, right: 30, bottom: 30, left: 40};
 const width = window.innerWidth - margin.left - margin.right;
 const height = window.innerHeight - margin.top - margin.bottom;
 
+const copsW = document.getElementById("copsWin")
+copsW.hidden = true;
+const replayBtn = document.getElementById("replayBtn")
+replayBtn.addEventListener("click", replay)
 const originalColor = "#69b3a2"
 const clickedOnColor = "rgb(0,0,255)"
 const nearColor = "rgb(255,0,0)"
@@ -154,7 +158,7 @@ function ticked() {
         .attr("cy", function(d) { return d.y-6; });
 }
 
-const pawn = d3.range(2).map(i => ({
+let pawn = d3.range(2).map(i => ({
   x: 100,
   y: 100 + 100*i,
   firstMove: true,
@@ -190,6 +194,14 @@ var settedPosition = true;
 
 function dragged(event, d) {
   d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+}
+
+function checkEnd(){
+  if (pawn[0].x == pawn[1].x){
+    if (pawn[0].y == pawn[1].y){
+      copsW.hidden = false;
+    }
+  }
 }
 
 function dragended(event, d) {
@@ -229,8 +241,12 @@ function dragended(event, d) {
       d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
     }
   }
+  checkEnd();
 }
 
+function replay() {
+    document.location.reload(true);
+}
 
 
 // d3.select("body").append("span")
