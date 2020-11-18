@@ -25,10 +25,9 @@ const thiefColor = "rgb(125,125,125)"
 let svg = d3.select("#visualizer")
     .append("svg")
       // .attr("viewBox", '0 0' + widh + ' ' + height)
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", width)
+      .attr("height", height)
     .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 let nodes = [];
 let links = [];
@@ -130,8 +129,8 @@ let grid = {
         for(var j = 0 ; j < lar ; ++j) {
           this.cells.push({
             id: id,
-            x: i * width/long,
-            y: j * height/lar,
+            x: i * width/long + (width/long)/2,
+            y: j * height/lar + (height/lar)/2,
             occupied: false
           });
           id++;
@@ -220,8 +219,8 @@ function ticked() {
       .each( (d) => {
         let gridpoint = grid.getCell(d);
         if (gridpoint) {
-          d.x += (gridpoint.x - d.x) * 0.5;
-          d.y += (gridpoint.y - d.y) * 0.5;
+          d.x += (gridpoint.x - d.x);
+          d.y += (gridpoint.y - d.y);
         }
       })
       .attr("cx", (d) => d.x)
