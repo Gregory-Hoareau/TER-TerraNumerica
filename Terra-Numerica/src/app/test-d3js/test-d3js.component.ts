@@ -15,13 +15,15 @@ export class TestD3jsComponent implements OnInit {
   private width = window.innerWidth - this.margin.left - this.margin.right;
   private height = window.innerHeight - this.margin.top - this.margin.bottom;
 
-  private svg;
-  private link;
-  private node;
+  private svg; private link; private node; private pawn;
+  private settedPosition; private lastPosX; private lastPosY;
   private graph: Graph;
   private simulation: Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>;
   private nodes: SimulationNodeDatum[] = []
   private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
+  
+  private radius = 20;
+  private detectRadius = 25;
 
   constructor(private graphService: GraphService) {
   }
@@ -52,6 +54,30 @@ export class TestD3jsComponent implements OnInit {
         .force("charge", d3.forceManyBody().strength(-100))
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
         .on("end", this.ticked.bind(this));
+
+    this.pawn = d3.range(2).map(i => ({
+      x: 100,
+      y: 100 + 100*i,
+      firstMove: true,
+      possiblePoints: [],
+      lastSlot: [],
+    
+    }));
+    this.svg.selectAll("pawn")
+      .data(this.pawn)
+      .join("circle")
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y)
+      .attr("r", this.radius)
+      .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
+      .call(d3.drag()
+        .on("start", this.dragstarted)
+        .on("drag", this.dragged)
+        .on("end", this.dragended));
+
+    var lastPosX;
+    var lastPosY;
+    var settedPosition = true;
   }
 
   initData() {
@@ -72,6 +98,67 @@ export class TestD3jsComponent implements OnInit {
             .attr("class", "circle")
             .style("fill", "#69b3a2")
             .on("click", this.showPossibleMoves.bind(this))
+  }
+
+  dragstarted(event, d) {
+    console.log("BEGIN ON DRAG STARTED")
+    this.lastPosX = event.x
+    this.lastPosY = event.y
+    this.settedPosition = false;
+    if(!d.firstMove) {
+      this.graphService.showPossibleMove(d.lastSlot)
+    }
+    d3.select(event.sourceEvent.target).raise().attr("stroke", "black");
+    console.log("END ON DRAG STARTED")
+  }
+
+  dragged(event, d) {
+    console.log("BEGIN ON DRAGGED")
+    d3.select(event.sourceEvent.target).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+    console.log("END ON DRAGGED")
+  }
+
+  dragended(event, d) {
+    console.log("BEGIN ON DRAG ENDED")
+    d3.select(event.sourceEvent.target).attr("stroke", null);
+    let circles = document.getElementsByClassName("circle");
+    console.log(circles)
+    console.log("END ON DRAG ENDED")
+    /* if(d.firstMove == true) {
+      for (const c of circles) {
+        if (c.cx.baseVal.value - this.detectRadius <= event.x && event.x <= c.cx.baseVal.value + this.detectRadius) {
+          if (c.cy.baseVal.value - this.detectRadius <= event.y && event.y <= c.cy.baseVal.value + this.detectRadius) {
+            d.possiblePoints = this.graphService.showPossibleMove(c)
+            console.log(d.possiblePoints)
+            d.lastSlot = c;
+            d3.select(this).attr("cx", d.x = c.cx.baseVal.value).attr("cy", d.y = c.cy.baseVal.value);
+            settedPosition = true;
+            d.firstMove = false;
+            break;
+          }
+        }
+      }
+      if (settedPosition == false) {
+        d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+      }
+    }else if(d.firstMove == false){
+      for(const e of d.possiblePoints) {
+        let pos = circles.item(e.id);
+        if (pos.cx.baseVal.value - detectRadius <= event.x && event.x <= pos.cx.baseVal.value + detectRadius) {
+          if (pos.cy.baseVal.value - detectRadius <= event.y && event.y <= pos.cy.baseVal.value + detectRadius) {
+            d.possiblePoints = showPossibleMoves(pos, g)
+            d.lastSlot = pos;
+            d3.select(this).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
+            settedPosition = true;
+            break;
+          }
+        }
+      }
+      if (settedPosition == false) {
+        d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+      }
+    }
+    checkEnd(); */
   }
 
   private ticked() {
