@@ -9,6 +9,8 @@ const height = window.innerHeight - margin.top - margin.bottom;
 
 const copsW = document.getElementById("copsWin")
 copsW.hidden = true;
+const warningT = document.getElementById("warningTurn")
+warningT.hidden = true;
 const replayBtn = document.getElementById("replayBtn")
 replayBtn.addEventListener("click", replay)
 const originalColor = "#69b3a2"
@@ -164,7 +166,7 @@ let pawn = d3.range(2).map(i => ({
   firstMove: true,
   possiblePoints: [],
   lastSlot: [],
-
+  yourTurn: true
 }));
 const radius = 20;
 const detectRadius = 25;
@@ -178,7 +180,8 @@ svg.selectAll("pawn")
   .call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
-    .on("end", dragended));
+    .on("end", dragended))
+
 var lastPosX;
 var lastPosY;
 var settedPosition = true;
@@ -207,39 +210,57 @@ function checkEnd(){
 function dragended(event, d) {
   d3.select(this).attr("stroke", null);
   let circles = document.getElementsByClassName("circle");
-  if(d.firstMove == true) {
-    for (const c of circles) {
-      if (c.cx.baseVal.value - detectRadius <= event.x && event.x <= c.cx.baseVal.value + detectRadius) {
-        if (c.cy.baseVal.value - detectRadius <= event.y && event.y <= c.cy.baseVal.value + detectRadius) {
-          d.possiblePoints = showPossibleMoves(c, g)
-          console.log(d.possiblePoints)
-          d.lastSlot = c;
-          d3.select(this).attr("cx", d.x = c.cx.baseVal.value).attr("cy", d.y = c.cy.baseVal.value);
-          settedPosition = true;
-          d.firstMove = false;
-          break;
+  if(d.yourTurn == true) {
+    warningT.hidden = true;
+    if (d.firstMove == true) {
+      for (const c of circles) {
+        if (c.cx.baseVal.value - detectRadius <= event.x && event.x <= c.cx.baseVal.value + detectRadius) {
+          if (c.cy.baseVal.value - detectRadius <= event.y && event.y <= c.cy.baseVal.value + detectRadius) {
+            d.possiblePoints = showPossibleMoves(c, g)
+            console.log(d.possiblePoints)
+            d.lastSlot = c;
+            d3.select(this).attr("cx", d.x = c.cx.baseVal.value).attr("cy", d.y = c.cy.baseVal.value);
+            settedPosition = true;
+            d.firstMove = false;
+            pawn.forEach(p => {
+              if(d != p){
+                p.yourTurn = true;
+              }
+            });
+            d.yourTurn = false;
+            break;
+          }
         }
       }
-    }
-    if (settedPosition == false) {
-      d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
-    }
-  }else if(d.firstMove == false){
-    for(const e of d.possiblePoints) {
-      let pos = circles.item(e.id);
-      if (pos.cx.baseVal.value - detectRadius <= event.x && event.x <= pos.cx.baseVal.value + detectRadius) {
-        if (pos.cy.baseVal.value - detectRadius <= event.y && event.y <= pos.cy.baseVal.value + detectRadius) {
-          d.possiblePoints = showPossibleMoves(pos, g)
-          d.lastSlot = pos;
-          d3.select(this).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
-          settedPosition = true;
-          break;
+      if (settedPosition == false) {
+        d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+      }
+    } else if (d.firstMove == false) {
+      for (const e of d.possiblePoints) {
+        let pos = circles.item(e.id);
+        if (pos.cx.baseVal.value - detectRadius <= event.x && event.x <= pos.cx.baseVal.value + detectRadius) {
+          if (pos.cy.baseVal.value - detectRadius <= event.y && event.y <= pos.cy.baseVal.value + detectRadius) {
+            d.possiblePoints = showPossibleMoves(pos, g)
+            d.lastSlot = pos;
+            d3.select(this).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
+            settedPosition = true;
+            pawn.forEach(p => {
+              if(d != p){
+                p.yourTurn = true;
+              }
+            });
+            d.yourTurn = false;
+            break;
+          }
         }
       }
+      if (settedPosition == false) {
+        d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+      }
     }
-    if (settedPosition == false) {
-      d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
-    }
+  }else if (d.yourTurn == false){
+    d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
+    warningT.hidden = false;
   }
   checkEnd();
 }
