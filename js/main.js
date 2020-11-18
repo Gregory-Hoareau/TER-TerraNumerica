@@ -9,12 +9,7 @@ const margin = {top: 10, right: 30, bottom: 30, left: 40};
 var width = document.getElementById('visualizer').offsetWidth;
 var height = document.getElementById('visualizer').offsetHeight;
 
-const copsW = document.getElementById("copsWin")
-copsW.hidden = true;
-const warningT = document.getElementById("warningTurn")
-warningT.hidden = true;
-const replayBtn = document.getElementById("replayBtn")
-replayBtn.addEventListener("click", replay)
+
 const originalColor = "#69b3a2"
 const clickedOnColor = "rgb(0,0,255)"
 const nearColor = "rgb(255,0,0)"
@@ -28,6 +23,9 @@ let svg = d3.select("#visualizer")
       .attr("width", width)
       .attr("height", height)
     .append("g")
+
+
+
 
 let nodes = [];
 let links = [];
@@ -233,8 +231,8 @@ function ticked() {
 }
 
 let pawn = d3.range(2).map(i => ({
-  x: 100,
-  y: 100 + 100*i,
+  x: 50,
+  y: 50 + 100*i,
   firstMove: true,
   possiblePoints: [],
   lastSlot: [],
@@ -262,6 +260,7 @@ var settedPosition = true;
     lastPosX = event.x
     lastPosY = event.y
     settedPosition = false;
+    d3.selectAll("#warningNotYourTurn").remove();
     if(!d.firstMove) {
       showPossibleMoves(d.lastSlot, g)
     }
@@ -275,7 +274,29 @@ function dragged(event, d) {
 function checkEnd(){
   if (pawn[0].x == pawn[1].x){
     if (pawn[0].y == pawn[1].y){
-      copsW.hidden = false;
+      svg.append("text")
+        .attr("x", width/2 - 175)
+        .attr("y", height - 75)
+        .attr("width", 200)
+        .text( function (d) { return "Le policier a gagné !"; })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "40px")
+        .attr("fill", "blue");
+      svg.append("text")
+        .attr("x", width/2 - 75)
+        .attr("y", height - 25)
+        .attr("width", 50)
+        .text( function (d) { return "Rejouer"; })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "50px")
+        .on("click", function () {
+          replay();
+        });
+
+
+
+
+
     }
   }
 }
@@ -284,7 +305,6 @@ function dragended(event, d) {
   d3.select(this).attr("stroke", null);
   let circles = document.getElementsByClassName("circle");
   if(d.yourTurn == true) {
-    warningT.hidden = true;
     if (d.firstMove == true) {
       for (const c of circles) {
         if (c.cx.baseVal.value - detectRadius <= event.x && event.x <= c.cx.baseVal.value + detectRadius) {
@@ -333,7 +353,15 @@ function dragended(event, d) {
     }
   }else if (d.yourTurn == false){
     d3.select(this).attr("cx", d.x = lastPosX).attr("cy", d.y = lastPosY);
-    warningT.hidden = false;
+    svg.append("text")
+      .attr("id", "warningNotYourTurn")
+      .attr("x", width/2 - 150)
+      .attr("y", 100)
+      .attr("width", 200)
+      .text( function (d) { return "Ce n'est pas votre tour !"; })
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "30px")
+      .attr("fill", "red");
   }
   checkEnd();
 }
@@ -342,6 +370,15 @@ function replay() {
     document.location.reload(true);
 }
 
+
+svg.append("text")
+  .attr("x", width/2 - 200)
+  .attr("y", 50)
+  .attr("width", 200)
+  .text( function (d) { return "c'est au tour du policier"; })
+  .attr("font-family", "sans-serif")
+  .attr("font-size", "40px")
+  .attr("fill", "red");
 
 // d3.select("body").append("span")
 //     .text("Hello, world!");
