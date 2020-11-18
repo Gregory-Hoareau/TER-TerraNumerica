@@ -1,0 +1,16 @@
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#visualizer {
+    flex: 1;
+    margin: 1em;
+    border: solid 1px;
+}

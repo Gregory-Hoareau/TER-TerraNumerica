@@ -4,8 +4,10 @@ const d3 = require("d3");
 
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 40};
-const width = window.innerWidth - margin.left - margin.right;
-const height = window.innerHeight - margin.top - margin.bottom;
+// const width = window.innerWidth - margin.left - margin.right;
+// const height = window.innerHeight - margin.top - margin.bottom;
+var width = document.getElementById('visualizer').offsetWidth;
+var height = document.getElementById('visualizer').offsetHeight;
 
 const copsW = document.getElementById("copsWin")
 copsW.hidden = true;
@@ -20,13 +22,13 @@ const thiefColor = "rgb(125,125,125)"
 // append the svg object to the body of the page
 let svg = d3.select("#visualizer")
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+      // .attr("viewBox", '0 0' + widh + ' ' + height)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 let nodes = [];
-
 let links = [];
 
 function clearGraph() {
@@ -40,7 +42,6 @@ function visualiseMove(graph) {
     const clicked =  event.target;
     console.log(clicked)
     showPossibleMoves(clicked, graph)
-
 }
 
 function showPossibleMoves(event, graph){
@@ -99,8 +100,9 @@ function gridGenerator(long, lar) {
             links.push({source: (long*i)+j, target: (long*i)+j+long});
         }
     }
-    console.log(links)
+    console.log(nodes)
 }
+
 const toGenerate = "grid";
 switch(toGenerate) {
     case "cycle":
@@ -112,6 +114,69 @@ switch(toGenerate) {
     default:
         break;
 }
+
+const GRID_SIZE = 100;
+let grid = {
+  cells: [],
+
+  init: function(long = null, lar = null) {
+    this.cells = [];
+
+    if (long != null && lar != null) {
+      var id = 0;
+      for(var i = 0 ; i < long ; ++i) {
+        for(var j = 0 ; j < lar ; ++j) {
+          this.cells.push({
+            id: id,
+            x: i * width/long,
+            y: j * height/lar,
+            occupied: false
+          });
+          id++;
+        }
+      }
+    } else {
+      for(var i = 0 ; i < width / GRID_SIZE ; ++i) {
+        for(var j = 0 ; j < height / GRID_SIZE ; ++j) {
+          var cell;
+          cell = {
+            x: i * GRID_SIZE,
+            y: j * GRID_SIZE,
+            occupied: false
+          };
+          this.cells.push(cell);
+        }
+      }
+    }
+  },
+
+  sqdist: function(a,b) {
+    return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
+  },
+
+  getCell: function(d) {
+    // console.log(d.id);
+    return this.cells[d.id];
+  },
+
+  occupyNearest: function(p) {
+    var minDist = 1000000;
+    var d;
+    var candidate = null;
+    for (var i = 0 ; i < this.cells.length ; ++i) {
+      if (!this.cells[i].occupied && ( d = this.sqdist(p, this.cells[i])) < minDist) {
+        minDist = d;
+        candidate = this.cells[i];
+      }
+    }
+    if(candidate) {
+      candidate.occupied = true;
+    }
+    return candidate;
+  }
+}
+grid.init(4,4);
+console.log(grid.cells);
 
 const g = new Graph(nodes, links);
 
@@ -136,26 +201,34 @@ var node = svg
         .on("click", visualiseMove.bind(this, g))
 
 // Let's list the force we wanna apply on the network
-var simulation = d3.forceSimulation(nodes)             // Force algorithm is applied to data.nodes
+var simulation = d3.forceSimulation(nodes)                      // Force algorithm is applied to data.nodes
     .force("link", d3.forceLink()                               // This force provides links between nodes
-        .id(function(d) { return d.id; })                     // This provide  the id of a node
-        .links(links)                                    // and this the list of links
+        .id(function(d) { return d.id; })                       // This provide  the id of a node
+        .links(links)                                          // and this the list of links
     )
-    .force("charge", d3.forceManyBody().strength(-100))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+    // .force("charge", d3.forceManyBody().strength(-100))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
     .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
-    .on("end", ticked);
+    .force("distance", () => 1)
+    .on("tick", ticked);
 
 // This function is run at each iteration of the force algorithm, updating the nodes position.
 function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
+    grid.init(4,4);
     node
-        .attr("cx", function (d) { return d.x+6; })
-        .attr("cy", function(d) { return d.y-6; });
+      .each( (d) => {
+        let gridpoint = grid.getCell(d);
+        if (gridpoint) {
+          d.x += (gridpoint.x - d.x) * 0.5;
+          d.y += (gridpoint.y - d.y) * 0.5;
+        }
+      })
+      .attr("cx", (d) => d.x)
+      .attr("cy", (d) => d.y);
+    link
+      .attr("x1", (d) => d.source.x)
+      .attr("y1", (d) => d.source.y)
+      .attr("x2", (d) => d.target.x)
+      .attr("y2", (d) => d.target.y);
 }
 
 let pawn = d3.range(2).map(i => ({
@@ -166,6 +239,7 @@ let pawn = d3.range(2).map(i => ({
   lastSlot: [],
 
 }));
+
 const radius = 20;
 const detectRadius = 25;
 svg.selectAll("pawn")
@@ -179,6 +253,7 @@ svg.selectAll("pawn")
     .on("start", dragstarted)
     .on("drag", dragged)
     .on("end", dragended));
+
 var lastPosX;
 var lastPosY;
 var settedPosition = true;
