@@ -1,12 +1,11 @@
-import { pawns } from './pawn';
+import { Pawns } from './Pawn';
 import { GraphService } from '../_services/graph/graph.service';
 import * as d3 from 'd3';
 
-export class cops extends pawns{
-    role: any;
+export class Cops extends Pawns{
 
-    constructor(private graphServ: GraphService){
-        super(graphServ);
+    constructor(private graphServ: GraphService, x: number, y: number){
+        super(graphServ, x, y);
         d3.select("svg")
         .append('circle')
         //.data(this)

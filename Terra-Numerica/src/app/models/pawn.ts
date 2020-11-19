@@ -1,8 +1,9 @@
+import { ThisReceiver } from '@angular/compiler';
 import * as d3 from 'd3';
 import { GraphService } from '../_services/graph/graph.service';
 
 
-export class pawns {
+export class Pawns {
       x: number;
       y: number;
       firstMove: boolean;
@@ -15,8 +16,13 @@ export class pawns {
       lastPosY;
       settedPosition = true;
 
-      constructor(private graphService: GraphService){
-
+      constructor(private graphService: GraphService, x: number, y: number){
+        this.x = x;
+        this.y = y;
+        this.firstMove = true;
+        this.possiblePoints = [];
+        this.lastSlot = [];
+        this.yourTurn = true;
       }
       dragstarted(event, d) {
         this.lastPosX = event.x
