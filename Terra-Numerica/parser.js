@@ -70,9 +70,10 @@ function generateComponent(name) {
 }
 
 function generateClass(name) {
-    console.log(`> ng g class models/${name}/${name}`)
+    const className = name.charAt(0).toUpperCase() + name.slice(1)
+    console.log(`> ng g class models/${name}/${className}`)
 
-    exec(`ng g class models/${name}/${name}`, (error, stdout, stderr) => {
+    exec(`ng g class models/${name}/${className}`, (error, stdout, stderr) => {
         if(error) {
             console.log(`error: ${error.message}`);
             return;
@@ -88,7 +89,7 @@ function generateClass(name) {
 function generateInterface(name) {
     console.log(`> ng g class models/i-${name}`)
 
-    exec(`ng g interface models/i-${name}`, (error, stdout, stderr) => {
+    exec(`ng g interface models/I${name}`, (error, stdout, stderr) => {
         if(error) {
             console.log(`error: ${error.message}`);
             return;
