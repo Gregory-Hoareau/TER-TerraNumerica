@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "demo": "echo 'Hey, "
+    "generate": "node ./parser.js",
+    "g": "node ./parser.js"
   },
   "private": true,
   "dependencies": {

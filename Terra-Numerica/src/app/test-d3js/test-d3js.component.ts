@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { Simulation, SimulationLinkDatum, SimulationNodeDatum } from 'd3';
-import { D3Node } from 'src/models/node';
 import { GraphService } from '../_services/graph/graph.service';
 import { Graph } from '../_services/graph/Graph';
 
