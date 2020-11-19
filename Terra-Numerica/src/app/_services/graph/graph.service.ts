@@ -48,11 +48,12 @@ export class GraphService {
         edges = this.edges({index: i});
       }
     }
+    console.log(vertex);
     vertex.style.fill = "rgb(0,0,255)";
     for(let i=0; i<edges.length; i++) {
       (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
     }
-  
+
     return edges;
   }
 
