@@ -17,7 +17,7 @@ export class Cops extends Pawns {
             .attr("fill", "rgb(0,0,255)")
             .call(d3.drag()
                 .on("start", this.dragstarted.bind(this))
-                .on("drag", this.dragged)
+                .on("drag", this.dragged.bind(this))
                 .on("end", this.dragended.bind(this)));
       }
 }

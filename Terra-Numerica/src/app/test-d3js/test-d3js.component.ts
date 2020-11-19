@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 import { Simulation, SimulationLinkDatum, SimulationNodeDatum } from 'd3';
 import { GraphService } from '../_services/graph/graph.service';
 import { Graph } from '../_services/graph/Graph';
+import { Pawns } from '../models/Pawn/pawn';
+import { Thief } from '../models/Pawn/Thief/thief';
+import { Cops } from '../models/Pawn/Cops/cops';
 
 @Component({
   selector: 'app-test-d3js',
@@ -12,17 +15,19 @@ import { Graph } from '../_services/graph/Graph';
 export class TestD3jsComponent implements OnInit {
   private margin = {top: 10, right: 30, bottom: 30, left: 40};
   private width;
-  private height; 
+  private height;
+  
 
-  private svg; private link; private node; private pawn;
+  private svg; private link; private node; 
+  private thiefs: Thief[] = [];
+  private cops: Cops[] = [];
   private settedPosition; private lastPosX; private lastPosY;
   private graph: Graph;
   private simulation: Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>;
   private nodes: SimulationNodeDatum[] = []
   private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
 
-  private radius = 20;
-  private detectRadius = 25;
+
 
   constructor(private graphService: GraphService) {
     
@@ -62,30 +67,9 @@ export class TestD3jsComponent implements OnInit {
         .force("charge", d3.forceManyBody().strength(-100))
         .on("tick", this.ticked.bind(this));
 
-    this.pawn = d3.range(2).map(i => ({
-      x: 50,
-      y: 50 + 100 * i,
-      firstMove: true,
-      possiblePoints: [],
-      lastSlot: [],
-      yourTurn: true
-
-    }));
-    this.svg.selectAll('pawn')
-      .data(this.pawn)
-      .join("circle")
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y)
-      .attr("r", this.radius)
-      .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
-      .call(d3.drag()
-        .on("start", this.dragstarted.bind(this))
-        .on("drag", this.dragged)
-        .on("end", this.dragended.bind(this)));
-
-    var lastPosX;
-    var lastPosY;
-    var settedPosition = true;
+    
+    this.cops.push(new Cops(this.graphService, 50, 250));
+    this.thiefs.push(new Thief(this.graphService, 50, 150));
 
     this.svg.append("text")
       .attr("x", this.width/2 - 200)
@@ -117,91 +101,11 @@ export class TestD3jsComponent implements OnInit {
             //.on("click", this.showPossibleMoves.bind(this))
   }
 
-  dragstarted(event, d) {
-    this.lastPosX = event.x
-    this.lastPosY = event.y
-    this.settedPosition = false;
-    d3.selectAll("#warningNotYourTurn").remove();
-    if(!d.firstMove) {
-      this.graphService.showPossibleMove(d.lastSlot)
-    }
-    d3.select(event.sourceEvent.target).raise().attr("stroke", "black");
-  }
-
-  dragged(event, d) {
-    d3.select(this as any).attr("cx", event.x).attr("cy", event.y);
-  }
-
-dragended(event, d) {
-    d3.select(event.sourceEvent.target).attr("stroke", null);
-    let circles = document.getElementsByClassName("circle");
-    if(d.yourTurn == true) {
-      if (d.firstMove == true) {
-        for (let i = 0; i<circles.length; i++ ) {
-          let c = circles[i] as any;
-          if (c.cx.baseVal.value - this.detectRadius <= event.x && event.x <= c.cx.baseVal.value + this.detectRadius) {
-            if (c.cy.baseVal.value - this.detectRadius <= event.y && event.y <= c.cy.baseVal.value + this.detectRadius) {
-              d.possiblePoints = this.showPossibleMoves(c)
-              d.lastSlot = c;
-              d3.select(event.sourceEvent.target).attr("cx", d.x = c.cx.baseVal.value).attr("cy", d.y = c.cy.baseVal.value);
-              this.settedPosition = true;
-              d.firstMove = false;
-              this.pawn.forEach(p => {
-                if(d != p){
-                  p.yourTurn = true;
-                }
-              });
-              d.yourTurn = false;
-              break;
-            }
-          }
-        }
-        if (this.settedPosition == false) {
-          d3.select(event.sourceEvent.target).attr("cx", d.x = this.lastPosX).attr("cy", d.y = this.lastPosY);
-        }
-      } else if (d.firstMove == false) {
-        for (const e of d.possiblePoints) {
-          let pos = circles.item(e.index) as any;
-          if (pos.cx.baseVal.value - this.detectRadius <= event.x && event.x <= pos.cx.baseVal.value + this.detectRadius) {
-            if (pos.cy.baseVal.value - this.detectRadius <= event.y && event.y <= pos.cy.baseVal.value + this.detectRadius) {
-              d.possiblePoints = this.showPossibleMoves(pos)
-              d.lastSlot = pos;
-              d3.select(event.sourceEvent.target).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
-              this.settedPosition = true;
-              this.pawn.forEach(p => {
-                if(d != p){
-                  p.yourTurn = true;
-                }
-              });
-              d.yourTurn = false;
-              break;
-            }
-          }
-        }
-        if (this.settedPosition == false) {
-          d3.select(event.sourceEvent.target).attr("cx", d.x = this.lastPosX).attr("cy", d.y = this.lastPosY);
-        }
-      }
-    }else if (d.yourTurn == false){
-      d3.select(event.sourceEvent.target).attr("cx", d.x = this.lastPosX).attr("cy", d.y = this.lastPosY);
-      this.svg.append("text")
-        .attr("id", "warningNotYourTurn")
-        .attr("x", this.width/2 - 150)
-        .attr("y", 100)
-        .attr("width", 200)
-        .text( function (d) { return "Ce n'est pas votre tour !"; })
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "30px")
-        .attr("fill", "red");
-    }
-  this.checkEnd();
-  }
-
-  replay() {
+  /* replay() {
     location.reload();
-  }
+  } */
 
-  checkEnd(){
+  /* checkEnd(){
     if (this.pawn[0].x == this.pawn[1].x){
       if (this.pawn[0].y == this.pawn[1].y){
         this.svg.append("text")
@@ -222,7 +126,7 @@ dragended(event, d) {
           .on("click", this.replay);
       }
     }
-  }
+  } */
   private grid = {
     cells: [],
     GRID_SIZE: 100,
