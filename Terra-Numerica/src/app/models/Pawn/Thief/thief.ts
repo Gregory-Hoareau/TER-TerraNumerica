@@ -3,13 +3,14 @@ import { GraphService } from 'src/app/_services/graph/graph.service';
 import { Pawns } from '../pawn';
 
 export class Thief extends Pawns {
-    role: any;
+
     constructor(private graphServ: GraphService, x: number, y: number){
         super(graphServ, x, y);
+        this.role = "thief"
         d3.select("svg")
         .append('circle')
-            .datum(function(){ return this; })
-            .attr("class", "pawns")
+            .datum(this)
+            .attr("class", "pawns "+ this.role)
             .attr("cx", this.x)
             .attr("cy", this.y)
             .attr("r", this.radius)
@@ -18,5 +19,6 @@ export class Thief extends Pawns {
                 .on("start", this.dragstarted.bind(this))
                 .on("drag", this.dragged.bind(this))
                 .on("end", this.dragended.bind(this)));
+        console.log(d3.select(".thief").datum());
     }
 }

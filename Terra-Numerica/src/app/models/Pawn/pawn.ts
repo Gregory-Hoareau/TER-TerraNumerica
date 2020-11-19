@@ -6,7 +6,7 @@ import { PawnStateWaitingPlacement } from './PawnState/PawnStateWaitingPlacement
 export class Pawns {
 
     state: PawnState;
-
+    role: string;
     x: number;
     y: number;
     firstMove: boolean;
@@ -37,7 +37,7 @@ export class Pawns {
     }
 
     dragged(event, d) {
-        console.log(d)
+
         this.state.dragged(event, d);
 
         // d3.select(this as any).attr("cx", event.x).attr("cy", event.y);

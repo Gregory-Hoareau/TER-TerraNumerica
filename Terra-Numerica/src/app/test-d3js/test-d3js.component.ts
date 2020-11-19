@@ -67,8 +67,9 @@ export class TestD3jsComponent implements OnInit {
         .force("charge", d3.forceManyBody().strength(-100))
         .on("tick", this.ticked.bind(this));
 
-    
-    this.cops.push(new Cops(this.graphService, 50, 250));
+    for(let i = 0; i<2; i++){
+      this.cops.push(new Cops(this.graphService, 50, 250 + i*100, i));
+    }
     this.thiefs.push(new Thief(this.graphService, 50, 150));
 
     this.svg.append("text")
