@@ -42,10 +42,8 @@ export class TestD3jsComponent implements OnInit {
     console.log(this.height)
     this.svg = d3.select("#visualizer")
     .append("svg")
-        .attr("width", this.width + this.margin.left + this.margin.right)
-        .attr("height", this.height + this.margin.top + this.margin.bottom)
-    .append("g")
-        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        .attr("width", this.width)
+        .attr("height", this.height)
 
 
 
