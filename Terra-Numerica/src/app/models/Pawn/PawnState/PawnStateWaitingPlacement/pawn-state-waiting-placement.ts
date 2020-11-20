@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
+import { environment } from 'src/environments/environment';
 import { PawnState } from '../pawn-state';
 import { PawnStateOnTurn } from '../PawnStateOnTurn/pawn-state-on-turn';
 import { PawnStateWaitingTurn } from '../PawnStateWaitingTurn/pawn-state-waiting-turn';
 
 export class PawnStateWaitingPlacement implements PawnState {
 
-    nextState: PawnState = new PawnStateWaitingTurn();
+    //nextState: PawnState = environment.waitingTurnState //new PawnStateWaitingTurn();
 
     dragstarted(event: any, d: any) {
         d.lastPosX = event.x
@@ -41,7 +42,7 @@ export class PawnStateWaitingPlacement implements PawnState {
         if (!d.settedPosition) {
             return this;
         } else {
-            return this.nextState; 
+            return environment.waitingTurnState; 
         }
 
         // d3.select

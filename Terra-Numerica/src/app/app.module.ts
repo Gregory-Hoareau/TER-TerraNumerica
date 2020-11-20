@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TestD3jsComponent } from './test-d3js/test-d3js.component';
 import { GraphService } from './_services/graph/graph.service';
+import { GameService } from './_services/game/game.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { GraphService } from './_services/graph/graph.service';
     AppRoutingModule
   ],
   providers: [
-    GraphService
+    GraphService,
+    GameService
   ],
   bootstrap: [AppComponent]
 })

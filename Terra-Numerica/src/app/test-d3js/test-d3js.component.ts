@@ -6,6 +6,8 @@ import { Graph } from '../_services/graph/Graph';
 import { Pawns } from '../models/Pawn/pawn';
 import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
+import { PawnStateWaitingPlacement } from '../models/Pawn/PawnState/PawnStateWaitingPlacement/pawn-state-waiting-placement';
+import { GameService } from '../_services/game/game.service';
 
 @Component({
   selector: 'app-test-d3js',
@@ -29,7 +31,7 @@ export class TestD3jsComponent implements OnInit {
 
 
 
-  constructor(private graphService: GraphService) {
+  constructor(private graphService: GraphService, private gameManager: GameService) {
     
   }
 
@@ -63,9 +65,11 @@ export class TestD3jsComponent implements OnInit {
         .on("tick", this.ticked.bind(this));
 
     for(let i = 0; i<2; i++){
-      this.cops.push(new Cops(this.graphService, 50, 250 + i*100, i));
+      this.cops.push(new Cops(this.gameManager, this.graphService, 50, 250 + i*100, i));
     }
-    this.thiefs.push(new Thief(this.graphService, 50, 150));
+    this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
+    this.gameManager.setCops(this.cops);
+    this.gameManager.setThief(this.thiefs)
 
     this.svg.append("text")
       .attr("x", this.width/2 - 200)

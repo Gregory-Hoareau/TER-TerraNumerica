@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
+import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
+import { environment } from 'src/environments/environment';
 import { PawnState } from './PawnState/pawn-state';
 import { PawnStateOnTurn } from './PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import { PawnStateWaitingPlacement } from './PawnState/PawnStateWaitingPlacement/pawn-state-waiting-placement';
@@ -21,8 +23,7 @@ export class Pawns {
     settedPosition = true;
 
     state: PawnState;
-
-    constructor(private graphService: GraphService, x: number, y: number){
+    constructor(private gameManager: GameService,private graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
         this.firstMove = true;
@@ -30,7 +31,7 @@ export class Pawns {
         this.lastSlot = [];
         this.yourTurn = true;
 
-        this.state = new PawnStateWaitingPlacement();
+        this.state = environment.waitingPlacementState;
     }
 
     dragstarted(event, d) {
@@ -43,6 +44,15 @@ export class Pawns {
 
     dragended(event, d) {
         this.state = this.state.dragended(event, d);
+        this.gameManager.update();
+    }
+
+    isWaitingPlacement() {
+        return this.state === environment.waitingPlacementState;
+    }
+
+    onTurn() {
+        return this.state === environment.onTurnState;
     }
 
 }

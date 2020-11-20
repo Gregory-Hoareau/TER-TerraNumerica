@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { environment } from 'src/environments/environment';
 import { PawnState } from '../pawn-state';
 import { PawnStateWaitingTurn } from '../PawnStateWaitingTurn/pawn-state-waiting-turn';
 
@@ -31,8 +32,8 @@ export class PawnStateOnTurn implements PawnState {
         }
         if (d.settedPosition == false){
             d3.select(event.sourceEvent.target).attr("cx", d.x = d.lastPosX).attr("cy", d.y = d.lastPosY);
-            return new PawnStateOnTurn();
+            return this;
         }
-        return new PawnStateWaitingTurn();
+        return environment.waitingTurnState //new PawnStateWaitingTurn();
     }
 }
