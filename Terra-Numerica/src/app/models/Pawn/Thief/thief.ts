@@ -15,7 +15,7 @@ export class Thief extends Pawns {
             .attr("cx", this.x)
             .attr("cy", this.y)
             .attr("r", this.radius)
-            .attr("fill", "rgb(0,255,0)")
+            .attr("fill", "url(#pawnThiefImage)")
             .call(d3.drag()
                 .on("start", this.dragstarted.bind(this))
                 .on("drag", this.dragged.bind(this))

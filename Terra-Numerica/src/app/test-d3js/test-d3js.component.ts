@@ -75,7 +75,7 @@ export class TestD3jsComponent implements OnInit {
       .attr("x", this.width/2 - 200)
       .attr("y", 50)
       .attr("width", 200)
-      .text( function (d) { return "c'est au tour du policier"; })
+      .text( function (d) { return "c'est au tour des policier"; })
       .attr("font-family", "sans-serif")
       .attr("font-size", "40px")
       .attr("fill", "red");

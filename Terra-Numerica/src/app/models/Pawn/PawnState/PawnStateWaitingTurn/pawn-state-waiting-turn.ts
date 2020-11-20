@@ -6,7 +6,7 @@ export class PawnStateWaitingTurn implements PawnState {
         d3.select("svg")
             .append("text")
                 .attr("id", "warningNotYourTurn")
-                .attr("x", 500)
+                .attr("x", 350)
                 .attr("y", 100)
                 .attr("width", 200)
                 .text( function (d) { return "Ce n'est pas votre tour !"; })
