@@ -79,6 +79,38 @@ export class TestD3jsComponent implements OnInit {
       .attr("font-family", "sans-serif")
       .attr("font-size", "40px")
       .attr("fill", "red");
+
+    let patternPawn = this.svg.append("svg")
+                                .attr("id", "mySvg")
+                                .attr("width", 80)
+                                .attr("height", 80)
+                                .append("defs")
+                                  .attr("id", "mdef");
+
+    patternPawn.append("pattern")
+                .attr("id", "pawnThiefImage")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("height", 80)
+                .attr("width", 80)
+                .append("image")
+                  .attr("xlink:href", "../../assets/thief.svg")
+                  .attr("x", 0)
+                  .attr("y", 0)
+                  .attr("height", 80)
+                  .attr("width", 80);
+    patternPawn.append("pattern")
+                .attr("id", "pawnCopsImage")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("height", 80)
+                .attr("width", 80)
+                .append("image")
+                  .attr("xlink:href", "../../assets/police.svg")
+                  .attr("x", 0)
+                  .attr("y", 0)
+                  .attr("height", 80)
+                  .attr("width", 80)
   }
 
   initData() {
