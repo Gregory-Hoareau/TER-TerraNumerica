@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
+import { Pawns } from 'src/app/models/Pawn/pawn';
+import { PawnState } from 'src/app/models/Pawn/PawnState/pawn-state';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
 
@@ -49,16 +51,34 @@ export class GameService {
 
   private startGame() {
     console.log('GAME IS STARTING')
-    for(let i=0; i<this.thiefs.length; i++) {
-      this.thiefs[i].state = environment.onTurnState
-    }
+    this.setPlayersTurn(this.thiefs);
   }
 
   private updateStates() {
     if(this.thiefTurn) {
-      
+      let allThiefHasPlayed = true;
+      for(let i=0; i< this.thiefs.length; i++) {
+        allThiefHasPlayed = allThiefHasPlayed && !this.thiefs[i].onTurn();
+      }
+      this.thiefTurn = !allThiefHasPlayed;
+      if(!this.thiefTurn) {
+        this.setPlayersTurn(this.cops);
+      }
     } else {
+      let allCopsHasPlayed = true;
+      for(let i=0; i< this.thiefs.length; i++) {
+        allCopsHasPlayed = allCopsHasPlayed && !this.thiefs[i].onTurn();
+      }
+      this.thiefTurn = allCopsHasPlayed;
+      if(this.thiefTurn) {
+        this.setPlayersTurn(this.thiefs);
+      }
+    }
+  }
 
+  private setPlayersTurn(players: Pawns[]) {
+    for(let i=0; i<players.length; i++) {
+      players[i].state = environment.onTurnState;
     }
   }
 
