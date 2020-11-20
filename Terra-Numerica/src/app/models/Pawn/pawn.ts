@@ -16,8 +16,8 @@ export class Pawns {
     possiblePoints: any;
     lastSlot: any;
     yourTurn: boolean;
-    radius = 20;
-    detectRadius = 25;
+    radius = 40;
+    detectRadius = 45;
     lastPosX;
     lastPosY;
     settedPosition = true;

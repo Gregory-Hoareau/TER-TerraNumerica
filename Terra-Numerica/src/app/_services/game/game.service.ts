@@ -66,8 +66,8 @@ export class GameService {
       }
     } else {
       let allCopsHasPlayed = true;
-      for(let i=0; i< this.thiefs.length; i++) {
-        allCopsHasPlayed = allCopsHasPlayed && !this.thiefs[i].onTurn();
+      for(let i=0; i< this.cops.length; i++) {
+        allCopsHasPlayed = allCopsHasPlayed && !this.cops[i].onTurn();
       }
       this.thiefTurn = allCopsHasPlayed;
       if(this.thiefTurn) {

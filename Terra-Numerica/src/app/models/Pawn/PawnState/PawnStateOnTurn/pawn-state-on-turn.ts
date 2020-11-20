@@ -37,6 +37,7 @@ export class PawnStateOnTurn implements PawnState {
                     position.y = nodeData.y;
                     d.settedPosition = true;
                     d.possiblePoints = d.graphService.showPossibleMove(elements[id]);
+                    d.lastSlot = elements[id]
                 }
             })
 
