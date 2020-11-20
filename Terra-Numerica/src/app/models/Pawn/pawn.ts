@@ -52,4 +52,8 @@ export class Pawns {
         return this.state === environment.onTurnState;
     }
 
+    isAtSamePostionAs(pawn: Pawns) {
+        return this.x === pawn.x && this.y === pawn.y
+    }
+
 }

@@ -15,6 +15,7 @@ export class GameService {
   private thiefTurn = true;
   private turnCount = 0;
   private placingPawns = true;
+  private winner: string;
 
   constructor() { }
 
@@ -35,6 +36,11 @@ export class GameService {
     }
     else {
       this.updateStates();
+    }
+    console.log('TURN #',this.turnCount)
+    if(this.checkEnd()) {
+      console.log('GAME IS FINISHED')
+      console.log('THE WINNER IS :'+ this.winner);
     }
   }
 
@@ -63,6 +69,7 @@ export class GameService {
       this.thiefTurn = !allThiefHasPlayed;
       if(!this.thiefTurn) {
         this.setPlayersTurn(this.cops);
+        this.turnCount++;
       }
     } else {
       let allCopsHasPlayed = true;
@@ -72,6 +79,7 @@ export class GameService {
       this.thiefTurn = allCopsHasPlayed;
       if(this.thiefTurn) {
         this.setPlayersTurn(this.thiefs);
+        this.turnCount++;
       }
     }
   }
@@ -80,6 +88,24 @@ export class GameService {
     for(let i=0; i<players.length; i++) {
       players[i].state = environment.onTurnState;
     }
+  }
+
+  private checkEnd() {
+    let allThiefCapture = false;
+    for(let i=0; i<this.thiefs.length; i++) {
+      const t = this.thiefs[i];
+      for(let j=0; i<this.cops.length; i++) {
+        allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
+      }
+    }
+    let timerEnd = this.turnCount > 20
+    if(allThiefCapture) this.winner = 'Policiers';
+    else if(timerEnd) this.winner = 'Voleur';
+    return allThiefCapture || timerEnd;
+  }
+
+  getTurnCount() {
+    return this.turnCount;
   }
 
 }
