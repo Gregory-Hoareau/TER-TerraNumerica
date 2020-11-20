@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { PawnState } from './PawnState/pawn-state';
+import { PawnStateOnTurn } from './PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import { PawnStateWaitingPlacement } from './PawnState/PawnStateWaitingPlacement/pawn-state-waiting-placement';
+import { PawnStateWaitingTurn } from './PawnState/PawnStateWaitingTurn/pawn-state-waiting-turn';
 
 export class Pawns {
 
-    state: PawnState;
     role: string;
     x: number;
     y: number;
@@ -19,6 +20,8 @@ export class Pawns {
     lastPosY;
     settedPosition = true;
 
+    state: PawnState;
+
     constructor(private graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
@@ -31,22 +34,15 @@ export class Pawns {
     }
 
     dragstarted(event, d) {
-
         this.state.dragstarted(event, d);
-
     }
 
     dragged(event, d) {
-
         this.state.dragged(event, d);
-
-        // d3.select(this as any).attr("cx", event.x).attr("cy", event.y);
     }
 
     dragended(event, d) {
-
         this.state = this.state.dragended(event, d);
-
     }
 
 }

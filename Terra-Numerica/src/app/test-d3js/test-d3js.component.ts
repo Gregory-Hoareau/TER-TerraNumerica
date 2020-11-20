@@ -34,12 +34,9 @@ export class TestD3jsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(document.getElementById('visualizer'))
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
     this.grid.init(4,4,this.width,this.height);
-    console.log(this.width)
-    console.log(this.height)
     this.svg = d3.select("#visualizer")
     .append("svg")
         .attr("width", this.width)
@@ -158,7 +155,7 @@ export class TestD3jsComponent implements OnInit {
           }
         }
       }
-      console.log(this.cells)
+      // console.log(this.cells)
     },
 
     sqdist: function (a, b) {

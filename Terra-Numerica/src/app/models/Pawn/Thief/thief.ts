@@ -19,6 +19,5 @@ export class Thief extends Pawns {
                 .on("start", this.dragstarted.bind(this))
                 .on("drag", this.dragged.bind(this))
                 .on("end", this.dragended.bind(this)));
-        console.log(d3.select(".thief").datum());
     }
 }

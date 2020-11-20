@@ -4,6 +4,9 @@ import { PawnStateOnTurn } from '../PawnStateOnTurn/pawn-state-on-turn';
 import { PawnStateWaitingTurn } from '../PawnStateWaitingTurn/pawn-state-waiting-turn';
 
 export class PawnStateWaitingPlacement implements PawnState {
+
+    nextState: PawnState = new PawnStateWaitingTurn();
+
     dragstarted(event: any, d: any) {
         d.lastPosX = event.x
         d.lastPosY = event.y
@@ -14,33 +17,31 @@ export class PawnStateWaitingPlacement implements PawnState {
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
     }
     dragended(event: any, d: any): PawnState {
+
         d3.select(event.sourceEvent.target).attr("stroke", null);
         
         let position = {
             x: d.lastPosX,
             y: d.lastPosY,
         }
+
         let distance = d.detectRadius;
         d3.selectAll(".circle").each((nodeData:any) => {
             let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
             if (h <= distance) {
                 distance = h;
-                position.x = nodeData.x
-                position.y = nodeData.y
-                console.log(position.x + " - " + position.y)
-                console.log(nodeData.x + " - " + nodeData.y)
-                d.settedPosition = true
-                d.firstMove = false;
-                d.yourTurn = false;
+                position.x = nodeData.x;
+                position.y = nodeData.y;
+                d.settedPosition = true;
             }
         })
 
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
 
         if (!d.settedPosition) {
-            return new PawnStateWaitingPlacement();
+            return this;
         } else {
-            return new PawnStateWaitingTurn(); 
+            return this.nextState; 
         }
 
         // d3.select
