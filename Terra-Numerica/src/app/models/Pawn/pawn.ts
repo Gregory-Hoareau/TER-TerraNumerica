@@ -3,9 +3,6 @@ import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { environment } from 'src/environments/environment';
 import { PawnState } from './PawnState/pawn-state';
-import { PawnStateOnTurn } from './PawnState/PawnStateOnTurn/pawn-state-on-turn';
-import { PawnStateWaitingPlacement } from './PawnState/PawnStateWaitingPlacement/pawn-state-waiting-placement';
-import { PawnStateWaitingTurn } from './PawnState/PawnStateWaitingTurn/pawn-state-waiting-turn';
 
 export class Pawns {
 

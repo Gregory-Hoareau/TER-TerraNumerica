@@ -3,10 +3,8 @@ import * as d3 from 'd3';
 import { Simulation, SimulationLinkDatum, SimulationNodeDatum } from 'd3';
 import { GraphService } from '../_services/graph/graph.service';
 import { Graph } from '../_services/graph/Graph';
-import { Pawns } from '../models/Pawn/pawn';
 import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
-import { PawnStateWaitingPlacement } from '../models/Pawn/PawnState/PawnStateWaitingPlacement/pawn-state-waiting-placement';
 import { GameService } from '../_services/game/game.service';
 
 @Component({
@@ -44,8 +42,6 @@ export class TestD3jsComponent implements OnInit {
         .attr("width", this.width)
         .attr("height", this.height)
 
-
-
     this.graphService.initGraph('grid', [4, 4])
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
@@ -71,15 +67,6 @@ export class TestD3jsComponent implements OnInit {
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
 
-    this.svg.append("text")
-      .attr("x", this.width/2 - 200)
-      .attr("y", 50)
-      .attr("width", 200)
-      .text( function (d) { return "c'est au tour des policier"; })
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "40px")
-      .attr("fill", "red");
-
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")
                                 .attr("width", 80)
@@ -99,6 +86,7 @@ export class TestD3jsComponent implements OnInit {
                   .attr("y", 0)
                   .attr("height", 80)
                   .attr("width", 80);
+
     patternPawn.append("pattern")
                 .attr("id", "pawnCopsImage")
                 .attr("x", 0)
@@ -111,6 +99,10 @@ export class TestD3jsComponent implements OnInit {
                   .attr("y", 0)
                   .attr("height", 80)
                   .attr("width", 80)
+
+    d3.select("#hud").append("p")
+      .attr("id", "main-message")
+      .text(() => "Veuillez placer vos pions")
   }
 
   initData() {

@@ -3,16 +3,10 @@ import { PawnState } from '../pawn-state';
 
 export class PawnStateWaitingTurn implements PawnState {
     dragstarted(event: any, d: any) {
-        d3.select("svg")
-            .append("text")
+        d3.select("#hud")
+            .append("p")
                 .attr("id", "warningNotYourTurn")
-                .attr("x", 350)
-                .attr("y", 100)
-                .attr("width", 200)
-                .text( function (d) { return "Ce n'est pas votre tour !"; })
-                .attr("font-family", "sans-serif")
-                .attr("font-size", "30px")
-                .attr("fill", "red");        
+                .text(() => "Ce n'est pas votre tour !")       
         d3.select(event.sourceEvent.target).raise().attr("stroke", "black");
     }
     dragged(event: any, d: any) {

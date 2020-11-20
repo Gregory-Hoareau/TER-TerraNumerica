@@ -1,8 +1,6 @@
-import { getAttrsForDirectiveMatching } from '@angular/compiler/src/render3/view/util';
 import * as d3 from 'd3';
 import { environment } from 'src/environments/environment';
 import { PawnState } from '../pawn-state';
-import { PawnStateWaitingTurn } from '../PawnStateWaitingTurn/pawn-state-waiting-turn';
 
 export class PawnStateOnTurn implements PawnState {
     edges: any = null;
@@ -26,7 +24,6 @@ export class PawnStateOnTurn implements PawnState {
         let distance = d.detectRadius;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
-                console.log(nodeData);
                 return true;
             })
             .each((nodeData:any, id:any, elements:any) => {
