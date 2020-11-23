@@ -190,6 +190,7 @@ export class GameService {
     this.thiefs.forEach(t => {
       if(t.state === environment.onTurnState){
         d3.select('.'+t.role)
+          .style("opacity", 1)
       }else if(t.state === environment.waitingTurnState){
         d3.select('.'+t.role)
           .style("opacity", 0.60);
