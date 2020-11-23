@@ -35,13 +35,13 @@ export class TestD3jsComponent implements OnInit {
   ngOnInit(): void {
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
-    this.grid.init(4,4,this.width,this.height);
+    // this.grid.init(4,4,this.width,this.height);
     this.svg = d3.select("#visualizer")
                 .append("svg")
                     .attr("width", this.width)
                     .attr("height", this.height)
 
-    this.graphService.initGraph('grid', [4, 4])
+    this.graphService.initGraph('cycle', [10, 4])
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
 
@@ -54,7 +54,7 @@ export class TestD3jsComponent implements OnInit {
           .force("link", d3.forceLink()
           .links(this.links)
         )
-        .force("distance", () => 1)
+        // .force("distance", () => 1)
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
         .force("charge", d3.forceManyBody().strength(-100))
         .on("tick", this.ticked.bind(this));
@@ -109,8 +109,7 @@ export class TestD3jsComponent implements OnInit {
     this.link = this.svg
     .selectAll("line")
     .data(this.links)
-    .enter()
-    .append("line")
+    .join("line")
         .style("stroke", "#aaa")
 
     // Initialize the nodes
