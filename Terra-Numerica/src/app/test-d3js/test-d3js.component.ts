@@ -30,7 +30,6 @@ export class TestD3jsComponent implements OnInit {
 
 
   constructor(private graphService: GraphService, private gameManager: GameService) {
-    
   }
 
   ngOnInit(): void {
@@ -38,9 +37,9 @@ export class TestD3jsComponent implements OnInit {
     this.height = document.getElementById('visualizer').offsetHeight;
     this.grid.init(4,4,this.width,this.height);
     this.svg = d3.select("#visualizer")
-    .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height)
+                .append("svg")
+                    .attr("width", this.width)
+                    .attr("height", this.height)
 
     this.graphService.initGraph('grid', [4, 4])
     this.nodes = this.graphService.getNodes();
@@ -61,11 +60,12 @@ export class TestD3jsComponent implements OnInit {
         .on("tick", this.ticked.bind(this));
 
     for(let i = 0; i<2; i++){
-      this.cops.push(new Cops(this.gameManager, this.graphService, 50, 250 + i*100, i));
+      this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
+    this.gameManager.update();
 
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")
@@ -122,35 +122,8 @@ export class TestD3jsComponent implements OnInit {
             .attr("r", 20)
             .attr("class", "circle")
             .style("fill", "#69b3a2")
-            //.on("click", this.showPossibleMoves.bind(this))
   }
 
-  /* replay() {
-    location.reload();
-  } */
-
-  /* checkEnd(){
-    if (this.pawn[0].x == this.pawn[1].x){
-      if (this.pawn[0].y == this.pawn[1].y){
-        this.svg.append("text")
-          .attr("x", this.width/2 - 175)
-          .attr("y", this.height - 75)
-          .attr("width", 200)
-          .text( function (d) { return "Le policier a gagné !"; })
-          .attr("font-family", "sans-serif")
-          .attr("font-size", "40px")
-          .attr("fill", "blue");
-        this.svg.append("text")
-          .attr("x", this.width/2 - 75)
-          .attr("y", this.height - 25)
-          .attr("width", 50)
-          .text( function (d) { return "Rejouer"; })
-          .attr("font-family", "sans-serif")
-          .attr("font-size", "50px")
-          .on("click", this.replay);
-      }
-    }
-  } */
   private grid = {
     cells: [],
     GRID_SIZE: 100,
@@ -217,6 +190,22 @@ export class TestD3jsComponent implements OnInit {
 
   showPossibleMoves(event){
     return this.graphService.showPossibleMove(event);
+  }
+
+  getTurnCount() {
+    return this.gameManager.getTurnCount();
+  }
+
+  isGameActionEmpty() {
+    return this.gameManager.isGameActionEmpty();
+  }
+
+  validateTurn() {
+    this.gameManager.validateTurn();
+  }
+
+  cancelAction() {
+    this.gameManager.cancelAction();
   }
 
 }

@@ -8,3 +8,37 @@
     top: 0;
     margin: 8px;
 }
+
+#hud {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 10%;
+    margin: 0 8px 8px 8px;
+    border: solid 1px;
+}
+
+#visualizer {
+    flex: 1;
+    border: solid 1px;
+    margin: 0 8px 8px 8px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#games-action {
+    display: flex;
+    width: 100%;
+    height: 90%;
+}
+
+.action-button {
+    background-color: #B711F0;
+    border-radius: 8px;
+    padding: 1%;
+    margin-left: 2%;
+}
