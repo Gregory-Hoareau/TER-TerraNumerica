@@ -8,6 +8,7 @@ import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
+import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,7 @@ export class GameService {
       console.log('GAME IS FINISHED')
       console.log('THE WINNER IS :'+ this.winner);
     }
+    this.checkTurn();
   }
 
   private checkPlacement() {
@@ -183,6 +185,26 @@ export class GameService {
     }
     this.update()
   }
+  
+  checkTurn(){
+    this.thiefs.forEach(t => {
+      if(t.state === environment.onTurnState){
+        d3.select('.'+t.role)
+      }else if(t.state === environment.waitingTurnState){
+        d3.select('.'+t.role)
+          .style("opacity", 0.60);
+      }
+    });
+    this.cops.forEach(c => {
+      if(c.state === environment.onTurnState){
+        d3.select('.'+c.role)
+        .style("opacity", 1);
+      }else if(c.state === environment.waitingTurnState){
+        d3.select('.'+c.role)
+          .style("opacity", 0.60);
+      }
+    });
+  }
 
   //GameAction related function
   addGameAction(action: GameAction) {
@@ -204,5 +226,6 @@ export class GameService {
   private clearActions() {
     this.actionStack.clear();
   }
+
 
 }
