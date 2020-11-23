@@ -35,7 +35,7 @@ export class TestD3jsComponent implements OnInit {
   ngOnInit(): void {
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
-    this.grid.init(4,4,this.width,this.height);
+    this.grid.init(4, 4,this.width,this.height);
     this.svg = d3.select("#visualizer")
                 .append("svg")
                     .attr("width", this.width)
@@ -54,10 +54,10 @@ export class TestD3jsComponent implements OnInit {
           .force("link", d3.forceLink()
           .links(this.links)
         )
-        .force("distance", () => 1)
+        //.force("distance", () => 1)
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-        .force("charge", d3.forceManyBody().strength(-100))
-        .on("tick", this.ticked.bind(this));
+        .force("charge", d3.forceManyBody().strength(-400))
+        .on("end", this.ticked.bind(this));
 
     for(let i = 0; i<2; i++){
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
@@ -127,7 +127,7 @@ export class TestD3jsComponent implements OnInit {
   private grid = {
     cells: [],
     GRID_SIZE: 100,
-    init: function(long = null, lar = null, width, height) {
+    init: function(lar = null, long = null, width, height) {
       this.cells = [];
 
       if (long != null && lar != null) {

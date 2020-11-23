@@ -213,7 +213,9 @@ export class GameService {
   }
 
   cancelAction(): boolean {
-    return this.actionStack.cancelAction();
+    const sucess = this.actionStack.cancelAction();
+    this.checkTurn();
+    return sucess;
   }
 
   isGameActionEmpty() {

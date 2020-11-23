@@ -17,6 +17,9 @@ export class GraphService {
       case 'grid':
         this.gridGenerator(args[0], args[1])
         break;
+      case 'cycle':
+        this.cycleGenerator(args[0]);
+        break;
     }
   }
 
@@ -88,6 +91,16 @@ export class GraphService {
             this.graph.links.push({source: (long*i)+j, target: (long*i)+j+long});
         }
     }
+  }
+
+  private cycleGenerator(n) {
+    this.clearGraph();
+    this.initNodes(n);
+    
+    for(let i=0; i<n-1; i++) {
+      this.graph.links.push({source: i, target: i+1})
+    }
+    this.graph.links.push({source: 0, target: n-1})
   }
 
 }
