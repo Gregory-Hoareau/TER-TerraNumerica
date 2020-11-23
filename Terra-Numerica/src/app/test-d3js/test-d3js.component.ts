@@ -228,7 +228,7 @@ export class TestD3jsComponent implements OnInit {
   }
 
   validateTurn() {
-
+    this.gameManager.validateTurn();
   }
 
   cancelAction() {

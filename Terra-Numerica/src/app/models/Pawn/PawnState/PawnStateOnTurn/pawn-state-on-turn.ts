@@ -45,6 +45,8 @@ export class PawnStateOnTurn implements PawnState {
             })
         if(startPosition.x !== position.x || startPosition.y !== position.y) {
             gameManager.addGameAction(new GameAction(d, startPosition, {x: position.x, y: position.y}))
+        } else {
+            d.settedPosition = false;
         }
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
 

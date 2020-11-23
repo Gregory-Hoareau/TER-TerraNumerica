@@ -78,26 +78,26 @@ export class GameService {
         allThiefHasPlayed = allThiefHasPlayed && !this.thiefs[i].onTurn();
       }
       this.thiefTurn = !allThiefHasPlayed;
-      if(!this.thiefTurn) {
+      /* if(!this.thiefTurn) {
         this.turnCount++;
         this.setPlayersTurn(this.cops);
         d3.select('#main-message')
           .style('color', 'blue')
           .text(() => 'C\'est au tour des policiers.');
-      }
+      } */
     } else {
       let allCopsHasPlayed = true;
       for(let i=0; i< this.cops.length; i++) {
         allCopsHasPlayed = allCopsHasPlayed && !this.cops[i].onTurn();
       }
       this.thiefTurn = allCopsHasPlayed;
-      if(this.thiefTurn) {
+      /* if(this.thiefTurn) {
         this.turnCount++;
         this.setPlayersTurn(this.thiefs);
         d3.select('#main-message')
           .style('color', 'green')
           .text(() => 'C\'est au tour du voleur.');
-      }
+      } */
     }
   }
 
@@ -125,6 +125,23 @@ export class GameService {
     return this.turnCount;
   }
 
+  validateTurn() {
+    this.turnCount++;
+    this.clearActions();
+    if(this.thiefTurn) {
+      this.setPlayersTurn(this.thiefs);
+      d3.select('#main-message')
+        .style('color', 'green')
+        .text(() => 'C\'est au tour du voleur.');
+    } 
+    else {
+      this.setPlayersTurn(this.cops);
+      d3.select('#main-message')
+        .style('color', 'blue')
+        .text(() => 'C\'est au tour des policiers.');
+    }
+  }
+
   //GameAction related function
   addGameAction(action: GameAction) {
     this.actionStack.push(action);
@@ -140,6 +157,10 @@ export class GameService {
 
   peekAction() {
     return this.actionStack.peek();
+  }
+
+  private clearActions() {
+    this.actionStack.clear();
   }
 
 }
