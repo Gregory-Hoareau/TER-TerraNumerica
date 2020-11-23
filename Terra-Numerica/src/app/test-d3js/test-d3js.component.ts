@@ -59,7 +59,7 @@ export class TestD3jsComponent implements OnInit {
         .force("charge", d3.forceManyBody().strength(-100))
         .on("tick", this.ticked.bind(this));
 
-    for(let i = 0; i<2; i++){
+    for(let i = 0; i<1; i++){
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 250 + i*100, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
