@@ -27,9 +27,8 @@ export class TestD3jsComponent implements OnInit {
   private nodes: SimulationNodeDatum[] = []
   private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
 
-
-
   constructor(private graphService: GraphService, private gameManager: GameService) {
+
   }
 
   ngOnInit(): void {
@@ -41,23 +40,38 @@ export class TestD3jsComponent implements OnInit {
                     .attr("width", this.width)
                     .attr("height", this.height)
 
-    this.graphService.initGraph('cycle', [10, 4])
+    this.graphService.initGraph('cycle', [20, 4])
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
 
     this.init()
   }
 
+  getPoolRadius() {
+    if (this.width < this.height) {
+      return (this.width/2)-50;
+    } else {
+      return (this.height/2)-50;
+    }
+  }
+
   init() {
     this.initData();
+
+    // var pool = this.svg.append("circle")
+    //   .style('opacity', 0.1)
+    //   .attr("r", this.getPoolRadius())
+    //   .attr("cy", this.height / 2)
+    //   .attr("cx", this.width / 2)
+
     this.simulation = d3.forceSimulation(this.nodes)
           .force("link", d3.forceLink()
           .links(this.links)
         )
-        // .force("distance", () => 1)
+        .force("radial", d3.forceRadial(this.getPoolRadius(), this.width / 2, this.height / 2))
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-        .force("charge", d3.forceManyBody().strength(-400))
-        .on("end", this.ticked.bind(this));
+        .force("charge", d3.forceManyBody().strength(-100))
+        .on("tick", this.ticked.bind(this));
 
     for(let i = 0; i<2; i++){
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
@@ -106,56 +120,41 @@ export class TestD3jsComponent implements OnInit {
   }
 
   initData() {
-    this.link = this.svg
-    .selectAll("line")
-    .data(this.links)
-    .join("line")
-        .style("stroke", "#aaa")
-
     // Initialize the nodes
     this.node = this.svg
-        .selectAll("circle")
-        .data(this.nodes)
-        .enter()
-        .append("circle")
-            .attr("r", 20)
-            .attr("class", "circle")
-            .style("fill", "#69b3a2")
+      .selectAll("circle")
+      .data(this.nodes)
+      .enter()
+      .append("circle")
+          .attr("r", 20)
+          .attr("class", "circle")
+          .style("fill", "#69b3a2")
+
+    this.link = this.svg
+      .selectAll("line")
+      .data(this.links)
+      .enter()
+      .append("line")
+          .style("stroke", "#aaa")
   }
 
   private grid = {
     cells: [],
     GRID_SIZE: 100,
-    init: function(lar = null, long = null, width, height) {
+    init: function(lar, long, width, height) {
       this.cells = [];
-
-      if (long != null && lar != null) {
-        var id = 0;
-        for(var i = 0 ; i < long ; ++i) {
-          for(var j = 0 ; j < lar ; ++j) {
-            this.cells.push({
-              id: id,
-              x: i * width/long + (width/long)/2,
-              y: j * height/lar + (height/lar)/2,
-              occupied: false
-            });
-            id++;
-          }
-        }
-      } else {
-        for(var i = 0 ; i < width / this.GRID_SIZE ; ++i) {
-          for(var j = 0 ; j < height / this.GRID_SIZE ; ++j) {
-            var cell;
-            cell = {
-              x: i * this.GRID_SIZE,
-              y: j * this.GRID_SIZE,
-              occupied: false
-            };
-            this.cells.push(cell);
-          }
+      var id = 0;
+      for(var i = 0 ; i < long ; ++i) {
+        for(var j = 0 ; j < lar ; ++j) {
+          this.cells.push({
+            id: id,
+            x: i * width/long + (width/long)/2,
+            y: j * height/lar + (height/lar)/2,
+            occupied: false
+          });
+          id++;
         }
       }
-      // console.log(this.cells)
     },
 
     sqdist: function (a, b) {
