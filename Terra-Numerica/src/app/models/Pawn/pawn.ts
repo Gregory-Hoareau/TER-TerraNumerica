@@ -20,7 +20,7 @@ export class Pawns {
     settedPosition = true;
 
     state: PawnState;
-    constructor(private gameManager: GameService, private graphService: GraphService, x: number, y: number){
+    constructor(private gameManager: GameService, public graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
         this.firstMove = true;

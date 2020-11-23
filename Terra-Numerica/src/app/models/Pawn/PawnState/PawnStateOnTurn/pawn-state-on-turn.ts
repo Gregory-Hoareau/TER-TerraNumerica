@@ -29,6 +29,7 @@ export class PawnStateOnTurn implements PawnState {
             x: d.lastPosX,
             y: d.lastPosY
         }
+        const previousSlot = d.lastSlot;
         let distance = d.detectRadius;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
@@ -47,7 +48,7 @@ export class PawnStateOnTurn implements PawnState {
             })
         
         if(startPosition.x !== position.x || startPosition.y !== position.y) {
-            gameManager.addGameAction(new GameAction(d, startPosition, {x: position.x, y: position.y}))
+            gameManager.addGameAction(new GameAction(d, startPosition, {x: position.x, y: position.y}, previousSlot))
         } else {
             d.settedPosition = false;
         }

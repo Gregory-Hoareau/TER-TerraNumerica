@@ -6,7 +6,6 @@ import { Pawns } from 'src/app/models/Pawn/pawn';
 import { PawnState } from 'src/app/models/Pawn/PawnState/pawn-state';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
-import * as d3 from 'd3';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
 
@@ -45,9 +44,9 @@ export class GameService {
           .text(() => 'C\'est au tour du voleur.');
       }
     }
-    else {
+   /*  else {
       this.updateStates();
-    }
+    } */
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
     if(pile.length != this.cops.length){
@@ -56,7 +55,6 @@ export class GameService {
         this.notificate(e[0], e.length);
       })
     }
-    console.log('TURN #',this.turnCount)
     if(this.checkEnd()) {
       console.log('GAME IS FINISHED')
       console.log('THE WINNER IS :'+ this.winner);
@@ -121,11 +119,11 @@ export class GameService {
 
   private startGame() {
     console.log('GAME IS STARTING')
-    this.setPlayersTurn(this.thiefs);
+    this.setPlayersState(this.thiefs, environment.onTurnState);
     this.turnCount++;
   }
 
-  private updateStates() {
+  /* private updateStates() {
     if(this.thiefTurn) {
       let allThiefHasPlayed = true;
       for(let i=0; i< this.thiefs.length; i++) {
@@ -139,11 +137,11 @@ export class GameService {
       }
       this.thiefTurn = allCopsHasPlayed;
     }
-  }
+  } */
 
-  private setPlayersTurn(players: Pawns[]) {
+  private setPlayersState(players: Pawns[], state: PawnState) {
     for(let i=0; i<players.length; i++) {
-      players[i].state = environment.onTurnState;
+      players[i].state = state;
     }
   }
 
@@ -166,20 +164,24 @@ export class GameService {
   }
 
   validateTurn() {
+    this.thiefTurn = !this.thiefTurn;
     this.turnCount++;
     this.clearActions();
     if(this.thiefTurn) {
-      this.setPlayersTurn(this.thiefs);
+      this.setPlayersState(this.cops, environment.waitingTurnState);
+      this.setPlayersState(this.thiefs, environment.onTurnState);
       d3.select('#main-message')
         .style('color', 'green')
         .text(() => 'C\'est au tour du voleur.');
     } 
     else {
-      this.setPlayersTurn(this.cops);
+      this.setPlayersState(this.thiefs, environment.waitingTurnState);
+      this.setPlayersState(this.cops, environment.onTurnState);
       d3.select('#main-message')
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }
+    this.update()
   }
 
   //GameAction related function
