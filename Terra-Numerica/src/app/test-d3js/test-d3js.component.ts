@@ -30,7 +30,6 @@ export class TestD3jsComponent implements OnInit {
 
 
   constructor(private graphService: GraphService, private gameManager: GameService) {
-    
   }
 
   ngOnInit(): void {
@@ -122,35 +121,8 @@ export class TestD3jsComponent implements OnInit {
             .attr("r", 20)
             .attr("class", "circle")
             .style("fill", "#69b3a2")
-            //.on("click", this.showPossibleMoves.bind(this))
   }
 
-  /* replay() {
-    location.reload();
-  } */
-
-  /* checkEnd(){
-    if (this.pawn[0].x == this.pawn[1].x){
-      if (this.pawn[0].y == this.pawn[1].y){
-        this.svg.append("text")
-          .attr("x", this.width/2 - 175)
-          .attr("y", this.height - 75)
-          .attr("width", 200)
-          .text( function (d) { return "Le policier a gagné !"; })
-          .attr("font-family", "sans-serif")
-          .attr("font-size", "40px")
-          .attr("fill", "blue");
-        this.svg.append("text")
-          .attr("x", this.width/2 - 75)
-          .attr("y", this.height - 25)
-          .attr("width", 50)
-          .text( function (d) { return "Rejouer"; })
-          .attr("font-family", "sans-serif")
-          .attr("font-size", "50px")
-          .on("click", this.replay);
-      }
-    }
-  } */
   private grid = {
     cells: [],
     GRID_SIZE: 100,
@@ -232,7 +204,7 @@ export class TestD3jsComponent implements OnInit {
   }
 
   cancelAction() {
-    console.log('IS ACTION CANCELED = ', this.gameManager.cancelAction());
+    this.gameManager.cancelAction();
   }
 
 }

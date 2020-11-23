@@ -43,6 +43,7 @@ export class PawnStateOnTurn implements PawnState {
                     d.lastSlot = elements[id]
                 }
             })
+        
         if(startPosition.x !== position.x || startPosition.y !== position.y) {
             gameManager.addGameAction(new GameAction(d, startPosition, {x: position.x, y: position.y}))
         } else {

@@ -34,7 +34,6 @@ export class GameService {
   }
 
   update() {
-    console.log('HERE',this.peekAction());
     if(this.placingPawns) {
       this.checkPlacement();
       if(!this.placingPawns) {
@@ -47,7 +46,6 @@ export class GameService {
     else {
       this.updateStates();
     }
-    console.log('TURN #',this.turnCount)
     if(this.checkEnd()) {
       console.log('GAME IS FINISHED')
       console.log('THE WINNER IS :'+ this.winner);
@@ -78,26 +76,12 @@ export class GameService {
         allThiefHasPlayed = allThiefHasPlayed && !this.thiefs[i].onTurn();
       }
       this.thiefTurn = !allThiefHasPlayed;
-      /* if(!this.thiefTurn) {
-        this.turnCount++;
-        this.setPlayersTurn(this.cops);
-        d3.select('#main-message')
-          .style('color', 'blue')
-          .text(() => 'C\'est au tour des policiers.');
-      } */
     } else {
       let allCopsHasPlayed = true;
       for(let i=0; i< this.cops.length; i++) {
         allCopsHasPlayed = allCopsHasPlayed && !this.cops[i].onTurn();
       }
       this.thiefTurn = allCopsHasPlayed;
-      /* if(this.thiefTurn) {
-        this.turnCount++;
-        this.setPlayersTurn(this.thiefs);
-        d3.select('#main-message')
-          .style('color', 'green')
-          .text(() => 'C\'est au tour du voleur.');
-      } */
     }
   }
 
