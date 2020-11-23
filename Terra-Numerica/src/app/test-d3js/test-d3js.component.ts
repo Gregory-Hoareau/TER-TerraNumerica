@@ -223,12 +223,16 @@ export class TestD3jsComponent implements OnInit {
     return this.gameManager.getTurnCount();
   }
 
+  isGameActionEmpty() {
+    return this.gameManager.isGameActionEmpty();
+  }
+
   validateTurn() {
 
   }
 
   cancelAction() {
-    
+    console.log('IS ACTION CANCELED = ', this.gameManager.cancelAction());
   }
 
 }

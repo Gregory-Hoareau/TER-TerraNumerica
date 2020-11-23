@@ -20,7 +20,7 @@ export class Pawns {
     settedPosition = true;
 
     state: PawnState;
-    constructor(private gameManager: GameService,private graphService: GraphService, x: number, y: number){
+    constructor(private gameManager: GameService, private graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
         this.firstMove = true;
@@ -40,7 +40,7 @@ export class Pawns {
     }
 
     dragended(event, d) {
-        this.state = this.state.dragended(event, d);
+        this.state = this.state.dragended(event, d, this.gameManager);
         this.gameManager.update();
     }
 

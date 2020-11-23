@@ -5,6 +5,8 @@ import { PawnState } from 'src/app/models/Pawn/PawnState/pawn-state';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
 import * as d3 from 'd3';
+import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
+import { GameAction } from 'src/app/models/GameAction/game-action';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +19,11 @@ export class GameService {
   private turnCount = 0;
   private placingPawns = true;
   private winner: string;
+  private actionStack: GameActionStack;
 
-  constructor() { }
+  constructor() {
+    this.actionStack = new GameActionStack();
+  }
 
   setThief(thiefs) {
     this.thiefs = thiefs;
@@ -29,6 +34,7 @@ export class GameService {
   }
 
   update() {
+    console.log('HERE',this.peekAction());
     if(this.placingPawns) {
       this.checkPlacement();
       if(!this.placingPawns) {
@@ -117,6 +123,23 @@ export class GameService {
 
   getTurnCount() {
     return this.turnCount;
+  }
+
+  //GameAction related function
+  addGameAction(action: GameAction) {
+    this.actionStack.push(action);
+  }
+
+  cancelAction(): boolean {
+    return this.actionStack.cancelAction();
+  }
+
+  isGameActionEmpty() {
+    return this.actionStack.isEmpty();
+  }
+
+  peekAction() {
+    return this.actionStack.peek();
   }
 
 }

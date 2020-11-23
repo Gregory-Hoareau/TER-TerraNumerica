@@ -1,4 +1,6 @@
 import * as d3 from 'd3';
+import { GameAction } from 'src/app/models/GameAction/game-action';
+import { GameService } from 'src/app/_services/game/game.service';
 import { environment } from 'src/environments/environment';
 import { PawnState } from '../pawn-state';
 
@@ -14,13 +16,17 @@ export class PawnStateOnTurn implements PawnState {
     dragged(event: any, d: any) {
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
     }
-    dragended(event: any, d: any): PawnState {
+    dragended(event: any, d: any, gameManager: GameService): PawnState {
         d3.select(event.sourceEvent.target).attr("stroke", null);
         let position = {
             x: d.lastPosX,
             y: d.lastPosY,
         }
 
+        const startPosition = {
+            x: d.lastPosX,
+            y: d.lastPosY
+        }
         let distance = d.detectRadius;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
@@ -37,7 +43,9 @@ export class PawnStateOnTurn implements PawnState {
                     d.lastSlot = elements[id]
                 }
             })
-
+        if(startPosition.x !== position.x || startPosition.y !== position.y) {
+            gameManager.addGameAction(new GameAction(d, startPosition, {x: position.x, y: position.y}))
+        }
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
 
         if (!d.settedPosition) {
@@ -47,9 +55,9 @@ export class PawnStateOnTurn implements PawnState {
         }
     }
 
-    machin(data:any){
-        return this.edges.includes(data);
-    }
+    //machin(data:any){
+    //    return this.edges.includes(data);
+    //}
 
 
 
