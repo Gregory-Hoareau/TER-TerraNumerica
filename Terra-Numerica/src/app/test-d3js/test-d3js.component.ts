@@ -223,4 +223,12 @@ export class TestD3jsComponent implements OnInit {
     return this.gameManager.getTurnCount();
   }
 
+  validateTurn() {
+
+  }
+
+  cancelAction() {
+    
+  }
+
 }
