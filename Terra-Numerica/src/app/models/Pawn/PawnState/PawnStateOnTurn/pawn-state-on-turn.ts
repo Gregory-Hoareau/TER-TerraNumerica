@@ -22,7 +22,9 @@ export class PawnStateOnTurn implements PawnState {
             x: d.lastPosX,
             y: d.lastPosY,
         }
+
         let edges = this.edges
+
         const startPosition = {
             x: d.lastPosX,
             y: d.lastPosY
