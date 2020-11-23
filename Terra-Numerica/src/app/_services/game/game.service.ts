@@ -4,6 +4,7 @@ import { Pawns } from 'src/app/models/Pawn/pawn';
 import { PawnState } from 'src/app/models/Pawn/PawnState/pawn-state';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
+import * as d3 from 'd3';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,9 @@ export class GameService {
       this.checkPlacement();
       if(!this.placingPawns) {
         this.startGame();
+        d3.select('#main-message')
+          .style('color', 'green')
+          .text(() => 'C\'est au tour du voleur.');
       }
     }
     else {
@@ -58,6 +62,7 @@ export class GameService {
   private startGame() {
     console.log('GAME IS STARTING')
     this.setPlayersTurn(this.thiefs);
+    this.turnCount++;
   }
 
   private updateStates() {
@@ -68,8 +73,11 @@ export class GameService {
       }
       this.thiefTurn = !allThiefHasPlayed;
       if(!this.thiefTurn) {
-        this.setPlayersTurn(this.cops);
         this.turnCount++;
+        this.setPlayersTurn(this.cops);
+        d3.select('#main-message')
+          .style('color', 'blue')
+          .text(() => 'C\'est au tour des policiers.');
       }
     } else {
       let allCopsHasPlayed = true;
@@ -78,8 +86,11 @@ export class GameService {
       }
       this.thiefTurn = allCopsHasPlayed;
       if(this.thiefTurn) {
-        this.setPlayersTurn(this.thiefs);
         this.turnCount++;
+        this.setPlayersTurn(this.thiefs);
+        d3.select('#main-message')
+          .style('color', 'green')
+          .text(() => 'C\'est au tour du voleur.');
       }
     }
   }
@@ -98,7 +109,7 @@ export class GameService {
         allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
       }
     }
-    let timerEnd = this.turnCount > 20
+    let timerEnd = this.turnCount > 15
     if(allThiefCapture) this.winner = 'Policiers';
     else if(timerEnd) this.winner = 'Voleur';
     return allThiefCapture || timerEnd;

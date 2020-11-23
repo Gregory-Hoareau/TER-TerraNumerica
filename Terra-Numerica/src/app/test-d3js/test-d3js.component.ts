@@ -38,9 +38,9 @@ export class TestD3jsComponent implements OnInit {
     this.height = document.getElementById('visualizer').offsetHeight;
     this.grid.init(4,4,this.width,this.height);
     this.svg = d3.select("#visualizer")
-    .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height)
+                .append("svg")
+                    .attr("width", this.width)
+                    .attr("height", this.height)
 
     this.graphService.initGraph('grid', [4, 4])
     this.nodes = this.graphService.getNodes();
@@ -217,6 +217,10 @@ export class TestD3jsComponent implements OnInit {
 
   showPossibleMoves(event){
     return this.graphService.showPossibleMove(event);
+  }
+
+  getTurnCount() {
+    return this.gameManager.getTurnCount();
   }
 
 }
