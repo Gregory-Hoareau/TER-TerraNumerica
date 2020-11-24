@@ -41,12 +41,12 @@ export class TestD3jsComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       this.graphType = params['graphType'];
-      this.copsNum = params['copsNum'];
-      this.graphParams = params['graphParams'];
+      this.copsNum = +params['copsNum'];
+      this.graphParams = this.convertAsNumberArr(params['graphParams']);
     })
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
-    // this.grid.init(4,4,this.width,this.height);
+    this.grid.init(this.graphParams[0], this.graphParams[1], this.width, this.height);
     this.svg = d3.select("#visualizer")
                 .append("svg")
                     .attr("width", this.width)
@@ -57,6 +57,13 @@ export class TestD3jsComponent implements OnInit {
     this.links = this.graphService.getLinks();
 
     this.init()
+  }
+
+  private convertAsNumberArr(arr) {
+    let res = []
+    res[0] = +arr[0];
+    res[1] = +arr[1]
+    return res;
   }
 
   getPoolRadius() {
@@ -78,12 +85,12 @@ export class TestD3jsComponent implements OnInit {
 
     this.simulation = d3.forceSimulation(this.nodes)
           .force("link", d3.forceLink()
-          .links(this.links)
-        )
-        .force("radial", d3.forceRadial(this.getPoolRadius(), this.width / 2, this.height / 2))
-        .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-        .force("charge", d3.forceManyBody().strength(-400))
-        .on("tick", this.ticked.bind(this));
+            .links(this.links)
+          )
+          .force("radial", d3.forceRadial(this.getPoolRadius(), this.width / 2, this.height / 2))
+          .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+          .force("charge", d3.forceManyBody().strength(-400))
+          .on("tick", this.ticked.bind(this));
 
     for(let i = 0; i<this.copsNum; i++){
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
