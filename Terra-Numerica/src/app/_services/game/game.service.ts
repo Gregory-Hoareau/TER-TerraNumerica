@@ -20,7 +20,9 @@ export class GameService {
   private cops: Cops[];
   private thiefs: Thief[];
   private thiefTurn = true;
+  private watchingPositionList = [];
   private turnCount = 0;
+  private turnChanged: boolean = false;
   private placingPawns = true;
   private winner: string;
   private actionStack: GameActionStack;
@@ -58,7 +60,23 @@ export class GameService {
         this.notificate(e[0], e.length);
       })
     }
+    if(this.turnChanged){
+      this.recordPosition();
+    }
     this.checkTurn();
+  }
+
+  private recordPosition(){
+    let tmpPositionList = []
+      this.turnChanged = false;
+      this.thiefs.forEach(e => {
+        tmpPositionList.push([e.x,e.y]);
+      })
+      this.cops.forEach(e => {
+        tmpPositionList.push([e.x,e.y]);      
+      })
+      this.watchingPositionList.push(tmpPositionList);
+      return tmpPositionList
   }
 
   private checkPlacement() {
@@ -152,9 +170,13 @@ export class GameService {
       }
     }
     let timerEnd = this.turnCount > 15
+    let startWatchingThiefWin = this.turnCount > 5
     if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
     else if(timerEnd) this.winner = 'Le Voleur est vainqueur';
-    return allThiefCapture || timerEnd;
+    else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
+        this.winner = 'Le Voleur est vainqueur';
+    }
+    return allThiefCapture || timerEnd || startWatchingThiefWin && this.checkSamePositionAsPreviously();
   }
 
   getTurnCount() {
@@ -162,10 +184,13 @@ export class GameService {
   }
 
   validateTurn() {
+    console.log(this.watchingPositionList)
+
     this.thiefTurn = !this.thiefTurn;
-    this.turnCount++;
     this.clearActions();
     if(this.thiefTurn) {
+      this.turnChanged = true;
+      this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
       this.setPlayersState(this.thiefs, environment.onTurnState);
       d3.select('#main-message')
@@ -188,6 +213,9 @@ export class GameService {
         confirmButtonText: 'Rejouer'
       }).then((result) => {
         if(result.isConfirmed){
+          console.log(this.watchingPositionList)
+          this.watchingPositionList = []
+          console.log(this.watchingPositionList)
           window.location.reload();
         }
       })
@@ -238,5 +266,8 @@ export class GameService {
     this.actionStack.clear();
   }
 
+  private checkSamePositionAsPreviously() {
+    return this.watchingPositionList.includes(this.recordPosition());
+  }
 
 }
