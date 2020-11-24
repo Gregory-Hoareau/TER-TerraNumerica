@@ -8,10 +8,7 @@
             <h2 class="subtitle">Choississez la forme de votre plateau de jeu</h2>
             <div class="graphImg">
                 <!-- A remplacer par des images -->
-                <div class="topo" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelected(type)">
-                    {{type}} <br>
-                    (TODO : Remplacer les div par des images)
-                </div> 
+                <img class="topo" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelected(type)" src="assets/{{type}}.svg"> 
             </div>
 
             <hr class="horizontal-separation">
