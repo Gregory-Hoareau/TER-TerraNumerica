@@ -20,6 +20,9 @@ export class GraphService {
       case 'cycle':
         this.cycleGenerator(args[0]);
         break;
+      case 'tree':
+        this.treeGenerator(args[0], args[1])
+        break;
     }
   }
 
@@ -101,6 +104,16 @@ export class GraphService {
       this.graph.links.push({source: i, target: i+1})
     }
     this.graph.links.push({source: 0, target: n-1})
+  }
+
+  private treeGenerator(n, arity) {
+    this.clearGraph();
+    this.initNodes(n);
+    for(let i=0; i<n; i++) {
+      for(let j=1; j<=arity && (i*arity)+j < n; j++) {
+        this.graph.links.push({source: i, target: (i*arity) + j});
+      }
+    }
   }
 
 }

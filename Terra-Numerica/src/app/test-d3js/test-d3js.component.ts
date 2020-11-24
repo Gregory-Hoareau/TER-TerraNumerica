@@ -40,7 +40,7 @@ export class TestD3jsComponent implements OnInit {
                     .attr("width", this.width)
                     .attr("height", this.height)
 
-    this.graphService.initGraph('cycle', [20, 4])
+    this.graphService.initGraph('tree', [16, 3])
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
 
@@ -70,7 +70,7 @@ export class TestD3jsComponent implements OnInit {
         )
         .force("radial", d3.forceRadial(this.getPoolRadius(), this.width / 2, this.height / 2))
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-        .force("charge", d3.forceManyBody().strength(-100))
+        .force("charge", d3.forceManyBody().strength(-400))
         .on("tick", this.ticked.bind(this));
 
     for(let i = 0; i<2; i++){
