@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
 import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
+import Swal from 'sweetalert2';
+
 
 @Injectable({
   providedIn: 'root'
@@ -55,10 +57,6 @@ export class GameService {
         if(e.length != 1)
         this.notificate(e[0], e.length);
       })
-    }
-    if(this.checkEnd()) {
-      console.log('GAME IS FINISHED')
-      console.log('THE WINNER IS :'+ this.winner);
     }
     this.checkTurn();
   }
@@ -156,8 +154,8 @@ export class GameService {
       }
     }
     let timerEnd = this.turnCount > 15
-    if(allThiefCapture) this.winner = 'Policiers';
-    else if(timerEnd) this.winner = 'Voleur';
+    if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
+    else if(timerEnd) this.winner = 'Le Voleur est vainqueur';
     return allThiefCapture || timerEnd;
   }
 
@@ -184,6 +182,19 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     this.update()
+    console.log(this.checkEnd())
+    if(this.checkEnd()) {
+      Swal.fire({
+        title: this.winner,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : facile' + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        icon: 'success',
+        confirmButtonText: 'Rejouer'
+      }).then((result) => {
+        if(result.isConfirmed){
+          window.location.reload();
+        }
+      })
+    }
   }
   
   checkTurn(){

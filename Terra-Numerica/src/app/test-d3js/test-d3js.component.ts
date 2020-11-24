@@ -6,7 +6,6 @@ import { Graph } from '../_services/graph/Graph';
 import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
 import { GameService } from '../_services/game/game.service';
-
 @Component({
   selector: 'app-test-d3js',
   templateUrl: './test-d3js.component.html',

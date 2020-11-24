@@ -53,7 +53,7 @@ export class Pawns {
     }
 
     isAtSamePostionAs(pawn: Pawns) {
-        return this.x === pawn.x && this.y === pawn.y
+        return pawn.x - 5 < this.x && this.x < pawn.x + 5 && pawn.y - 5 < this.y && this.y < pawn.y + 5
     }
 
 }
