@@ -1,0 +1,97 @@
+.game-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+}
+
+.game-param {
+    display: flex;
+    justify-content: space-around;
+}
+
+.graph-selection {
+    width: 40%;
+    height: 90%;
+    border: 1px solid black;
+}
+
+.graphImg {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.topo {
+    width: 150px;
+    height: 150px;
+    border: 1px solid black; //Temporaire
+    margin: 2%;
+}
+
+.parameters {
+    width: 55%;
+    height: 90%;
+    border: 1px solid black;
+} 
+
+.form-field {
+    margin: 1%;
+}
+
+.form-field label {
+    display: inline-block;
+    min-width: 25%;
+    text-align: center;
+}
+
+.form-field input {
+    padding: 1% 2%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid gray;
+}
+
+form .form-field input {
+    width: 5%;
+}
+
+div > .form-field input {
+    width: 20%;
+}
+
+.form-field input:focus {
+    border-bottom: 2px solid green;
+}
+
+.buttons {
+    margin-top: 2%;
+    align-self: center;
+}
+
+.horizontal-separation {
+    width: 90%;
+    text-align: center;
+    
+}
+
+.vs {
+    border: 1px solid black;
+    width: 150px;
+    height: 150px;
+    margin: 1%;
+}
+
+.play-opt {
+    display: flex;
+}
+
+.selected {
+    border: 5px solid purple
+}
+

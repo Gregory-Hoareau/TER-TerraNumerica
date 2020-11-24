@@ -113,12 +113,10 @@ export class GameService {
       }
     }
     })
-    console.log(copsPile);
     return copsPile;
   }
 
   private startGame() {
-    console.log('GAME IS STARTING')
     this.setPlayersState(this.thiefs, environment.onTurnState);
     this.turnCount++;
   }
@@ -182,7 +180,6 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     this.update()
-    console.log(this.checkEnd())
     if(this.checkEnd()) {
       Swal.fire({
         title: this.winner,

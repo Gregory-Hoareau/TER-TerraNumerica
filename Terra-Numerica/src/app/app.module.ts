@@ -8,17 +8,22 @@ import { GraphService } from './_services/graph/graph.service';
 import { GameService } from './_services/game/game.service';
 import { FilereaderComponent } from './filereader/filereader.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GameMenuComponent } from './components/game-menu/game-menu.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestD3jsComponent,
-    FilereaderComponent
+    FilereaderComponent,
+    GameMenuComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
-    FormsModule, ReactiveFormsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     GraphService,

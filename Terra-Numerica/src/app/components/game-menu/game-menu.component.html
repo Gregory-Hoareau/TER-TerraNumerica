@@ -1,0 +1,76 @@
+<div class="game-menu">
+
+    <h1 class="title">Voici le menu de paramétrage du jeu</h1>
+    
+    
+    <div class="game-param">
+        <div class="graph-selection">
+            <h2 class="subtitle">Choississez la forme de votre plateau de jeu</h2>
+            <div class="graphImg">
+                <!-- A remplacer par des images -->
+                <div class="topo" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelected(type)">
+                    {{type}} <br>
+                    (TODO : Remplacer les div par des images)
+                </div> 
+            </div>
+
+            <hr class="horizontal-separation">
+
+            <div class="diff">
+                TODO : Define difficulties of game 
+            </div>
+
+        </div>
+        <div class="parameters">
+            <h2 class="subtitle">Choix d'adversaire</h2>
+            <div class="players-param">
+                <div class="play-opt">
+                    <img class="vs" *ngFor="let type of availableOpponentType" src="assets/vs_{{type}}.svg"
+                        [class]='isSelected(type)' 
+                        (click)="selectPlayer(type)"/>
+                    <div class="cops">
+                        <div class="form-field">
+                            <label for="copsNum">
+                                Nombre de policier : 
+                            </label>
+                            <input [(ngModel)]="cops" min="1" max="5" oninput="validity.valid||(value='');" id="copsNum" type="number" name="cops">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="horizontal-separation">
+            
+            <h2 class="subtitle">Parametrage du plateau</h2>
+            <div class="graph-param">
+                <form>
+                    <div *ngIf="paramsNames.length > 0" class="form-field">
+                        <label for="param1">
+                            {{paramsNames[0]}}
+                        </label>
+                        <input [(ngModel)]="graphParam1" min="1" oninput="validity.valid||(value='');" id="param1" type="number" name="param1">
+                    </div>
+                    
+                    <div *ngIf="paramsNames.length > 1" class="form-field">
+                        <label for="param2">
+                            {{paramsNames[1]}}
+                        </label>
+                        <input [(ngModel)]="graphParam2" min="1" oninput="validity.valid||(value='');" id="param2" type="number" name="param2">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button (click)="validateParams()">Commencer la partie</button>
+    </div>
+    
+</div>
+
+<!-- <div class="debug">
+    GRAPH PARAM = 
+        param 1 = {{graphParam1}}
+        param 2 = {{graphParam2}}
+    
+</div> -->

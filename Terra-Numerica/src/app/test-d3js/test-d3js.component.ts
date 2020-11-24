@@ -6,6 +6,8 @@ import { Graph } from '../_services/graph/Graph';
 import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
 import { GameService } from '../_services/game/game.service';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-test-d3js',
   templateUrl: './test-d3js.component.html',
@@ -26,11 +28,22 @@ export class TestD3jsComponent implements OnInit {
   private nodes: SimulationNodeDatum[] = []
   private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
 
-  constructor(private graphService: GraphService, private gameManager: GameService) {
+  //Params coming from the menu
+  private graphType;
+  private copsNum;
+  private graphParams;
+
+  constructor(private graphService: GraphService, private gameManager: GameService,
+              private activatedRoute: ActivatedRoute) {
 
   }
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.graphType = params['graphType'];
+      this.copsNum = params['copsNum'];
+      this.graphParams = params['graphParams'];
+    })
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
     // this.grid.init(4,4,this.width,this.height);
@@ -39,7 +52,7 @@ export class TestD3jsComponent implements OnInit {
                     .attr("width", this.width)
                     .attr("height", this.height)
 
-    this.graphService.initGraph('tree', [16, 3])
+    this.graphService.initGraph(this.graphType, this.graphParams)
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
 
@@ -72,7 +85,7 @@ export class TestD3jsComponent implements OnInit {
         .force("charge", d3.forceManyBody().strength(-400))
         .on("tick", this.ticked.bind(this));
 
-    for(let i = 0; i<2; i++){
+    for(let i = 0; i<this.copsNum; i++){
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
