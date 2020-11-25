@@ -35,7 +35,7 @@ export class GameMenuComponent implements OnInit {
   updateParamsName() {
     switch(this.selectedGraphType) {
       case 'grid':
-        this.paramsNames = ['Longueur :', 'Largeur :'];
+        this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
       case 'cycle':
         this.paramsNames = ['Nombre de noeuds :']
