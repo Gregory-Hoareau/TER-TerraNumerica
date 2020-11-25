@@ -7,6 +7,33 @@ import { Graph } from './Graph';
 export class GraphService {
 
   private graph: Graph;
+  private grid = {
+    cells: [],
+    GRID_SIZE: 100,
+    init: function(lar, long, width, height) {
+      this.cells = [];
+      var id = 0;
+      for(var i = 0 ; i < long ; ++i) {
+        for(var j = 0 ; j < lar ; ++j) {
+          this.cells.push({
+            id: id,
+            x: i * width/long + (width/long)/2,
+            y: j * height/lar + (height/lar)/2,
+            occupied: false
+          });
+          id++;
+        }
+      }
+    },
+
+    sqdist: function (a, b) {
+      return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
+    },
+
+    getCell: function (d) {
+      return this.cells[d.index];
+    },
+  }
 
   constructor() {
   }
@@ -15,15 +42,24 @@ export class GraphService {
     this.graph = new Graph([], []);
     switch(type) {
       case 'grid':
+        const w = document.getElementById('visualizer').offsetWidth;
+        const h = document.getElementById('visualizer').offsetHeight;
+        this.grid.init(args[0], args[1], w, h);
         this.gridGenerator(args[0], args[1])
         break;
       case 'cycle':
+        this.grid.cells = [];
         this.cycleGenerator(args[0]);
         break;
       case 'tree':
+        this.grid.cells = [];
         this.treeGenerator(args[0], args[1])
         break;
     }
+  }
+
+  getGrid() {
+    return this.grid;
   }
 
   getNodes() {
