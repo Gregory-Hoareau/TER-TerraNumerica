@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class GameService {
 
+  private gameMode;
   private cops: Cops[];
   private thiefs: Thief[];
   private thiefTurn = true;
@@ -181,6 +182,10 @@ export class GameService {
 
   getTurnCount() {
     return this.turnCount;
+  }
+
+  setGameMode(gameMode){
+    this.gameMode = gameMode
   }
 
   validateTurn() {

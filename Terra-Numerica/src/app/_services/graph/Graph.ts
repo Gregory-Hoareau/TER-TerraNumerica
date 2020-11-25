@@ -11,6 +11,7 @@ export class Graph {
 
     edges(node): SimulationNodeDatum[] {
         const edges = [];
+        edges.push(this._nodes.find(n => n.index === node.index))
         for(const l of this._links) {
             if(l.source.index === node.index) {
                 edges.push(this._nodes.find(n => n.index === l.target.index))

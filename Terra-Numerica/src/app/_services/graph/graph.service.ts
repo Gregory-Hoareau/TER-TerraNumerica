@@ -5,7 +5,7 @@ import { Graph } from './Graph';
   providedIn: 'root'
 })
 export class GraphService {
-
+  private gameMode;
   private graph: Graph;
   private grid = {
     cells: [],
@@ -90,18 +90,23 @@ export class GraphService {
         edges = this.edges({index: i});
       }
     }
-    console.log(vertex);
-    vertex.style.fill = "rgb(0,0,255)";
-    for(let i=0; i<edges.length; i++) {
-      (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+    if(this.gameMode === "facile" || this.gameMode === "normal"){
+      console.log(vertex);
+      for(let i=0; i<edges.length; i++) {
+        (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+      }
+      vertex.style.fill = "rgb(0,0,255)";
     }
-
     return edges;
   }
 
   private clearGraph() {
     this.graph.nodes = [];
     this.graph.links = [];
+  }
+
+  setGameMode(gameMode){
+    this.gameMode = gameMode
   }
 
   private initNodes(n) {
