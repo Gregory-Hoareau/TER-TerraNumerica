@@ -1,4 +1,5 @@
 // "Import"
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
@@ -10,6 +11,7 @@ const app = express();
 
 //Configuration du serveur
 app.use(bodyParser.json())
+app.use(cors());
 app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'))
 app.use('/graph', graphRoute)
 

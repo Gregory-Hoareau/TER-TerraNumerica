@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
+import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -19,10 +20,11 @@ export class GameMenuComponent implements OnInit {
   public graphParam2 = 1;
   public cops = 1;
 
-  constructor(private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private randomGraph: RandomGraphService) { }
 
   ngOnInit(): void {
     this.updateParamsName();
+    this.randomGraph.loadGraphs();
   }
 
   selectGraphType(type: string) {
