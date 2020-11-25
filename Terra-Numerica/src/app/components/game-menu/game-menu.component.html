@@ -14,9 +14,14 @@
             <hr class="horizontal-separation">
 
             <div class="diff">
-                TODO : Define difficulties of game 
-            </div>
-
+                <div>
+                    <legend style="font-weight: bold;">Choisissez votre mode de jeu</legend>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile"><label>facile</label>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal"><label>normal</label>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile"><label>difficile</label>
+                    <br>
+            </div>            
+        </div>
         </div>
         <div class="parameters">
             <h2 class="subtitle">Choix d'adversaire</h2>

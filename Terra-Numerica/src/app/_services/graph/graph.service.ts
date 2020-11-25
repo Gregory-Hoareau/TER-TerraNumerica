@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
+import { GRID } from 'src/app/models/Grid/grid';
 import { Graph } from './Graph';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphService {
-
+  private gameMode;
   private graph: Graph;
+  private grid = GRID;
 
   constructor() {
   }
@@ -15,15 +17,24 @@ export class GraphService {
     this.graph = new Graph([], []);
     switch(type) {
       case 'grid':
+        const w = document.getElementById('visualizer').offsetWidth;
+        const h = document.getElementById('visualizer').offsetHeight;
+        this.grid.init(args[0], args[1], w, h);
         this.gridGenerator(args[0], args[1])
         break;
       case 'cycle':
+        this.grid.cells = [];
         this.cycleGenerator(args[0]);
         break;
       case 'tree':
+        this.grid.cells = [];
         this.treeGenerator(args[0], args[1])
         break;
     }
+  }
+
+  getGrid() {
+    return this.grid;
   }
 
   getNodes() {
@@ -54,18 +65,23 @@ export class GraphService {
         edges = this.edges({index: i});
       }
     }
-    console.log(vertex);
-    vertex.style.fill = "rgb(0,0,255)";
-    for(let i=0; i<edges.length; i++) {
-      (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+    if(this.gameMode === "facile" || this.gameMode === "normal"){
+      console.log(vertex);
+      for(let i=0; i<edges.length; i++) {
+        (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+      }
+      vertex.style.fill = "rgb(0,0,255)";
     }
-
     return edges;
   }
 
   private clearGraph() {
     this.graph.nodes = [];
     this.graph.links = [];
+  }
+
+  setGameMode(gameMode){
+    this.gameMode = gameMode
   }
 
   private initNodes(n) {

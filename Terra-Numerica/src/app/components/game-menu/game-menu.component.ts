@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
+import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -11,18 +12,20 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   private selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'cycle', 'tree'];
+  public availableGraphType = ['grid', 'cycle', 'tree', 'random'];
   public availableOpponentType = ['ia', 'player'];
 
+  public gameModeSelected = "facile";
   public paramsNames;
   public graphParam1 = 1;
   public graphParam2 = 1;
   public cops = 1;
 
-  constructor(private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private randomGraph: RandomGraphService) { }
 
   ngOnInit(): void {
     this.updateParamsName();
+    this.randomGraph.loadGraphs();
   }
 
   selectGraphType(type: string) {
@@ -34,7 +37,7 @@ export class GameMenuComponent implements OnInit {
   updateParamsName() {
     switch(this.selectedGraphType) {
       case 'grid':
-        this.paramsNames = ['Longueur :', 'Largeur :'];
+        this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
       case 'cycle':
         this.paramsNames = ['Nombre de noeuds :']
@@ -43,7 +46,7 @@ export class GameMenuComponent implements OnInit {
         this.paramsNames = ['Nombre de noeuds :', 'Arité de l\'arbre :']
         break;
       case 'random':
-        this.paramsNames = ['Param 1 :', 'Param 2 :']
+        this.paramsNames = []
         break;
       default:
         break;
@@ -60,12 +63,21 @@ export class GameMenuComponent implements OnInit {
 
   validateParams() {
     this.paramSafetyCheck();
+    switch(this.gameModeSelected){
+    case "facile":
+      break;
+    case "normal":
+      break;
+    case "difficile":
+      break;
+    }
     const extras: NavigationExtras = {
       queryParams: {
         copsNum: this.cops,
         graphType: this.selectedGraphType,
         oppenent: this.selectedOpponentType,
-        graphParams: [this.graphParam1, this.graphParam2]
+        graphParams: [this.graphParam1, this.graphParam2],
+        gameMode: this.gameModeSelected
       }
     }
     this.router.navigate(['/test-d3js'], extras)

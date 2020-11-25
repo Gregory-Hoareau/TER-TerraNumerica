@@ -15,6 +15,21 @@ export class PawnStateOnTurn implements PawnState {
     }
     dragged(event: any, d: any) {
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
+        if(d.graphService.gameMode == "facile"){
+            let edges = this.edges
+            d3.selectAll(".circle")
+                .filter(function(nodeData:any){
+                    console.log(nodeData)
+                    return edges.includes(nodeData);
+                })
+                .each((nodeData:any, id:any, elements:any) => {
+                    let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
+                    let distance = d.detectRadius;
+                    if (h <= distance) {
+                        d.graphService.showPossibleMove(elements[id]);
+                    }
+                })
+        }
     }
     dragended(event: any, d: any, gameManager: GameService): PawnState {
         d3.select(event.sourceEvent.target).attr("stroke", null);

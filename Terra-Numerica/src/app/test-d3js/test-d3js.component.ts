@@ -28,10 +28,13 @@ export class TestD3jsComponent implements OnInit {
   private nodes: SimulationNodeDatum[] = []
   private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
 
+  private grid;
+
   //Params coming from the menu
   private graphType;
   private copsNum;
   private graphParams;
+  private gameMode;
 
   constructor(private graphService: GraphService, private gameManager: GameService,
               private activatedRoute: ActivatedRoute) {
@@ -42,25 +45,26 @@ export class TestD3jsComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.graphType = params['graphType'];
       this.copsNum = +params['copsNum'];
+      this.gameMode = params['gameMode'];
       this.graphParams = this.convertAsNumberArr(params['graphParams']);
     })
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
-    this.grid.init(this.graphParams[0], this.graphParams[1], this.width, this.height);
     this.svg = d3.select("#visualizer")
                 .append("svg")
                     .attr("width", this.width)
                     .attr("height", this.height)
 
     this.graphService.initGraph(this.graphType, this.graphParams)
+    this.grid = this.graphService.getGrid();
     this.nodes = this.graphService.getNodes();
     this.links = this.graphService.getLinks();
 
-    this.init()
+    this.init();
   }
 
   private convertAsNumberArr(arr) {
-    let res = []
+    let res = [];
     res[0] = +arr[0];
     res[1] = +arr[1]
     return res;
@@ -75,6 +79,7 @@ export class TestD3jsComponent implements OnInit {
   }
 
   init() {
+    console.log("GAME MODE : " + this.gameMode)
     this.initData();
 
     // var pool = this.svg.append("circle")
@@ -96,6 +101,8 @@ export class TestD3jsComponent implements OnInit {
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
+    this.gameManager.setGameMode(this.gameMode);
+    this.graphService.setGameMode(this.gameMode)
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
     this.gameManager.update();
@@ -155,34 +162,6 @@ export class TestD3jsComponent implements OnInit {
       .enter()
       .append("line")
           .style("stroke", "#aaa")
-  }
-
-  private grid = {
-    cells: [],
-    GRID_SIZE: 100,
-    init: function(lar, long, width, height) {
-      this.cells = [];
-      var id = 0;
-      for(var i = 0 ; i < long ; ++i) {
-        for(var j = 0 ; j < lar ; ++j) {
-          this.cells.push({
-            id: id,
-            x: i * width/long + (width/long)/2,
-            y: j * height/lar + (height/lar)/2,
-            occupied: false
-          });
-          id++;
-        }
-      }
-    },
-
-    sqdist: function (a, b) {
-      return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
-    },
-
-    getCell: function (d) {
-      return this.cells[d.index];
-    },
   }
 
   private ticked() {
