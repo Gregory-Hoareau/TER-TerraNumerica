@@ -10,6 +10,9 @@ import { FilereaderComponent } from './filereader/filereader.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GameMenuComponent } from './components/game-menu/game-menu.component';
 import { CommonModule } from '@angular/common';
+import { BackendService } from './_services/backend/backend.service';
+import { RandomGraphService } from './_services/random-graph/random-graph.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,11 +26,14 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     GraphService,
-    GameService
+    GameService,
+    BackendService,
+    RandomGraphService
   ],
   bootstrap: [AppComponent]
 })
