@@ -43,7 +43,7 @@
                     </div>
                 </div> <!-- .graph-importation -->
             </div> <!-- .graph-selection -->
-        </div>
+        </div> <!-- .col1 -->
 
         <div class="col2">
             <div class="oponent-selection">
@@ -67,9 +67,14 @@
     
             <div class="difficulty-selection">
                 <h2 class="subtitle">Choisissez une difficulté</h2>
-                TODO : Define difficulties of game 
+                <label for="mode1">facile</label>
+                <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile">
+                <label for="mode2">normal</label>
+                <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal">
+                <label for="mode3">difficile</label>
+                <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile">
             </div> <!-- .difficulty-selection -->
-        </div>
+        </div> <!-- .col2 -->
     </div> <!-- .game-param -->
 
     <div class="buttons">

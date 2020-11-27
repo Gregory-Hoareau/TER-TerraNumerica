@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
+import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -13,12 +13,13 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   private selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'cycle', 'tree'];
+  public availableGraphType = ['grid', 'cycle', 'tree', 'random'];
   public availableOpponentType = ['ia', 'player'];
 
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
+  public gameModeSelected = "facile";
 
   public paramsNames;
   public graphParam1: number = 1;
@@ -28,10 +29,11 @@ export class GameMenuComponent implements OnInit {
   constructor(private graphService: GraphService,
               private gameService: GameService,
               private router: Router,
-              private formBuilder: FormBuilder) { }
+              private randomGraph: RandomGraphService) { }
 
   ngOnInit(): void {
     this.updateParamsName();
+    this.randomGraph.loadGraphs();
   }
 
   selectGraphType(type: string) {
@@ -43,7 +45,7 @@ export class GameMenuComponent implements OnInit {
   updateParamsName() {
     switch(this.selectedGraphType) {
       case 'grid':
-        this.paramsNames = ['Longueur :', 'Largeur :'];
+        this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
       case 'cycle':
         this.paramsNames = ['Nombre de noeuds :']
@@ -52,7 +54,7 @@ export class GameMenuComponent implements OnInit {
         this.paramsNames = ['Nombre de noeuds :', 'Arité de l\'arbre :']
         break;
       case 'random':
-        this.paramsNames = ['Param 1 :', 'Param 2 :']
+        this.paramsNames = []
         break;
       default:
         break;
@@ -73,6 +75,14 @@ export class GameMenuComponent implements OnInit {
         this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
       } else if (this.graphImportation) {
         this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
+      }
+      switch(this.gameModeSelected){
+        case "facile":
+          break;
+        case "normal":
+          break;
+        case "difficile":
+          break;
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
@@ -121,7 +131,6 @@ export class GameMenuComponent implements OnInit {
   onFileChange(file) {
     if (file.type === "application/json") {
       this.inputGraphJSONFile = file;
-      // this.graphService.loadGraphFromFile(this.inputFile)
     } 
   }
 

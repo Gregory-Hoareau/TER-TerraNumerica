@@ -31,6 +31,7 @@ export class TestD3jsComponent implements OnInit {
   private graphType;
   private copsNum;
   private graphParams;
+  private gameMode;
 
   constructor(private graphService: GraphService, private gameManager: GameService,
               private activatedRoute: ActivatedRoute) {
@@ -55,6 +56,8 @@ export class TestD3jsComponent implements OnInit {
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
+    this.gameManager.setGameMode(this.gameMode);
+    this.graphService.setGameMode(this.gameMode)
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
     this.gameManager.update();

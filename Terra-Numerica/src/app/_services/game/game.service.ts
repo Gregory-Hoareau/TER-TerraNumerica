@@ -16,15 +16,18 @@ import Swal from 'sweetalert2';
 })
 export class GameService {
 
+  private gameMode;
   private cops: Cops[];
   private thiefs: Thief[];
   private thiefTurn = true;
   private watchingPositionList = [];
+  private watchingPositionListStep2 = [];
   private turnCount = 0;
   private turnChanged: boolean = false;
   private placingPawns = true;
   private winner: string;
   private actionStack: GameActionStack;
+  private alreadyEnconteredPos: boolean = false
 
   private copsNumber = 0;
   private opponentType = null;
@@ -75,7 +78,7 @@ export class GameService {
       })
     }
     if(this.turnChanged){
-      this.recordPosition();
+      this.watchingPositionList.push(JSON.stringify(this.recordPosition()));
     }
     this.checkTurn();
   }
@@ -89,7 +92,6 @@ export class GameService {
       this.cops.forEach(e => {
         tmpPositionList.push([e.x,e.y]);      
       })
-      this.watchingPositionList.push(tmpPositionList);
       return tmpPositionList
   }
 
@@ -186,19 +188,22 @@ export class GameService {
     let timerEnd = this.turnCount > 15
     let startWatchingThiefWin = this.turnCount > 5
     if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
-    else if(timerEnd) this.winner = 'Le Voleur est vainqueur';
+    else if(timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
     else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
-        this.winner = 'Le Voleur est vainqueur';
+        this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
     }
-    return allThiefCapture || timerEnd || startWatchingThiefWin && this.checkSamePositionAsPreviously();
+    return allThiefCapture || timerEnd || startWatchingThiefWin && this.alreadyEnconteredPos;
   }
 
   getTurnCount() {
     return this.turnCount;
   }
 
+  setGameMode(gameMode){
+    this.gameMode = gameMode
+  }
+
   validateTurn() {
-    console.log(this.watchingPositionList)
 
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
@@ -227,9 +232,9 @@ export class GameService {
         confirmButtonText: 'Rejouer'
       }).then((result) => {
         if(result.isConfirmed){
-          console.log(this.watchingPositionList)
           this.watchingPositionList = []
-          console.log(this.watchingPositionList)
+          this.watchingPositionListStep2 = []
+          this.alreadyEnconteredPos = false
           window.location.reload();
         }
       })
@@ -281,7 +286,11 @@ export class GameService {
   }
 
   private checkSamePositionAsPreviously() {
-    return this.watchingPositionList.includes(this.recordPosition());
+    this.alreadyEnconteredPos = (this.thiefTurn && this.watchingPositionListStep2.includes(JSON.stringify(this.recordPosition())))
+    if(this.thiefTurn && this.watchingPositionList.includes(JSON.stringify(this.recordPosition()))){
+      this.watchingPositionListStep2.push(JSON.stringify(this.recordPosition()));
+    }
+    return this.alreadyEnconteredPos;
   }
 
 }

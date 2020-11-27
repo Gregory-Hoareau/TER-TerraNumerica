@@ -3,6 +3,8 @@ import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { Tree } from 'src/app/models/Graph/Tree/tree';
+import { GRID } from 'src/app/models/Grid/grid';
+import { RandomGraphService } from '../random-graph/random-graph.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,35 +12,12 @@ import { Tree } from 'src/app/models/Graph/Tree/tree';
 export class GraphService {
   
   private graph: Graph;
-  // private grid = {
-  //   cells: [],
-  //   GRID_SIZE: 100,
-  //   init: function(lar, long, width, height) {
-  //     this.cells = [];
-  //     var id = 0;
-  //     for(var i = 0 ; i < long ; ++i) {
-  //       for(var j = 0 ; j < lar ; ++j) {
-  //         this.cells.push({
-  //           id: id,
-  //           x: i * width/long + (width/long)/2,
-  //           y: j * height/lar + (height/lar)/2,
-  //           occupied: false
-  //         });
-  //         id++;
-  //       }
-  //     }
-  //   },
 
-  //   sqdist: function (a, b) {
-  //     return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
-  //   },
+  private gameMode;
 
-  //   getCell: function (d) {
-  //     return this.cells[d.index];
-  //   },
-  // }
+  // private grid = GRID;
 
-  constructor() {}
+  constructor(private randomGraph: RandomGraphService) {}
 
   drawGraph(svg) {
     this.graph.draw(svg);
@@ -163,6 +142,9 @@ export class GraphService {
       case 'tree':
         this.graph = new Tree(config.nodes, config.links);
         break;
+      // case 'random':
+      //   this.grid.cells = [];
+      //   this.randomGenerator();
     }
   }
 
@@ -194,12 +176,80 @@ export class GraphService {
         edges = this.edges({index: i});
       }
     }
-    console.log(vertex);
-    vertex.style.fill = "rgb(0,0,255)";
-    for(let i=0; i<edges.length; i++) {
-      (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+    if(this.gameMode === "facile" || this.gameMode === "normal"){
+      console.log(vertex);
+      for(let i=0; i<edges.length; i++) {
+        (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+      }
+      vertex.style.fill = "rgb(0,0,255)";
     }
-
     return edges;
   }
+
+  // private clearGraph() {
+  //   this.graph.nodes = [];
+  //   this.graph.links = [];
+  // }
+
+  setGameMode(gameMode){
+    this.gameMode = gameMode
+  }
+
+  // private initNodes(n) {
+  //   for(let i=0; i<n; i++) {
+  //       this.graph.nodes.push({x: i, y: i});
+  //   }
+  // }
+
+  // private gridGenerator(long, lar) {
+  //   this.clearGraph()
+  //   const n = long*lar;
+  //   this.initNodes(n)
+
+  //   //construct grid links
+  //   let count = 0;
+  //   for(let i=0; i<lar; i++) {
+  //       for(let j=0; j<long-1; j++) {
+  //           this.graph.links.push({source: count, target: count+1})
+  //           count++;
+  //       }
+  //       count++
+  //   }
+
+  //   for(let i=0; i<lar-1; i++) {
+  //       for(let j=0; j<long; j++) {
+  //           this.graph.links.push({source: (long*i)+j, target: (long*i)+j+long});
+  //       }
+  //   }
+  // }
+
+  // private cycleGenerator(n) {
+  //   this.clearGraph();
+  //   this.initNodes(n);
+    
+  //   for(let i=0; i<n-1; i++) {
+  //     this.graph.links.push({source: i, target: i+1})
+  //   }
+  //   this.graph.links.push({source: 0, target: n-1})
+  // }
+
+  // private treeGenerator(n, arity) {
+  //   this.clearGraph();
+  //   this.initNodes(n);
+  //   for(let i=0; i<n; i++) {
+  //     for(let j=1; j<=arity && (i*arity)+j < n; j++) {
+  //       this.graph.links.push({source: i, target: (i*arity) + j});
+  //     }
+  //   }
+  // }
+
+  // private randomGenerator(){
+  //   let rGraph = this.randomGraph.getRandomGraph();
+  //   this.clearGraph();
+  //   this.initNodes(rGraph.nodes.length);
+  //   rGraph.links.forEach(l => {
+  //     this.graph.links.push(l)
+  //   });
+  // }
+
 }
