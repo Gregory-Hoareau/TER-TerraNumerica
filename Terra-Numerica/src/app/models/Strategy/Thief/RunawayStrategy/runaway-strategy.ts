@@ -16,24 +16,16 @@ export class RunawayStrategy implements IStrategy {
         let farthest;
         let dist = 0;
         const edges = graph.edges(this.actual_place);
-        let i = 1
         for(const e of edges) {
-            console.log(i++)
-            if(!farthest) {
+            let globalDist = 0;
+            for(const c of cops_position_slot) {
+                const d = graph.distance(e, c);
+                globalDist += d !== -1 ? d : 0;
+            }
+
+            if(!farthest || globalDist > dist) {
                 farthest = e;
-                for(const c of cops_position_slot) {
-                    dist += graph.distance(e, c);
-                } 
-            } 
-            else {
-                let globalDist = 0;
-                for(const c of cops_position_slot) {
-                    globalDist += graph.distance(e, c);
-                }
-                if(globalDist > dist) {
-                    farthest = e;
-                    dist = globalDist;
-                }
+                dist = globalDist;
             }
         }
         this.actual_place = farthest;

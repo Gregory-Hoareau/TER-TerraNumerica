@@ -34,7 +34,6 @@ export class Pawns {
         this.yourTurn = true;
 
         this.state = environment.waitingPlacementState;
-        this.strategy = new RunawayStrategy();
     }
 
     place(graph, cops = [], thiefs = []) {
@@ -49,6 +48,7 @@ export class Pawns {
     }
 
     move(graph, cops = [], thiefs = []) {
+        console.log('MOVE')
         const pos = this.strategy.move(graph, cops, thiefs);
         this.updatePosition(pos);
         d3.select('.'+this.role)

@@ -40,18 +40,16 @@ export class Graph {
         while(edges.length > 0) {
             distance++;
             for(const e of edges) {
-                if(e.index===n2.index) return distance;
+                if(e.index == n2.index) return distance;
             }
             const save =  edges;
             edges = []
             for(const e of save) {
-                //console.log(this.edges(e).filter(i => !(i.id in marked)))
-                const temp = this.edges(e).filter(i => !(i.index in marked)).forEach(edge => {
+                const temp = this.edges(e).filter(i => !(marked.includes(i.index))).forEach(edge => {
                     let isIn = false
                     for(const i of edges) {
                         if(i.index === edge.index) {
                             isIn = true;
-                            break;
                         }
                     }
                     if(!isIn) edges.push(edge)

@@ -48,18 +48,23 @@ export class GameService {
     let index = this.thiefs.findIndex(t => t == thief);
     
     this.thiefs_position[index] = pos;
+    //console.log('THIEF POSITION :', this.thiefs_position)
   }
 
   updateCopsPosition(cop, pos) {
     let index = this.cops.findIndex(c => c == cop);
 
     this.cops_position[index] = pos;
+    //console.log('COPS POSITION :', this.cops_position)
   }
 
   update() {
     if(this.placingPawns) {
-      for(const t of this.thiefs) {
+      /* for(const t of this.thiefs) {
         if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+      } */
+      for(const c of this.cops) {
+        if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
       }
       this.checkPlacement();
       if(!this.placingPawns) {
@@ -69,9 +74,9 @@ export class GameService {
           .text(() => 'C\'est au tour du voleur.');
       }
     } else {
-      if(this.thiefTurn) {
-        for(const t of this.thiefs) {
-          t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+      if(!this.thiefTurn) {
+        for(const c of this.cops) {
+          c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
         }
         this.validateTurn();
       }
