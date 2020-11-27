@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
+import { Common } from 'src/app/models/Graph/Common/common';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
@@ -33,16 +34,12 @@ export class GraphService {
       case 'tree':
         this.graph = this.generateTree(args[0], args[1]);
         break;
-      // case 'random':
-      //   this.grid.cells = [];
-      //   this.randomGenerator();
-      // case 'copsAlwaysWin':
-      //   this.grid.cells = [];
-      //   this.oneCopsGraph(args[0])
-      //   break;
-      // case 'random':
-      //   this.grid.cells = [];
-      //   this.randomGenerator();
+      case 'random':
+        this.graph = this.generateRandom();
+        break;
+      case 'copsAlwaysWin':
+        this.graph = this.oneCopsGraph(args[0]);
+        break;
     } 
   }
 
@@ -121,6 +118,47 @@ export class GraphService {
     return new Tree(nodes, links);
   }
 
+  generateRandom(): Common {
+    let randomGraph = this.randomGraph.getRandomGraph();
+
+    return new Common(randomGraph.nodes, randomGraph.links)
+  }
+
+  oneCopsGraph(size): Common {
+
+    let nodes = this.generatesNodes(size);
+    let links = [];
+
+    let numberOfSpecialNode = Math.floor(1 + Math.random() * Math.floor((size/2)-1));
+    for(let i = 0 ; i < size-1 ; ++i) {
+      links.push({
+        source: i,
+        target: i+1
+      });
+    }
+    for(let i = 0 ; i < numberOfSpecialNode ; ++i){
+      let idNode1 = Math.floor(Math.random() * Math.floor(size))
+      let node1 = nodes[idNode1];
+      let node2 = nodes[Math.floor(idNode1 + Math.random() * Math.floor(size - idNode1))];
+      for(let i=0; i<3; i++){
+        let idOfNodeLinkedRandomly = Math.floor(idNode1 + Math.random() * Math.floor(size - idNode1));
+        console.log(node1)
+        console.log(node2)
+        links.push({
+          source: node1,
+          target: idOfNodeLinkedRandomly
+        });
+        links.push({
+          source: node2,
+          target: idOfNodeLinkedRandomly
+        });
+      }
+      links.push({source: node1, target: node2});    
+    }
+
+    return new Common(nodes, links);
+  }
+
   readAsync(file: File): Promise<Graph> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -152,9 +190,8 @@ export class GraphService {
       case 'tree':
         this.graph = new Tree(config.nodes, config.links);
         break;
-      // case 'random':
-      //   this.grid.cells = [];
-      //   this.randomGenerator();
+      case 'random':
+        this.graph = new Common(config.nodes, config.links);
     }
   }
 

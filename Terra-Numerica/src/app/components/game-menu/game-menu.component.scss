@@ -61,6 +61,7 @@
     
                         .graph-topology-preview-list {
                             display: flex;
+                            flex-wrap: wrap;
                             justify-content: center;
         
                             .graph-topology-preview-img {
