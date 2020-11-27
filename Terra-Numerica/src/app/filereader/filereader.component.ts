@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GraphService } from '../_services/graph/graph.service';
 
 @Component({
   selector: 'app-filereader',
@@ -7,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilereaderComponent implements OnInit {
 
-  graphConfigForm;
+  inputFile: File = null;
 
-  constructor() { 
+  constructor(private graphService: GraphService) { 
 
   }
 
@@ -17,12 +18,16 @@ export class FilereaderComponent implements OnInit {
     
   }
 
-  onSubmit(event) {
-    console.warn(event)
+  onSubmit() {
+    if (this.inputFile) {
+      if (this.inputFile.type === "application/json") {
+        this.graphService.loadGraphFromFile(this.inputFile)
+      }
+    }
   }
 
-  onFileChange(event) {
-    console.warn(event)
+  onFileChange(file) {
+    this.inputFile = file;
   }
 
 }

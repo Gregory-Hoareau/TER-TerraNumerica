@@ -8,7 +8,6 @@ import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
-import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import Swal from 'sweetalert2';
 
 
@@ -27,8 +26,23 @@ export class GameService {
   private winner: string;
   private actionStack: GameActionStack;
 
+  private copsNumber = 0;
+  private opponentType = null;
+
   constructor() {
     this.actionStack = new GameActionStack();
+  }
+
+  setCopsNumber(n: number) {
+    this.copsNumber = n;
+  }
+
+  getCopsNumber(): number {
+    return this.copsNumber;
+  }
+
+  setOpponentType(type: string) {
+    this.opponentType = type;
   }
 
   setThief(thiefs) {
@@ -49,7 +63,7 @@ export class GameService {
           .text(() => 'C\'est au tour du voleur.');
       }
     }
-   /*  else {
+    /* else {
       this.updateStates();
     } */
     d3.selectAll("#notificationBubble").remove();

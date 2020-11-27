@@ -1,65 +1,169 @@
 import { Injectable } from '@angular/core';
-import { Graph } from './Graph';
+import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
+import { Graph } from 'src/app/models/Graph/graph';
+import { Grid } from 'src/app/models/Graph/Grid/grid';
+import { Tree } from 'src/app/models/Graph/Tree/tree';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphService {
-
+  
   private graph: Graph;
-  private grid = {
-    cells: [],
-    GRID_SIZE: 100,
-    init: function(lar, long, width, height) {
-      this.cells = [];
-      var id = 0;
-      for(var i = 0 ; i < long ; ++i) {
-        for(var j = 0 ; j < lar ; ++j) {
-          this.cells.push({
-            id: id,
-            x: i * width/long + (width/long)/2,
-            y: j * height/lar + (height/lar)/2,
-            occupied: false
-          });
-          id++;
-        }
-      }
-    },
+  // private grid = {
+  //   cells: [],
+  //   GRID_SIZE: 100,
+  //   init: function(lar, long, width, height) {
+  //     this.cells = [];
+  //     var id = 0;
+  //     for(var i = 0 ; i < long ; ++i) {
+  //       for(var j = 0 ; j < lar ; ++j) {
+  //         this.cells.push({
+  //           id: id,
+  //           x: i * width/long + (width/long)/2,
+  //           y: j * height/lar + (height/lar)/2,
+  //           occupied: false
+  //         });
+  //         id++;
+  //       }
+  //     }
+  //   },
 
-    sqdist: function (a, b) {
-      return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
-    },
+  //   sqdist: function (a, b) {
+  //     return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
+  //   },
 
-    getCell: function (d) {
-      return this.cells[d.index];
-    },
+  //   getCell: function (d) {
+  //     return this.cells[d.index];
+  //   },
+  // }
+
+  constructor() {}
+
+  drawGraph(svg) {
+    this.graph.draw(svg);
   }
 
-  constructor() {
-  }
-
-  initGraph(type: string, args?: any[]) {
-    this.graph = new Graph([], []);
+  generateGraph(type: string, args?: any[]) {
     switch(type) {
       case 'grid':
-        const w = document.getElementById('visualizer').offsetWidth;
-        const h = document.getElementById('visualizer').offsetHeight;
-        this.grid.init(args[0], args[1], w, h);
-        this.gridGenerator(args[0], args[1])
+        this.graph = this.generateGrid(args[0], args[1]);
         break;
       case 'cycle':
-        this.grid.cells = [];
-        this.cycleGenerator(args[0]);
+        this. graph = this.generateCycle(args[0]);
         break;
       case 'tree':
-        this.grid.cells = [];
-        this.treeGenerator(args[0], args[1])
+        this.graph = this.generateTree(args[0], args[1]);
         break;
-    }
+    } 
   }
 
-  getGrid() {
-    return this.grid;
+  generatesNodes(n: number): any[] {
+    let nodes = [];
+    for(let i=0 ; i < n ; ++i) {
+      nodes.push({
+        index: i,
+      });
+    }
+    return nodes;
+  }
+
+  generateGrid(width: number, height: number): Grid {
+
+    const size = width*height;
+    let nodes = this.generatesNodes(size);
+    let links = [];
+
+    let count = 0;
+    for(let i = 0 ; i < height ; ++i) {
+        for(let j = 0 ; j < width-1 ; ++j) {
+            links.push({
+              source: count,
+              target: count+1
+            })
+            count++;
+        }
+        count++
+    }
+
+    for(let i = 0 ; i < height-1 ; ++i) {
+        for(let j = 0 ; j < width ; ++j) {
+            links.push({
+              source: (width*i)+j,
+              target: (width*i)+j+width
+            });
+        }
+    }
+
+    return new Grid(nodes, links, width, height);
+  }
+
+  generateCycle(size: number): Cycle {
+    let nodes = this.generatesNodes(size);
+    let links = [];
+
+    for(let i: number = 0 ; i < size-1 ; ++i) {
+      links.push({
+        source: i,
+        target: i+1
+      })
+    }
+    links.push({
+      source: 0,
+      target: size-1
+    })
+
+    return new Cycle(nodes, links);
+  }
+
+  generateTree(size: number, arity: number): Tree {
+
+    let nodes = this.generatesNodes(size);
+    let links = [];
+
+    for(let i = 0 ; i < size ; ++i) {
+      for(let j = 1 ; j <= arity && (i*arity)+j < size ; ++j) {
+        links.push({
+          source: i,
+          target: (i*arity) + j
+        });
+      }
+    }
+
+    return new Tree(nodes, links);
+  }
+
+  readAsync(file: File): Promise<Graph> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        let config = JSON.parse(reader.result.toString());
+        resolve(config);
+      };
+      reader.onerror = () => {
+          reject (new Error ('Unable to read..'));
+      };
+      reader.readAsText(file);
+    });
+  }
+  
+  async loadGraphFromFile(file: File) {
+    const config = await this.readAsync(file);
+    this.importGraph(config);
+  }
+
+  importGraph(config) {
+    switch(config.typology) {
+      case 'grid':
+        this.graph = new Grid(config.nodes, config.links, config.width, config.height);
+        break;
+      case 'cycle':
+        this.graph = new Cycle(config.nodes, config.links);
+        break;
+      case 'tree':
+        this.graph = new Tree(config.nodes, config.links);
+        break;
+    }
   }
 
   getNodes() {
@@ -98,58 +202,4 @@ export class GraphService {
 
     return edges;
   }
-
-  private clearGraph() {
-    this.graph.nodes = [];
-    this.graph.links = [];
-  }
-
-  private initNodes(n) {
-    for(let i=0; i<n; i++) {
-        this.graph.nodes.push({x: i, y: i});
-    }
-  }
-
-  private gridGenerator(long, lar) {
-    this.clearGraph()
-    const n = long*lar;
-    this.initNodes(n)
-
-    //construct grid links
-    let count = 0;
-    for(let i=0; i<lar; i++) {
-        for(let j=0; j<long-1; j++) {
-            this.graph.links.push({source: count, target: count+1})
-            count++;
-        }
-        count++
-    }
-
-    for(let i=0; i<lar-1; i++) {
-        for(let j=0; j<long; j++) {
-            this.graph.links.push({source: (long*i)+j, target: (long*i)+j+long});
-        }
-    }
-  }
-
-  private cycleGenerator(n) {
-    this.clearGraph();
-    this.initNodes(n);
-    
-    for(let i=0; i<n-1; i++) {
-      this.graph.links.push({source: i, target: i+1})
-    }
-    this.graph.links.push({source: 0, target: n-1})
-  }
-
-  private treeGenerator(n, arity) {
-    this.clearGraph();
-    this.initNodes(n);
-    for(let i=0; i<n; i++) {
-      for(let j=1; j<=arity && (i*arity)+j < n; j++) {
-        this.graph.links.push({source: i, target: (i*arity) + j});
-      }
-    }
-  }
-
 }
