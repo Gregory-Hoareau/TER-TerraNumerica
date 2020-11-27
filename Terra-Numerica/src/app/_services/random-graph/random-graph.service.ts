@@ -13,7 +13,6 @@ export class RandomGraphService {
   loadGraphs() {
     this.backend.get('graph').subscribe(graphs => {
       this.graphs = graphs;
-      console.log(this.graphs);
     });
   }
 

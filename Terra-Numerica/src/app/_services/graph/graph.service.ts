@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as d3 from 'd3';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
@@ -15,8 +16,6 @@ export class GraphService {
 
   private gameMode;
 
-  // private grid = GRID;
-
   constructor(private randomGraph: RandomGraphService) {}
 
   drawGraph(svg) {
@@ -24,6 +23,7 @@ export class GraphService {
   }
 
   generateGraph(type: string, args?: any[]) {
+    this.graph = null;
     switch(type) {
       case 'grid':
         this.graph = this.generateGrid(args[0], args[1]);
@@ -34,6 +34,9 @@ export class GraphService {
       case 'tree':
         this.graph = this.generateTree(args[0], args[1]);
         break;
+      // case 'random':
+      //   this.grid.cells = [];
+      //   this.randomGenerator();
     } 
   }
 
@@ -132,6 +135,7 @@ export class GraphService {
   }
 
   importGraph(config) {
+    this.graph = null;
     switch(config.typology) {
       case 'grid':
         this.graph = new Grid(config.nodes, config.links, config.width, config.height);
@@ -164,36 +168,47 @@ export class GraphService {
     return this.graph.distance(n1, n2);
   }
 
+  setGameMode(gameMode){
+    this.gameMode = gameMode
+  }
+
   showPossibleMove(vertex) {
-    const circles = document.getElementsByClassName("circle");
-    for(let i=0; i<circles.length; i++) {
-      let c = circles[i];
-      (c as HTMLElement).style.fill = '#69b3a2'
-    }
-    let edges;
-    for(let i=0; i<circles.length; i++) {
-      if(vertex === circles.item(i)) {
-        edges = this.edges({index: i});
-      }
-    }
-    if(this.gameMode === "facile" || this.gameMode === "normal"){
-      console.log(vertex);
-      for(let i=0; i<edges.length; i++) {
-        (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
-      }
-      vertex.style.fill = "rgb(0,0,255)";
+
+    const edges = this.graph.edges(vertex.__data__)
+    d3.selectAll(".circle").style("fill", '#69b3a2');
+    if(this.gameMode === "facile" || this.gameMode === "normal") {
+      vertex.style.fill = "blue"
+      d3.selectAll(".circle").filter(function(d: any) {
+        return edges.includes(d);
+      }).style("fill", "red");
     }
     return edges;
+
+    // const circles = document.getElementsByClassName("circle");
+    // for(let i=0; i<circles.length; i++) {
+    //   let c = circles[i];
+    //   (c as HTMLElement).style.fill = '#69b3a2'
+    // }
+    // let edges;
+    // for(let i=0; i<circles.length; i++) {
+    //   if(vertex === circles.item(i)) {
+    //     edges = this.edges({index: i});
+    //   }
+    // }
+    // if(this.gameMode === "facile" || this.gameMode === "normal"){
+    //   console.log(vertex);
+    //   for(let i=0; i<edges.length; i++) {
+    //     (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
+    //   }
+    //   vertex.style.fill = "rgb(0,0,255)";
+    // }
+    // return edges;
   }
 
   // private clearGraph() {
   //   this.graph.nodes = [];
   //   this.graph.links = [];
   // }
-
-  setGameMode(gameMode){
-    this.gameMode = gameMode
-  }
 
   // private initNodes(n) {
   //   for(let i=0; i<n; i++) {

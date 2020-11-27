@@ -13,24 +13,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./test-d3js.component.scss']
 })
 export class TestD3jsComponent implements OnInit {
-  private margin = {top: 10, right: 30, bottom: 30, left: 40};
   private width;
   private height;
   
 
-  private svg; private link; private node; 
+  private svg;
   private thiefs: Thief[] = [];
   private cops: Cops[] = [];
-  private simulation: Simulation<SimulationNodeDatum, SimulationLinkDatum<SimulationNodeDatum>>;
-  private nodes: SimulationNodeDatum[] = []
-  private links: SimulationLinkDatum<SimulationNodeDatum>[] = []
-
-  private grid;
-
-  // Params coming from the menu
-  private graphType;
-  private copsNum;
-  private graphParams;
   private gameMode;
 
   constructor(private graphService: GraphService, private gameManager: GameService,
@@ -39,6 +28,13 @@ export class TestD3jsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      // this.graphType = params['graphType'];
+      // this.copsNum = +params['copsNum'];
+      this.gameMode = params['gameMode'];
+      // this.graphParams = this.convertAsNumberArr(params['graphParams']);
+    })
+
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
     this.svg = d3.select("#visualizer")
@@ -57,7 +53,7 @@ export class TestD3jsComponent implements OnInit {
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
     this.gameManager.setGameMode(this.gameMode);
-    this.graphService.setGameMode(this.gameMode)
+    this.graphService.setGameMode(this.gameMode);
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
     this.gameManager.update();
@@ -100,9 +96,9 @@ export class TestD3jsComponent implements OnInit {
       .text(() => "Veuillez placer vos pions")
   }
 
-  showPossibleMoves(event){
-    return this.graphService.showPossibleMove(event);
-  }
+  // showPossibleMoves(event){
+  //   return this.graphService.showPossibleMove(event);
+  // }
 
   getTurnCount() {
     return this.gameManager.getTurnCount();

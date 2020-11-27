@@ -19,7 +19,6 @@ export class PawnStateOnTurn implements PawnState {
             let edges = this.edges
             d3.selectAll(".circle")
                 .filter(function(nodeData:any){
-                    console.log(nodeData)
                     return edges.includes(nodeData);
                 })
                 .each((nodeData:any, id:any, elements:any) => {
@@ -75,31 +74,4 @@ export class PawnStateOnTurn implements PawnState {
             return environment.waitingTurnState; 
         }
     }
-
-    //machin(data:any){
-    //    return this.edges.includes(data);
-    //}
-
-
-
-        // let circles = document.getElementsByClassName("circle");
-        // for (const e of d.possiblePoints) {
-        //     let pos = circles.item(e.index) as any;
-        //     if (pos.cx.baseVal.value - d.detectRadius <= event.x && event.x <= pos.cx.baseVal.value + d.detectRadius) {
-        //         if (pos.cy.baseVal.value - d.detectRadius <= event.y && event.y <= pos.cy.baseVal.value + d.detectRadius) {
-        //             d.possiblePoints = d.graphService.showPossibleMove(pos)
-
-        //             d.lastSlot = pos;
-        //             d3.select(event.sourceEvent.target).attr("cx", d.x = pos.cx.baseVal.value).attr("cy", d.y = pos.cy.baseVal.value);
-        //             d.settedPosition = true;
-        //             d.yourTurn = false;
-        //             break;
-        //         }
-        //     }
-        // }
-        // if (d.settedPosition == false){
-        //     d3.select(event.sourceEvent.target).attr("cx", d.x = d.lastPosX).attr("cy", d.y = d.lastPosY);
-        //     return this;
-        // }
-        // return environment.waitingTurnState //new PawnStateWaitingTurn();
 }
