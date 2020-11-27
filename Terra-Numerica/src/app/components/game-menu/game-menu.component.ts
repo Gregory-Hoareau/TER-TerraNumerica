@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { GameService } from 'src/app/_services/game/game.service';
+import { GraphService } from 'src/app/_services/graph/graph.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -14,12 +16,19 @@ export class GameMenuComponent implements OnInit {
   public availableGraphType = ['grid', 'cycle', 'tree'];
   public availableOpponentType = ['ia', 'player'];
 
-  public paramsNames;
-  public graphParam1 = 1;
-  public graphParam2 = 1;
-  public cops = 1;
+  private inputGraphJSONFile: File = null;
+  private graphGeneration: boolean = true;
+  private graphImportation: boolean = false;
 
-  constructor(private router: Router, private formBuilder: FormBuilder) { }
+  public paramsNames;
+  public graphParam1: number = 1;
+  public graphParam2: number = 1;
+  public cops: number = 1;
+
+  constructor(private graphService: GraphService,
+              private gameService: GameService,
+              private router: Router,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.updateParamsName();
@@ -59,26 +68,61 @@ export class GameMenuComponent implements OnInit {
   }
 
   validateParams() {
-    this.paramSafetyCheck();
-    const extras: NavigationExtras = {
-      queryParams: {
-        copsNum: this.cops,
-        graphType: this.selectedGraphType,
-        oppenent: this.selectedOpponentType,
-        graphParams: [this.graphParam1, this.graphParam2]
+    if (this.paramSafetyCheck()) {
+      if (this.graphGeneration) {
+        this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
+      } else if (this.graphImportation) {
+        this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       }
+      this.gameService.setOpponentType(this.selectedOpponentType);
+      this.gameService.setCopsNumber(this.cops);
+      this.router.navigate(['/test-d3js']);
     }
-    this.router.navigate(['/test-d3js'], extras)
   }
 
   private paramSafetyCheck() {
-    if(!this.graphParam1) this.graphParam1 = 0;
-    if(!this.graphParam2) this.graphParam2 = 0;
+    if (this.inputGraphJSONFile && this.graphImportation) {
+      return true;
+    }
+    if (this.graphGeneration) {
+      if(!this.graphParam1) this.graphParam1 = 0;
+      if(!this.graphParam2) this.graphParam2 = 0;
+      return true
+    }
+    return false;
   }
 
-  isSelected(type) {
-    if(type === this.selectedOpponentType || type === this.selectedGraphType) return 'selected'
-    else return ''
+  isSelectedOponent(type) {
+    return type === this.selectedOpponentType ? 'selected' : ''
+  }
+
+  isSelectedGraphType(typology) {
+    return typology === this.selectedGraphType ? 'selected' : ''
+  }
+
+  selectGraphGeneration() {
+    this.graphGeneration = true;
+    this.graphImportation = false;
+  }
+
+  selectGraphImportation() {
+    this.graphGeneration = false;
+    this.graphImportation = true;
+  }
+
+  isSeletectedGraphGeneration() {
+    return this.graphGeneration ? 'selected' : '';
+  }
+
+  isSeletectedGraphImportation() {
+    return this.graphImportation ? 'selected' : '';
+  }
+
+  onFileChange(file) {
+    if (file.type === "application/json") {
+      this.inputGraphJSONFile = file;
+      // this.graphService.loadGraphFromFile(this.inputFile)
+    } 
   }
 
 }
