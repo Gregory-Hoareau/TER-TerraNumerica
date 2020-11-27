@@ -22,7 +22,6 @@ export class Pawns {
     lastPosY;
     settedPosition = true;
     strategy: IStrategy;
-    last_node;
 
     state: PawnState;
     constructor(private gameManager: GameService, public graphService: GraphService, x: number, y: number){
@@ -34,6 +33,10 @@ export class Pawns {
         this.yourTurn = true;
 
         this.state = environment.waitingPlacementState;
+    }
+
+    setStrategy(strat) {
+        this.strategy = strat;
     }
 
     place(graph, cops = [], thiefs = []) {

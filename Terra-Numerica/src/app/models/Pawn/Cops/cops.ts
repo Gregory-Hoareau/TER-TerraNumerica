@@ -25,9 +25,6 @@ export class Cops extends Pawns {
       }
 
       updatePosition(node) {
-          if(node) {
-            this.gameM.updateCopsPosition(this, node);
-            this.last_node = node
-          }
+          if(node) this.gameM.updateCopsPosition(this, node);
       }
 }
