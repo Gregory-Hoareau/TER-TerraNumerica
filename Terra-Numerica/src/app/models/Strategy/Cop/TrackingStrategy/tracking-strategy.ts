@@ -16,14 +16,10 @@ export class TrackingStrategy implements IStrategy {
         let closest;
         let distance = graph.nodes.length;
         const edges = graph.edges(this.actual_place);
-        console.warn('START FOR LOOP')
         for(const e of edges) {
             let globalDist = 0;
             for(const t of thiefs_position_slot) {
-                console.log('E', e);
-                console.log('T', t);
                 const d = graph.distance(e, t);
-                console.log('D', d)
                 globalDist += d !== -1 ? d : 0;
             }
 
@@ -31,12 +27,8 @@ export class TrackingStrategy implements IStrategy {
                 closest = e;
                 distance = globalDist;
             }
-            console.log('GLOBAL DISTANCE', globalDist)
         }
         this.actual_place = closest;
-        console.warn('DISPLAY VALUE')
-        console.log('HERE', this.actual_place);
-        console.log('DIST', distance)
         return this.actual_place;
     }
 }

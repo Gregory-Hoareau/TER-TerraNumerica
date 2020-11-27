@@ -60,7 +60,7 @@ export class GameService {
 
   update() {
     if(this.placingPawns) {
-      /* for(const t of this.thiefs) {
+     /* for(const t of this.thiefs) {
         if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
       } */
       for(const c of this.cops) {
@@ -79,7 +79,13 @@ export class GameService {
           c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
         }
         this.validateTurn();
-      }
+      } 
+      /* else {
+        for(const t of this.thiefs) {
+          t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+        }
+        this.validateTurn();
+      } */
     }
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
