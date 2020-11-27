@@ -10,6 +10,7 @@ import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stac
 import { GameAction } from 'src/app/models/GameAction/game-action';
 import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import Swal from 'sweetalert2';
+import { GraphService } from '../graph/graph.service';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class GameService {
   private gameMode;
   private cops: Cops[];
   private thiefs: Thief[];
-  private thiefTurn = true;
+  private thiefTurn = false;
   private watchingPositionList = [];
   private turnCount = 0;
   private turnChanged: boolean = false;
@@ -28,7 +29,10 @@ export class GameService {
   private winner: string;
   private actionStack: GameActionStack;
 
-  constructor() {
+  private cops_position = [];
+  private thiefs_position = [];
+
+  constructor(private graphService: GraphService) {
     this.actionStack = new GameActionStack();
   }
 
@@ -40,8 +44,23 @@ export class GameService {
     this.cops = cops;
   }
 
+  updateThiefPosition(thief, pos) {
+    let index = this.thiefs.findIndex(t => t == thief);
+    
+    this.thiefs_position[index] = pos;
+  }
+
+  updateCopsPosition(cop, pos) {
+    let index = this.cops.findIndex(c => c == cop);
+
+    this.cops_position[index] = pos;
+  }
+
   update() {
     if(this.placingPawns) {
+      for(const t of this.thiefs) {
+        if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+      }
       this.checkPlacement();
       if(!this.placingPawns) {
         this.startGame();
@@ -49,10 +68,14 @@ export class GameService {
           .style('color', 'green')
           .text(() => 'C\'est au tour du voleur.');
       }
+    } else {
+      if(this.thiefTurn) {
+        for(const t of this.thiefs) {
+          t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+        }
+        this.validateTurn();
+      }
     }
-   /*  else {
-      this.updateStates();
-    } */
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
     if(pile.length != this.cops.length){
@@ -136,8 +159,10 @@ export class GameService {
   }
 
   private startGame() {
+    this.thiefTurn = true;
     this.setPlayersState(this.thiefs, environment.onTurnState);
     this.turnCount++;
+    this.update();
   }
 
   /* private updateStates() {
@@ -171,7 +196,7 @@ export class GameService {
       }
     }
     let timerEnd = this.turnCount > 15
-    let startWatchingThiefWin = this.turnCount > 5
+    let startWatchingThiefWin = this.turnCount > 10
     if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
     else if(timerEnd) this.winner = 'Le Voleur est vainqueur';
     else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
@@ -189,7 +214,6 @@ export class GameService {
   }
 
   validateTurn() {
-    console.log(this.watchingPositionList)
 
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
@@ -209,7 +233,6 @@ export class GameService {
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }
-    this.update()
     if(this.checkEnd()) {
       Swal.fire({
         title: this.winner,
@@ -224,6 +247,8 @@ export class GameService {
           window.location.reload();
         }
       })
+    } else {
+      this.update()
     }
   }
   

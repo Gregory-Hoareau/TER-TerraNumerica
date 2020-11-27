@@ -61,6 +61,10 @@ export class TestD3jsComponent implements OnInit {
     this.links = this.graphService.getLinks();
 
     this.init();
+    setTimeout(() => {
+      this.gameManager.update();
+    }, 2000)
+    
   }
 
   private convertAsNumberArr(arr) {
@@ -105,7 +109,6 @@ export class TestD3jsComponent implements OnInit {
     this.graphService.setGameMode(this.gameMode)
     this.gameManager.setCops(this.cops);
     this.gameManager.setThief(this.thiefs)
-    this.gameManager.update();
 
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")
@@ -143,6 +146,9 @@ export class TestD3jsComponent implements OnInit {
     d3.select("#hud").append("p")
       .attr("id", "main-message")
       .text(() => "Veuillez placer vos pions")
+    
+      
+    
   }
 
   initData() {

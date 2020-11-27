@@ -22,4 +22,11 @@ export class Thief extends Pawns {
                 .on("end", this.dragended.bind(this)));
 
     }
+
+    updatePosition(node) {
+        if(node) {
+            this.gameM.updateThiefPosition(this, node);
+            this.last_node = node
+        }
+    }
 }

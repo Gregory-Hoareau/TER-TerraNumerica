@@ -9,6 +9,10 @@ export class Graph {
         this._links = links;
     }
 
+    getRandomEdge(): SimulationNodeDatum {
+        return Object.assign({}, this._nodes[this.getRandomInt(this._nodes.length-1)]);
+    }
+
     edges(node): SimulationNodeDatum[] {
         const edges = [];
         edges.push(this._nodes.find(n => n.index === node.index))
@@ -58,6 +62,11 @@ export class Graph {
         return -1;
     }
 
+    getRandomAccessibleEdges(n) {
+        const edges = this.edges(n);
+        return edges[this.getRandomInt(edges.length)];
+    }
+
     get nodes() {
         return this._nodes
     }
@@ -72,5 +81,9 @@ export class Graph {
 
     set links(l) {
         this._links = l;
+    }
+
+    private getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
     }
 }

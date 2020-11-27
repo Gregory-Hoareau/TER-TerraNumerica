@@ -13,6 +13,10 @@ export class GraphService {
   constructor() {
   }
 
+  getGraph() {
+    return this.graph;
+  }
+
   initGraph(type: string, args?: any[]) {
     this.graph = new Graph([], []);
     switch(type) {
@@ -66,7 +70,7 @@ export class GraphService {
       }
     }
     if(this.gameMode === "facile" || this.gameMode === "normal"){
-      console.log(vertex);
+      //console.log(vertex);
       for(let i=0; i<edges.length; i++) {
         (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";
       }

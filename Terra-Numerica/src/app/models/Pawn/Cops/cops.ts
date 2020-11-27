@@ -21,4 +21,11 @@ export class Cops extends Pawns {
                 .on("drag", this.dragged.bind(this))
                 .on("end", this.dragended.bind(this)));
       }
+
+      updatePosition(node) {
+          if(node) {
+            this.gameM.updateCopsPosition(this, node);
+            this.last_node = node
+          }
+      }
 }
