@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GRID } from 'src/app/models/Grid/grid';
+import { RandomGraphService } from '../random-graph/random-graph.service';
 import { Graph } from './Graph';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class GraphService {
   private graph: Graph;
   private grid = GRID;
 
-  constructor() {
+  constructor(private randomGraph: RandomGraphService) {
   }
 
   initGraph(type: string, args?: any[]) {
@@ -30,6 +31,9 @@ export class GraphService {
         this.grid.cells = [];
         this.treeGenerator(args[0], args[1])
         break;
+      case 'random':
+        this.grid.cells = [];
+        this.randomGenerator();
     }
   }
 
@@ -130,6 +134,15 @@ export class GraphService {
         this.graph.links.push({source: i, target: (i*arity) + j});
       }
     }
+  }
+
+  private randomGenerator(){
+    let rGraph = this.randomGraph.getRandomGraph();
+    this.clearGraph();
+    this.initNodes(rGraph.nodes.length);
+    rGraph.links.forEach(l => {
+      this.graph.links.push(l)
+    });
   }
 
 }
