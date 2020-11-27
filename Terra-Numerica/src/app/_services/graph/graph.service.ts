@@ -31,6 +31,10 @@ export class GraphService {
         this.grid.cells = [];
         this.treeGenerator(args[0], args[1])
         break;
+      case 'copsAlwaysWin':
+        this.grid.cells = [];
+        this.oneCopsGraph(args[0])
+        break;
       case 'random':
         this.grid.cells = [];
         this.randomGenerator();
@@ -134,6 +138,30 @@ export class GraphService {
         this.graph.links.push({source: i, target: (i*arity) + j});
       }
     }
+  }
+
+  private oneCopsGraph(n) {
+    this.clearGraph
+    this.initNodes(n)
+    let numberOfSpecialNode = Math.floor(1 + Math.random() * Math.floor((n/2)-1));
+    for(let i=0; i<n-1; i++){
+      this.graph.links.push({source: i, target: i+1});
+    }
+    console.log(numberOfSpecialNode)
+    for(let i=0; i<numberOfSpecialNode; i++){
+      let idNode1 = Math.floor(Math.random() * Math.floor(n))
+      let node1 = this.graph.nodes[idNode1];
+      let node2 = this.graph.nodes[Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1))];
+      for(let i=0; i<3; i++){
+        let idOfNodeLinkedRandomly = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1));
+        console.log(node1)
+        console.log(node2)
+        this.graph.links.push({source: node1, target: idOfNodeLinkedRandomly});
+        this.graph.links.push({source: node2, target: idOfNodeLinkedRandomly});
+      }
+      this.graph.links.push({source: node1, target: node2});    
+    }
+
   }
 
   private randomGenerator(){

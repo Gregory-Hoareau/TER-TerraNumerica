@@ -12,7 +12,7 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   private selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'cycle', 'tree', 'random'];
+  public availableGraphType = ['grid', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
   public availableOpponentType = ['ia', 'player'];
 
   public gameModeSelected = "facile";
@@ -44,6 +44,9 @@ export class GameMenuComponent implements OnInit {
         break;
       case 'tree':
         this.paramsNames = ['Nombre de noeuds :', 'Arité de l\'arbre :']
+        break;
+      case 'copsAlwaysWin':
+        this.paramsNames = ['Nombre de noeuds :']
         break;
       case 'random':
         this.paramsNames = []
