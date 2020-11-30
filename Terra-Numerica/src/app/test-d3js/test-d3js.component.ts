@@ -6,6 +6,7 @@ import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
 import { GameService } from '../_services/game/game.service';
 import { ActivatedRoute } from '@angular/router';
+import { Graph } from '../models/Graph/graph';
 
 @Component({
   selector: 'app-test-d3js',
@@ -22,7 +23,8 @@ export class TestD3jsComponent implements OnInit {
   private cops: Cops[] = [];
   private gameMode;
 
-  constructor(private graphService: GraphService, private gameManager: GameService,
+  constructor(private graphService: GraphService,
+              private gameManager: GameService,
               private activatedRoute: ActivatedRoute) {
 
   }
@@ -44,6 +46,15 @@ export class TestD3jsComponent implements OnInit {
 
     this.graphService.drawGraph(this.svg);
     this.init();
+  }
+
+  drawGraph() {
+    if (localStorage.getItem("graph") !== null) {
+      const savedGraph = JSON.parse(localStorage.getItem("graph")) as Graph
+      console.log(savedGraph)
+    } else {
+      this.graphService.drawGraph(this.svg);
+    }
   }
 
   init() {
@@ -114,6 +125,12 @@ export class TestD3jsComponent implements OnInit {
 
   cancelAction() {
     this.gameManager.cancelAction();
+  }
+
+  checkReload() {
+    if (localStorage.getItem("graph") !== null) {
+      this.graphService.reloadGraph()
+    }
   }
 
 }

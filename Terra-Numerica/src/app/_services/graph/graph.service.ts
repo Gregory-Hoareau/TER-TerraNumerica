@@ -14,15 +14,38 @@ export class GraphService {
   
   private graph: Graph;
 
-  private gameMode;
+  private gameMode: string;
 
-  constructor(private randomGraph: RandomGraphService) {}
+  constructor(private randomGraph: RandomGraphService) {
+    if (localStorage.getItem("method") !== null) {
+      switch(localStorage.getItem("method")) {
+        case "generate":
+          if (localStorage.getItem("type") !== null && localStorage.getItem("args") !== null) {
+            const type = localStorage.getItem("type");
+            const args = JSON.parse(localStorage.getItem("args"));
+            this.generateGraph(type, args)
+          }
+          break;
+        case "import":
+          if (localStorage.getItem("config") !== null) {
+            const config = JSON.parse(localStorage.getItem("config"))
+            this.importGraph(config);
+          }
+          break;
+      }
+    } else {
+      this.graph = null;
+    }
+  }
 
   drawGraph(svg) {
     this.graph.draw(svg);
   }
 
   generateGraph(type: string, args?: any[]) {
+    localStorage.setItem("method", "generate");
+    localStorage.setItem("type", type);
+    localStorage.setItem("args", JSON.stringify(args));
     this.graph = null;
     switch(type) {
       case 'grid':
@@ -40,7 +63,7 @@ export class GraphService {
       case 'copsAlwaysWin':
         this.graph = this.oneCopsGraph(args[0]);
         break;
-    } 
+    }
   }
 
   generatesNodes(n: number): any[] {
@@ -167,6 +190,8 @@ export class GraphService {
 
   importGraph(config) {
     this.graph = null;
+    localStorage.setItem("method", "import");
+    localStorage.setItem("config", JSON.stringify(config));
     switch(config.typology) {
       case 'grid':
         this.graph = new Grid(config.nodes, config.links, config.width, config.height);
@@ -180,6 +205,7 @@ export class GraphService {
       case 'random':
         this.graph = new Common(config.nodes, config.links);
     }
+    localStorage.setItem("graph", JSON.stringify(this.graph));
   }
 
   getNodes() {

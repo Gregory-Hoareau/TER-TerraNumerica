@@ -33,12 +33,16 @@ export class GameService {
   private copsNumber = 0;
   private opponentType = null;
 
-  constructor(private router: Router,) {
+  constructor(private router: Router) {
     this.actionStack = new GameActionStack();
+    if (localStorage.getItem("cops") !== null) {
+      this.copsNumber = parseInt(localStorage.getItem("cops"));
+    }
   }
 
   setCopsNumber(n: number) {
     this.copsNumber = n;
+    localStorage.setItem("cops", n.toString());
   }
 
   getCopsNumber(): number {
