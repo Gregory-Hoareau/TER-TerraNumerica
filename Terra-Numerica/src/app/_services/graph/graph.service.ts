@@ -143,25 +143,23 @@ export class GraphService {
   private oneCopsGraph(n) {
     this.clearGraph
     this.initNodes(n)
-    let numberOfSpecialNode = Math.floor(1 + Math.random() * Math.floor((n/2)-1));
-    for(let i=0; i<n-1; i++){
-      this.graph.links.push({source: i, target: i+1});
-    }
-    console.log(numberOfSpecialNode)
-    for(let i=0; i<numberOfSpecialNode; i++){
       let idNode1 = Math.floor(Math.random() * Math.floor(n))
       let node1 = this.graph.nodes[idNode1];
-      let node2 = this.graph.nodes[Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1))];
-      for(let i=0; i<3; i++){
-        let idOfNodeLinkedRandomly = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1));
-        console.log(node1)
-        console.log(node2)
-        this.graph.links.push({source: node1, target: idOfNodeLinkedRandomly});
-        this.graph.links.push({source: node2, target: idOfNodeLinkedRandomly});
+      console.log(node1)
+      let idNode2 = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1 - 1))
+      let node2 = this.graph.nodes[idNode2];
+      console.log(node2)
+      console.log(idNode1, idNode2)
+      for(let i=0; i<idNode1; i++){
+        this.graph.links.push({source: i, target: i+1});
       }
-      this.graph.links.push({source: node1, target: node2});    
-    }
-
+      for(let i=idNode1 + 1; i<n; i++){
+        if(i!=idNode2){
+          this.graph.links.push({source: node1, target: i});
+          this.graph.links.push({source: node2, target: i});
+        }
+      }
+      this.graph.links.push({source: node1, target: node2})
   }
 
   private randomGenerator(){
