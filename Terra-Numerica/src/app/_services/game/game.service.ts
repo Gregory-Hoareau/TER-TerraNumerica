@@ -240,15 +240,21 @@ export class GameService {
           this.alreadyEnconteredPos = false
           window.location.reload();
         }else if(!result.isConfirmed){
-          this.watchingPositionList = []
-          this.watchingPositionListStep2 = []
-          this.alreadyEnconteredPos = false
-          this.turnCount = 0;
+          this.reset();
           this.router.navigate(['/menu']);
 
         }
       })
     }
+  }
+
+  reset(){
+    this.watchingPositionList = []
+    this.watchingPositionListStep2 = []
+    this.alreadyEnconteredPos = false
+    this.turnCount = 0;
+    this.thiefTurn = true;
+    this.placingPawns = true;
   }
   
   checkTurn(){
