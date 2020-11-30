@@ -127,10 +127,4 @@ export class TestD3jsComponent implements OnInit {
     this.gameManager.cancelAction();
   }
 
-  checkReload() {
-    if (localStorage.getItem("graph") !== null) {
-      this.graphService.reloadGraph()
-    }
-  }
-
 }

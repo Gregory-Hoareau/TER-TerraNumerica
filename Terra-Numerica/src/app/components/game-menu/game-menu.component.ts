@@ -78,9 +78,10 @@ export class GameMenuComponent implements OnInit {
     if (this.paramSafetyCheck()) {
       if (this.graphGeneration) {
         this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
-      } else if (this.graphImportation) {
-        this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       }
+      // else if (this.graphImportation) {
+      //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
+      // }
       switch(this.gameModeSelected){
         case "facile":
           break;
@@ -145,6 +146,7 @@ export class GameMenuComponent implements OnInit {
   onFileChange(file) {
     if (file.type === "application/json") {
       this.inputGraphJSONFile = file;
+      this.graphService.loadGraphFromFile(file);
     } 
   }
 

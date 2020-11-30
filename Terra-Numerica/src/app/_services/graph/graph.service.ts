@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
+import { promise } from 'protractor';
 import { Common } from 'src/app/models/Graph/Common/common';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
@@ -152,27 +153,27 @@ export class GraphService {
     let links = [];
 
     let idNode1 = Math.floor(Math.random() * Math.floor(n))
-      let node1 = nodes[idNode1];
-      let idNode2 = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1 - 1))
-      let node2 = nodes[idNode2];
+    let node1 = nodes[idNode1];
+    let idNode2 = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1 - 1))
+    let node2 = nodes[idNode2];
 
-      for(let i=0; i<idNode1; i++){
-        links.push({source: i, target: i+1});
-      }
-      for(let i=idNode1 + 1; i<n; i++){
-        if(i!=idNode2){
-          links.push({source: node1, target: i});
-          links.push({source: node2, target: i});
-        }
-      }
-      links.push({source: node1, target: node2})
-      return new Common(nodes, links);
+    for(let i=0; i<idNode1; i++){
+      links.push({source: i, target: i+1});
     }
+    for(let i=idNode1 + 1; i<n; i++){
+      if(i!=idNode2){
+        links.push({source: node1, target: i});
+        links.push({source: node2, target: i});
+      }
+    }
+    links.push({source: node1, target: node2})
+    return new Common(nodes, links);
+  }
 
   readAsync(file: File): Promise<Graph> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onloadend = () => {
         let config = JSON.parse(reader.result.toString());
         resolve(config);
       };
@@ -197,6 +198,7 @@ export class GraphService {
         this.graph = new Grid(config.nodes, config.links, config.width, config.height);
         break;
       case 'cycle':
+        console.log(config.links)
         this.graph = new Cycle(config.nodes, config.links);
         break;
       case 'tree':
@@ -205,7 +207,6 @@ export class GraphService {
       case 'random':
         this.graph = new Common(config.nodes, config.links);
     }
-    localStorage.setItem("graph", JSON.stringify(this.graph));
   }
 
   getNodes() {
