@@ -8,8 +8,8 @@ import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { environment } from 'src/environments/environment';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
-import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -30,8 +30,23 @@ export class GameService {
   private actionStack: GameActionStack;
   private alreadyEnconteredPos: boolean = false
 
-  constructor() {
+  private copsNumber = 0;
+  private opponentType = null;
+
+  constructor(private router: Router,) {
     this.actionStack = new GameActionStack();
+  }
+
+  setCopsNumber(n: number) {
+    this.copsNumber = n;
+  }
+
+  getCopsNumber(): number {
+    return this.copsNumber;
+  }
+
+  setOpponentType(type: string) {
+    this.opponentType = type;
   }
 
   setThief(thiefs) {
@@ -52,7 +67,7 @@ export class GameService {
           .text(() => 'C\'est au tour du voleur.');
       }
     }
-   /*  else {
+    /* else {
       this.updateStates();
     } */
     d3.selectAll("#notificationBubble").remove();
@@ -215,13 +230,22 @@ export class GameService {
         title: this.winner,
         text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : facile' + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
-        confirmButtonText: 'Rejouer'
+        confirmButtonText: 'Rejouer',
+        showCancelButton: true,
+        cancelButtonText: 'Retour au Menu'
       }).then((result) => {
         if(result.isConfirmed){
           this.watchingPositionList = []
           this.watchingPositionListStep2 = []
           this.alreadyEnconteredPos = false
           window.location.reload();
+        }else if(!result.isConfirmed){
+          this.watchingPositionList = []
+          this.watchingPositionListStep2 = []
+          this.alreadyEnconteredPos = false
+          this.turnCount = 0;
+          this.router.navigate(['/menu']);
+
         }
       })
     }
