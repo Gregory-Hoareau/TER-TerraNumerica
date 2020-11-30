@@ -198,7 +198,6 @@ export class GraphService {
         this.graph = new Grid(config.nodes, config.links, config.width, config.height);
         break;
       case 'cycle':
-        console.log(config.links)
         this.graph = new Cycle(config.nodes, config.links);
         break;
       case 'tree':
