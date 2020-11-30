@@ -206,7 +206,7 @@ export class GameService {
         allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
       }
     }
-    let timerEnd = this.turnCount > 15
+    let timerEnd = this.turnCount > 25
     let startWatchingThiefWin = this.turnCount > 10
     if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
     else if(timerEnd) this.winner = 'Le Voleur est vainqueur';

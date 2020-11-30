@@ -3,8 +3,6 @@ import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { environment } from 'src/environments/environment';
 import { IStrategy } from '../Strategy/istrategy';
-import { RandomStrategy } from '../Strategy/RandomStrategy/Strategy/random-strategy';
-import { RunawayStrategy } from '../Strategy/Thief/RunawayStrategy/runaway-strategy';
 import { PawnState } from './PawnState/pawn-state';
 
 export class Pawns {
