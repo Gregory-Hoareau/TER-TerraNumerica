@@ -1,97 +1,254 @@
+.selected {
+    border: 5px solid purple !important
+}
+
 .game-menu {
     display: flex;
     flex-direction: column;
-}
+    justify-content: stretch;
+    height: 100%;
 
-.title {
-    text-align: center;
-}
+    .title, .subtitle {
+        text-align: center;
 
-.subtitle {
-    text-align: center;
-}
+    } // all .title and .subtitle in .game-menu
 
-.game-param {
-    display: flex;
-    justify-content: space-around;
-}
+    .subtitle {
+        margin: 0;
+    }
 
-.graph-selection {
-    width: 40%;
-    height: 90%;
-    border: 1px solid black;
-}
+    .game-param {
+        flex: 1;
+        display: flex;
+        justify-content: stretch;
+        flex-wrap: wrap;
 
-.graphImg {
-    display: flex;
-    flex-wrap: wrap;
-}
+        > * {
+            margin: 0.2em;
 
-.topo {
-    width: 150px;
-    height: 150px;
-    border: 1px solid black; //Temporaire
-    margin: 2%;
-}
+        } // all .game-param childs
 
-.parameters {
-    width: 55%;
-    height: 90%;
-    border: 1px solid black;
-} 
+        .col1 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid blue;
 
-.form-field {
-    margin: 1%;
-}
+            > * {
+                border: 1px solid black;
+                margin: 0.2em;
 
-.form-field label {
-    display: inline-block;
-    min-width: 25%;
-    text-align: center;
-}
+            } // all .graph-selection childs
 
-.form-field input {
-    padding: 1% 2%;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid gray;
-}
-
-form .form-field input {
-    width: 5%;
-}
-
-div > .form-field input {
-    width: 20%;
-}
-
-.form-field input:focus {
-    border-bottom: 2px solid green;
-}
-
-.buttons {
-    margin-top: 2%;
-    align-self: center;
-}
-
-.horizontal-separation {
-    width: 90%;
-    text-align: center;
+            .graph-selection {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                
+                > * {
+                    border: 1px solid black;
+                    margin: 0.2em;
     
-}
+                } // all .graph-selection childs
+    
+                .graph-generation {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 0.5em;
+    
+                    .graph-generation-topology-selection {
+    
+                        .graph-topology-preview-list {
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: center;
+        
+                            .graph-topology-preview-img {
+                                min-width: 100px;
+                                min-height: 100px;
+                                width: 15%;
+                                height: auto;
+                                border: 1px solid black; //Temporaire
+                                margin: 2%;
+    
+                            } // .graph-topology-preview-img
+    
+                        } // .graph-topology-preview-list
+    
+                    } // .graph-generation-topology-selection
+    
+                    .graph-generation-parameters {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 0.5em;
+    
+                    } // .graph-generation-parameters
+    
+                } // .graph-generation
+    
+                .graph-importation {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+    
+            } // .graph-selection
+        }
 
-.vs {
-    border: 1px solid black;
-    width: 150px;
-    height: 150px;
-    margin: 1%;
-}
+        .col2 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid red;
 
-.play-opt {
-    display: flex;
-}
+            > * {
+                margin: 0.2em;
 
-.selected {
-    border: 5px solid purple
-}
+            } // all .graph-selection childs
+
+            .oponent-selection {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 0.5em;
+    
+                .player-option {
+                    display: flex;
+                    justify-content: center;
+    
+                    img {
+                        min-width: 100px;
+                        min-height: 100px;
+                        width: 15%;
+                        height: auto;
+                        margin: 2%;
+                    }
+    
+                } // .players-param
+    
+            } // .oponent-selection
+    
+            .cops-number-selection {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5em;
+
+            } // .cops-number-selection
+    
+            .difficulty-selection {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5em;
+
+            } // .difficulty-selection
+        }
+
+    } // .game-param
+
+} // .game-menu
+
+// .title {
+//     text-align: center;
+// }
+
+// .subtitle {
+//     text-align: center;
+// }
+
+// .game-param {
+//     display: flex;
+//     flex: 1;
+//     align-items: stretch;
+//     justify-content: space-around;
+// }
+
+// .graph-selection {
+//     flex: 1;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: stretch;
+//     border: 1px solid black;
+//     margin-right: 0.3em;
+// }
+
+// .graphImg {
+//     display: flex;
+//     flex-wrap: wrap;
+//     justify-content: center;
+// }
+
+// .topo {
+//     width: 150px;
+//     height: 150px;
+//     border: 1px solid black; //Temporaire
+//     margin: 2%;
+// }
+
+// .parameters {
+//     flex: 1;
+//     border: 1px solid black;
+//     margin-left: 0.3em;
+// } 
+
+// .form-field {
+//     margin: 1%;
+// }
+
+// .form-field label {
+//     display: inline-block;
+//     min-width: 25%;
+//     text-align: center;
+// }
+
+// .form-field input {
+//     padding: 1% 2%;
+//     outline: none;
+//     border: none;
+//     border-bottom: 1px solid gray;
+// }
+
+// form .form-field input {
+//     width: 5%;
+// }
+
+// div > .form-field input {
+//     width: 20%;
+// }
+
+// .form-field input:focus {
+//     border-bottom: 2px solid green;
+// }
+
+// .buttons {
+//     margin: 1% 0 1% 0;
+//     align-self: center;
+// }
+
+// .horizontal-separation {
+//     width: 90%;
+//     text-align: center;
+    
+// }
+
+// .vs {
+//     border: 1px solid black;
+//     width: 150px;
+//     height: 150px;
+//     margin: 1%;
+// }
+
+// .play-opt {
+//     display: flex;
+// }
+
+// .selected {
+//     border: 5px solid purple
+// }
 

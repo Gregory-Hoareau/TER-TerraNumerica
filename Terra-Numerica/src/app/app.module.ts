@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { TestD3jsComponent } from './test-d3js/test-d3js.component';
 import { GraphService } from './_services/graph/graph.service';
 import { GameService } from './_services/game/game.service';
-import { FilereaderComponent } from './filereader/filereader.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GameMenuComponent } from './components/game-menu/game-menu.component';
 import { CommonModule } from '@angular/common';
@@ -18,7 +17,6 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     TestD3jsComponent,
-    FilereaderComponent,
     GameMenuComponent
   ],
   imports: [

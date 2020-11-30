@@ -23,6 +23,4 @@ export class GameAction {
         this.pawn.lastSlot = this.prevSlot;
         this.pawn.possiblePoints = this.pawn.graphService.showPossibleMove(this.prevSlot);
     }
-
-
 }
