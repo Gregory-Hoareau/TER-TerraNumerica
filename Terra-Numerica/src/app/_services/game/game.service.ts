@@ -76,6 +76,7 @@ export class GameService {
     } else {
       if(!this.thiefTurn) {
         for(const c of this.cops) {
+          console.warn("NEW COP IS PLAYING")
           c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
         }
         this.validateTurn();

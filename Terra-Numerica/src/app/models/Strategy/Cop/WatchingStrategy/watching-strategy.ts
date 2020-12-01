@@ -31,16 +31,14 @@ export class WatchingStrategy implements IStrategy {
             })
         }
         let distance = graph.nodes.length;
-        console.log('STAY ON SPOT', this.stay_on_spot)
         for(const e of edges) {
             // Compte les sommets surveillé par les policiers
             const temp = graph.edges(e).filter(v => thief_possible_move.includes(v));
             if(temp.length > watchVertex.length) {
-                watchVertex = temp
+                watchVertex = temp;
                 vertex = e;
             }
             else if(temp.length === watchVertex.length) {
-                // TODO : cops move if two cops are on the same spot
                 let count_on_spot = 0;
                 for(const c of cops_position_slot) {
                     count_on_spot += c.index===this.actual_place.index? 1:0;
@@ -48,7 +46,7 @@ export class WatchingStrategy implements IStrategy {
                 if(count_on_spot > 1) {
                     watchVertex = temp;
                     vertex = e;
-                }
+                } 
             }
 
             // Réduire la distance avec le voleur
@@ -64,8 +62,11 @@ export class WatchingStrategy implements IStrategy {
             }
         }
 
-        if(watchVertex.length === 0) {
+        if(this.actual_place == vertex) this.stay_on_spot++;
+        
+        if(watchVertex.length === 0 || this.stay_on_spot > 1) {
             vertex = closest_vertex
+            this.stay_on_spot = 0;
         }
 
         this.actual_place = vertex;
