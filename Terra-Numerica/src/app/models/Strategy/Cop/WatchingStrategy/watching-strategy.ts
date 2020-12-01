@@ -10,6 +10,7 @@ import { IStrategy } from '../../istrategy';
 export class WatchingStrategy implements IStrategy {
     actual_place: any;
     stay_on_spot = 0;
+    prev_cops_pos = [];
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
         this.actual_place = graph.getRandomEdge();
@@ -31,16 +32,25 @@ export class WatchingStrategy implements IStrategy {
             })
         }
         let distance = graph.nodes.length;
-        console.log('STAY ON SPOT', this.stay_on_spot)
+        
+        // New add
+        let watchedByOther = [];
+        for(const c of cops_position_slot) {
+            if(c != this.actual_place)
+                graph.edges(c).forEach(v => {
+                    if(thief_possible_move.includes(v)) watchedByOther.push(v);
+                })
+        }
+        // End new add
+
         for(const e of edges) {
             // Compte les sommets surveillé par les policiers
-            const temp = graph.edges(e).filter(v => thief_possible_move.includes(v));
+            const temp = graph.edges(e).filter(v => thief_possible_move.includes(v) && !watchedByOther.includes(v))
             if(temp.length > watchVertex.length) {
-                watchVertex = temp
+                watchVertex = temp;
                 vertex = e;
             }
             else if(temp.length === watchVertex.length) {
-                // TODO : cops move if two cops are on the same spot
                 let count_on_spot = 0;
                 for(const c of cops_position_slot) {
                     count_on_spot += c.index===this.actual_place.index? 1:0;
@@ -48,7 +58,7 @@ export class WatchingStrategy implements IStrategy {
                 if(count_on_spot > 1) {
                     watchVertex = temp;
                     vertex = e;
-                }
+                } 
             }
 
             // Réduire la distance avec le voleur
@@ -64,10 +74,14 @@ export class WatchingStrategy implements IStrategy {
             }
         }
 
-        if(watchVertex.length === 0) {
+        if(this.actual_place == vertex) this.stay_on_spot++;
+        
+        if(watchVertex.length === 0 || this.stay_on_spot > 1) {
             vertex = closest_vertex
+            this.stay_on_spot = 0;
         }
 
+        this.prev_cops_pos = cops_position_slot;
         this.actual_place = vertex;
         return this.actual_place;
     }
