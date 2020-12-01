@@ -69,7 +69,7 @@ export class GraphService {
         edges = this.edges({index: i});
       }
     }
-    if(this.gameMode === "facile" || this.gameMode === "normal"){
+    if(this.gameMode === "easy" || this.gameMode === "medium"){
       //console.log(vertex);
       for(let i=0; i<edges.length; i++) {
         (circles.item(edges[i].index) as HTMLElement).style.fill = "rgb(255,0,0)";

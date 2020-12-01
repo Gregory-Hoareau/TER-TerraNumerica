@@ -7,7 +7,6 @@
         <div class="graph-selection">
             <h2 class="subtitle">Choississez la forme de votre plateau de jeu</h2>
             <div class="graphImg">
-                <!-- A remplacer par des images -->
                 <img class="topo" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelected(type)" src="assets/{{type}}.svg"> 
             </div>
 
@@ -16,9 +15,9 @@
             <div class="diff">
                 <div>
                     <legend style="font-weight: bold;">Choisissez votre mode de jeu</legend>
-                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile"><label>facile</label>
-                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal"><label>normal</label>
-                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile"><label>difficile</label>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="easy"><label>facile</label>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="medium"><label>normal</label>
+                    <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="hard"><label>difficile</label>
                     <br>
             </div>            
         </div>

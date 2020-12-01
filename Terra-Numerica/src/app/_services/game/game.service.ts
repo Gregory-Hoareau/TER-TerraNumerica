@@ -11,6 +11,11 @@ import { GameAction } from 'src/app/models/GameAction/game-action';
 import { PawnStateOnTurn } from 'src/app/models/Pawn/PawnState/PawnStateOnTurn/pawn-state-on-turn';
 import Swal from 'sweetalert2';
 import { GraphService } from '../graph/graph.service';
+import { IStrategy } from 'src/app/models/Strategy/istrategy';
+import { RandomStrategy } from 'src/app/models/Strategy/RandomStrategy/random-strategy';
+import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/tracking-strategy';
+import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
+import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
 
 
 @Injectable({
@@ -32,62 +37,125 @@ export class GameService {
   private cops_position = [];
   private thiefs_position = [];
 
+  private ai_thief_strat: () => IStrategy;
+  private ai_cops_strat: () => IStrategy;
+  private ai_side = undefined; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
+
   constructor(private graphService: GraphService) {
     this.actionStack = new GameActionStack();
   }
 
-  setThief(thiefs) {
-    this.thiefs = thiefs;
+  setAiSide(side) {
+    this.ai_side = side;
   }
 
-  setCops(cops) {
+  chooseAIStrat() {
+    switch(this.gameMode) {
+      case 'medium':
+        this.ai_cops_strat = () => {
+          return new TrackingStrategy();
+        };
+        this.ai_thief_strat = () => {
+          return new RunawayStrategy();
+        };
+        break;
+      case 'hard':
+        this.ai_cops_strat = () => {
+          return new WatchingStrategy();
+        };
+        this.ai_thief_strat = () => {
+          return new RunawayStrategy();
+        };
+        break;
+      case 'easy':
+      default:
+        this.ai_cops_strat = () => {
+          return new RandomStrategy();
+        };
+        this.ai_thief_strat = () => {
+          return new RandomStrategy();
+        };
+        break;
+    }
+  }
+
+  setPawns(thiefs, cops) {
+    this.chooseAIStrat();
+    this.setThief(thiefs);
+    this.setCops(cops);
+  }
+
+  private setThief(thiefs) {
+    this.thiefs = thiefs;
+    for(const t of this.thiefs) {
+      t.setStrategy(this.ai_thief_strat());
+    }
+  }
+
+  private setCops(cops) {
     this.cops = cops;
+    for(const c of this.cops) {
+      c.setStrategy(this.ai_cops_strat());
+    }
   }
 
   updateThiefPosition(thief, pos) {
     let index = this.thiefs.findIndex(t => t == thief);
-    
     this.thiefs_position[index] = pos;
-    //console.log('THIEF POSITION :', this.thiefs_position)
   }
 
   updateCopsPosition(cop, pos) {
     let index = this.cops.findIndex(c => c == cop);
-
     this.cops_position[index] = pos;
-    //console.log('COPS POSITION :', this.cops_position)
   }
 
   update() {
     if(this.placingPawns) {
-     /* for(const t of this.thiefs) {
-        if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
-      } */
-      for(const c of this.cops) {
-        if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
-      }
+      //Check if there is AI
+      if(this.ai_side) {
+        // Check if the AI is a thief
+        if(this.ai_side === 'thief') {
+          for(const t of this.thiefs) {
+            if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+        }
+        //Check if AI is cops
+        if(this.ai_side === 'cops') {
+          for(const c of this.cops) {
+            if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+        }
+      
+      } //End check if there is AI
+
       this.checkPlacement();
       if(!this.placingPawns) {
-        this.startGame();
         d3.select('#main-message')
           .style('color', 'green')
           .text(() => 'C\'est au tour du voleur.');
+        this.startGame();
       }
     } else {
-      if(!this.thiefTurn) {
-        for(const c of this.cops) {
-          console.warn("NEW COP IS PLAYING")
-          c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+      // Check if there is an AI
+      if(this.ai_side) {
+        // Check if this is cops turn and if AI is cops
+        if(this.ai_side === 'cops' && !this.thiefTurn) {
+          for(const c of this.cops) {
+            c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
+        } 
+        // check if this is thief turn and if AI is thief
+        else if(this.ai_side === 'thief' && this.thiefTurn) {
+          for(const t of this.thiefs) {
+            console.log('HEY HO')
+            t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
-        this.validateTurn();
-      } 
-      /* else {
-        for(const t of this.thiefs) {
-          t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
-        }
-        this.validateTurn();
-      } */
+      } // End Check if there is an AI
     }
+
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
     if(pile.length != this.cops.length){
@@ -177,22 +245,6 @@ export class GameService {
     this.update();
   }
 
-  /* private updateStates() {
-    if(this.thiefTurn) {
-      let allThiefHasPlayed = true;
-      for(let i=0; i< this.thiefs.length; i++) {
-        allThiefHasPlayed = allThiefHasPlayed && !this.thiefs[i].onTurn();
-      }
-      this.thiefTurn = !allThiefHasPlayed;
-    } else {
-      let allCopsHasPlayed = true;
-      for(let i=0; i< this.cops.length; i++) {
-        allCopsHasPlayed = allCopsHasPlayed && !this.cops[i].onTurn();
-      }
-      this.thiefTurn = allCopsHasPlayed;
-    }
-  } */
-
   private setPlayersState(players: Pawns[], state: PawnState) {
     for(let i=0; i<players.length; i++) {
       players[i].state = state;
@@ -226,7 +278,6 @@ export class GameService {
   }
 
   validateTurn() {
-
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
     if(this.thiefTurn) {
@@ -253,9 +304,9 @@ export class GameService {
         confirmButtonText: 'Rejouer'
       }).then((result) => {
         if(result.isConfirmed){
-          console.log(this.watchingPositionList)
+          //console.log(this.watchingPositionList)
           this.watchingPositionList = []
-          console.log(this.watchingPositionList)
+          //console.log(this.watchingPositionList)
           window.location.reload();
         }
       })

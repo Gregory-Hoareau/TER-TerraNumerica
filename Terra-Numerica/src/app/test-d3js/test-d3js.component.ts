@@ -7,6 +7,7 @@ import { Thief } from '../models/Pawn/Thief/thief';
 import { Cops } from '../models/Pawn/Cops/cops';
 import { GameService } from '../_services/game/game.service';
 import { ActivatedRoute } from '@angular/router';
+import { RandomStrategy } from '../models/Strategy/RandomStrategy/random-strategy';
 
 @Component({
   selector: 'app-test-d3js',
@@ -106,9 +107,8 @@ export class TestD3jsComponent implements OnInit {
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
     this.gameManager.setGameMode(this.gameMode);
-    this.graphService.setGameMode(this.gameMode)
-    this.gameManager.setCops(this.cops);
-    this.gameManager.setThief(this.thiefs)
+    this.graphService.setGameMode(this.gameMode);
+    this.gameManager.setPawns(this.thiefs, this.cops);
 
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")

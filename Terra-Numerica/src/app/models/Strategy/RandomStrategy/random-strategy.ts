@@ -1,5 +1,5 @@
 import { Graph } from 'src/app/_services/graph/Graph';
-import { IStrategy } from '../../istrategy';
+import { IStrategy } from '../istrategy';
 
 export class RandomStrategy implements IStrategy {
     actual_place = null;

@@ -11,11 +11,11 @@ import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.
 export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
-  private selectedOpponentType = 'player';
+  public selectedOpponentType = 'player';
   public availableGraphType = ['grid', 'cycle', 'tree', 'random'];
   public availableOpponentType = ['ia', 'player'];
 
-  public gameModeSelected = "facile";
+  public gameModeSelected = "easy";
   public paramsNames;
   public graphParam1 = 1;
   public graphParam2 = 1;
@@ -54,21 +54,17 @@ export class GameMenuComponent implements OnInit {
   }
 
   selectPlayer(opponent) {
-    if(opponent === 'ia') {
-      alert('AI opponent is not implemented yet');
-      return;
-    }
     this.selectedOpponentType = opponent;
   }
 
   validateParams() {
     this.paramSafetyCheck();
     switch(this.gameModeSelected){
-    case "facile":
+    case 'easy':
       break;
-    case "normal":
+    case 'medium':
       break;
-    case "difficile":
+    case 'hard':
       break;
     }
     const extras: NavigationExtras = {
