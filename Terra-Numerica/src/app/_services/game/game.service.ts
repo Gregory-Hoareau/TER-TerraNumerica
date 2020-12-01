@@ -211,7 +211,7 @@ export class GameService {
   }
 
   validateTurn() {
-
+    d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
     if(this.thiefTurn) {
