@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { IStrategy } from '../Strategy/istrategy';
 import { PawnState } from './PawnState/pawn-state';
 
-export class Pawns {
+export abstract class Pawns {
 
     role: string;
     x: number;
@@ -85,7 +85,6 @@ export class Pawns {
         return pawn.x - 5 < this.x && this.x < pawn.x + 5 && pawn.y - 5 < this.y && this.y < pawn.y + 5
     }
 
-    updatePosition(node) {
-    }
+    abstract updatePosition(node)
 
 }

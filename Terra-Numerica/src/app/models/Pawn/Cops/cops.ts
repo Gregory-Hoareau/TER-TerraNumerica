@@ -4,13 +4,14 @@ import { GraphService } from 'src/app/_services/graph/graph.service';
 import { GameService } from 'src/app/_services/game/game.service';
 import { TrackingStrategy } from '../../Strategy/Cop/TrackingStrategy/tracking-strategy';
 import { WatchingStrategy } from '../../Strategy/Cop/WatchingStrategy/watching-strategy';
+import { GridStrategy } from '../../Strategy/Cop/GridStrategy/grid-strategy';
 
 export class Cops extends Pawns {
 
     constructor(private gameM: GameService, private graphServ: GraphService, x: number, y: number, id: number){
         super(gameM, graphServ, x, y);
         this.role = "cops"+id
-        this.strategy = new WatchingStrategy();
+        this.strategy = new GridStrategy(graphServ);
         d3.select("svg")
         .append('circle')
             .datum(this)
