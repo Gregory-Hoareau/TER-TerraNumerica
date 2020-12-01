@@ -3,7 +3,7 @@ import { PawnState } from '../pawn-state';
 
 export class PawnStateWaitingTurn implements PawnState {
     dragstarted(event: any, d: any) {
-        d3.select("#hud")
+        d3.select("#top-hud-turn-information-details")
             .append("p")
                 .attr("id", "warningNotYourTurn")
                 .text(() => "Ce n'est pas votre tour !")       

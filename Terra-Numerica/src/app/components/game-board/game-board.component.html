@@ -1,0 +1,19 @@
+<div id="top-hud">
+    <div id="top-hud-turn-information">
+        <div id="top-hud-turn-information-number" class="card">
+            Tour n°{{getTurnCount()}}
+        </div>
+        <div id="top-hud-turn-information-details" class="card">
+            Placez vos pions
+        </div>
+    </div>
+</div>
+
+<div id="visualizer" class="card"></div>
+
+<div id="bottom-hud" class="card">
+    <div *ngIf='getTurnCount() !== 0' id="games-action">
+        <button (click)="validateTurn()">Valider le tour</button>
+        <button *ngIf='!isGameActionEmpty()' (click)="cancelAction()">Annuler action</button>
+    </div>
+</div>

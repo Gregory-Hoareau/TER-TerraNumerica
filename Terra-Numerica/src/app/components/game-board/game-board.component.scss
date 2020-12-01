@@ -1,0 +1,80 @@
+// TRICKS TO HAVE A FULL PAGE SIZE
+:host {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: 8px;
+}
+
+// TRICKS TO SELECT THE BODY FROM COMPONENT
+::ng-deep body {
+    background-color: Gainsboro;
+}
+
+.card {
+    margin: 0.2em;
+    background-color: snow;
+    border-radius: 1em;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+}
+
+#top-hud {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    height: 10%;
+
+    #top-hud-turn-information {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+    }
+
+    #top-hud-turn-information-number {
+        flex: 1;
+        max-width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    #top-hud-turn-information-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+
+} // #top-hud
+
+#visualizer {
+    flex: 1;
+
+} // #visualizer
+
+#bottom-hud {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    height: 10%;
+
+    #games-action {
+        flex: 1;
+        display: flex;
+        padding: 1em;
+
+        button {
+            flex: 1;
+        }
+    }
+
+} // #bottom-hud
+

@@ -33,6 +33,8 @@ export class GameService {
   private copsNumber = 0;
   private opponentType = null;
 
+  private HUD_TURN_DETAILS: string = '#top-hud-turn-information-details';
+
   constructor(private router: Router) {
     this.actionStack = new GameActionStack();
     if (localStorage.getItem("cops") !== null) {
@@ -66,7 +68,7 @@ export class GameService {
       this.checkPlacement();
       if(!this.placingPawns) {
         this.startGame();
-        d3.select('#main-message')
+        d3.select(this.HUD_TURN_DETAILS)
           .style('color', 'green')
           .text(() => 'C\'est au tour du voleur.');
       }
@@ -217,14 +219,14 @@ export class GameService {
       this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
       this.setPlayersState(this.thiefs, environment.onTurnState);
-      d3.select('#main-message')
+      d3.select(this.HUD_TURN_DETAILS)
         .style('color', 'green')
         .text(() => 'C\'est au tour du voleur.');
     } 
     else {
       this.setPlayersState(this.thiefs, environment.waitingTurnState);
       this.setPlayersState(this.cops, environment.onTurnState);
-      d3.select('#main-message')
+      d3.select(this.HUD_TURN_DETAILS)
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }

@@ -17,17 +17,17 @@ export abstract class Graph {
 
     draw(svg: any) {
 
+        this.svgLinks = svg.selectAll("line")
+            .data(this.links)
+            .join("line")
+                .style("stroke", "#aaa")
+
         this.svgNodes = svg.selectAll("circle")
             .data(this.nodes)
             .join("circle")
                 .attr("r", 20)
                 .attr("class", "circle")
                 .style("fill", "#69b3a2")
-
-        this.svgLinks = svg.selectAll("line")
-            .data(this.links)
-            .join("line")
-                .style("stroke", "#aaa")
         
         this.simulate(svg);
 
