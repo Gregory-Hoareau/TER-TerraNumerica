@@ -229,6 +229,24 @@ export class GraphService {
     return edges;
   }
 
+  showPossibleMoveDragging(vertex, lastPos) {
+    const edges = this.graph.edges(vertex.__data__)
+    edges.push(vertex.__data__)
+    d3.selectAll(".circle").style("fill", '#69b3a2');
+    if(this.gameMode === "facile" || this.gameMode === "normal") {
+      d3.selectAll(".circle").filter(function(d: any) {
+        return edges.includes(d);
+      }).style("fill", "orange");
+      vertex.style.fill = "red"
+      lastPos.style.fill = "blue"
+
+      
+
+    }
+
+    return edges;
+  }
+
   // private oneCopsGraph(n) {
   //   this.clearGraph
   //   this.initNodes(n)

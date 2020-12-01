@@ -25,7 +25,7 @@ export class PawnStateOnTurn implements PawnState {
                     let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
                     let distance = d.detectRadius;
                     if (h <= distance) {
-                        d.graphService.showPossibleMove(elements[id]);
+                        d.graphService.showPossibleMoveDragging(elements[id], d.lastSlot);
                     }
                 })
         }
@@ -58,7 +58,7 @@ export class PawnStateOnTurn implements PawnState {
                     position.x = nodeData.x;
                     position.y = nodeData.y;
                     d.settedPosition = true;
-                    d.possiblePoints = d.graphService.showPossibleMove(elements[id]);
+                    d.possiblePoints = d.graphService.showPossibleMoveDragging(elements[id], d.lastSlot);
                     d.lastSlot = elements[id]
                 }
             })
