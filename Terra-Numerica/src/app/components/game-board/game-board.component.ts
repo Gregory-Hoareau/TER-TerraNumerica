@@ -65,8 +65,7 @@ export class GameBoardComponent implements OnInit {
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
     this.gameManager.setGameMode(this.gameMode);
     this.graphService.setGameMode(this.gameMode);
-    this.gameManager.setCops(this.cops);
-    this.gameManager.setThief(this.thiefs)
+    this.gameManager.setPawns(this.thiefs, this.cops)
     this.gameManager.update();
 
     let patternPawn = this.svg.append("svg")

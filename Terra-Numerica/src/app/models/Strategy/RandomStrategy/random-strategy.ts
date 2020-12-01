@@ -1,4 +1,4 @@
-import { Graph } from 'src/app/_services/graph/Graph';
+import { Graph } from '../../Graph/graph';
 import { IStrategy } from '../istrategy';
 
 export class RandomStrategy implements IStrategy {

@@ -1,4 +1,4 @@
-import { Graph } from 'src/app/_services/graph/Graph';
+import { Graph } from '../Graph/graph';
 
 export interface IStrategy {
     

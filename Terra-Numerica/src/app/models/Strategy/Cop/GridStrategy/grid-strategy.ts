@@ -1,6 +1,6 @@
-import { Graph } from 'src/app/_services/graph/Graph';
 import { IStrategy } from '../../istrategy';
 import { GraphService } from 'src/app/_services/graph/graph.service';
+import { Graph } from 'src/app/models/Graph/graph';
 
 /**
  * This is a cop strategy. It will minimise the global distance with all thief.
@@ -11,7 +11,7 @@ export class GridStrategy implements IStrategy {
     constructor(private graphService: GraphService){}
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
-        let g = this.graphService.getGrid();
+        let g //= this.graphService.getGrid();
         let nodes = this.graphService.getNodes();
 
         if(cops_position_slot.length === 0){

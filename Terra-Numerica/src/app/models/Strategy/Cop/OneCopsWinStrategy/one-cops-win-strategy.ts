@@ -1,7 +1,7 @@
-import { Graph } from 'src/app/_services/graph/Graph';
 import { IStrategy } from '../../istrategy';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { tickStep } from 'd3';
+import { Graph } from 'src/app/models/Graph/graph';
 
 /**
  * This is a cop strategy. It will minimise the global distance with all thief.

@@ -1,4 +1,4 @@
-import { Graph } from 'src/app/_services/graph/Graph';
+import { Graph } from 'src/app/models/Graph/graph';
 import { IStrategy } from '../../istrategy';
 
 /**
