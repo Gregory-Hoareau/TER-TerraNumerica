@@ -10,10 +10,19 @@ import { IStrategy } from '../../istrategy';
 export class WatchingStrategy implements IStrategy {
     actual_place: any;
     stay_on_spot = 0;
-    prev_cops_pos = [];
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
-        this.actual_place = graph.getRandomEdge();
+        let nextTo = true;
+        while(nextTo) { 
+            this.actual_place = graph.getRandomEdge();
+            nextTo = false;
+            for(const c of cops_position_slot) {
+                if(graph.distance(this.actual_place, c) <= 1) {
+                    nextTo = true;
+                    break;
+                }
+            }
+        }
         return this.actual_place;
     }
 
@@ -81,7 +90,6 @@ export class WatchingStrategy implements IStrategy {
             this.stay_on_spot = 0;
         }
 
-        this.prev_cops_pos = cops_position_slot;
         this.actual_place = vertex;
         return this.actual_place;
     }
