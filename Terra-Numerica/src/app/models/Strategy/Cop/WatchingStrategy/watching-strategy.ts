@@ -10,6 +10,7 @@ import { IStrategy } from '../../istrategy';
 export class WatchingStrategy implements IStrategy {
     actual_place: any;
     stay_on_spot = 0;
+    prev_cops_pos = [];
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
         this.actual_place = graph.getRandomEdge();
@@ -31,9 +32,20 @@ export class WatchingStrategy implements IStrategy {
             })
         }
         let distance = graph.nodes.length;
+        
+        // New add
+        let watchedByOther = [];
+        for(const c of cops_position_slot) {
+            if(c != this.actual_place)
+                graph.edges(c).forEach(v => {
+                    if(thief_possible_move.includes(v)) watchedByOther.push(v);
+                })
+        }
+        // End new add
+
         for(const e of edges) {
             // Compte les sommets surveillé par les policiers
-            const temp = graph.edges(e).filter(v => thief_possible_move.includes(v));
+            const temp = graph.edges(e).filter(v => thief_possible_move.includes(v) && !watchedByOther.includes(v))
             if(temp.length > watchVertex.length) {
                 watchVertex = temp;
                 vertex = e;
@@ -69,6 +81,7 @@ export class WatchingStrategy implements IStrategy {
             this.stay_on_spot = 0;
         }
 
+        this.prev_cops_pos = cops_position_slot;
         this.actual_place = vertex;
         return this.actual_place;
     }
