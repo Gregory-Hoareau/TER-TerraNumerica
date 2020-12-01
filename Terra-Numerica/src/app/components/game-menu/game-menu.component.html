@@ -1,52 +1,46 @@
 <div class="game-menu">
 
-    <h1 class="title">Voici le menu de paramétrage du jeu</h1>
+    <div class="card">
+        <h1 class="title">Voici le menu de paramétrage du jeu</h1>
+    </div>
     
     <div class="game-param">
 
         <div class="col1">
             <div class="graph-selection">
-                <div class="graph-generation" (click)="selectGraphGeneration()" [class]="isSeletectedGraphGeneration()">
+                <div class="graph-generation card" (click)="selectGraphGeneration()" [class]="isSeletectedGraphGeneration()">
                     <h2 class="subtitle">Générer un plateau de jeu</h2>
                     <div class="graph-generation-topology-selection">
-                        <h2 class="subtitle">Choississez la forme de votre plateau de jeu</h2>
                         <div class="graph-topology-preview-list">
                             <!-- A remplacer par des images -->
                             <img class="graph-topology-preview-img" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)" src="assets/{{type}}.svg"> 
                         </div> <!-- .graph-topology-preview-list -->
                     </div> <!-- .graph-generation-topology-selection -->
                     
-                    <div class="graph-generation-parameters">
-                        <h2 class="subtitle">Parametrage du plateau</h2>
-                        <form>
-                            <div *ngIf="paramsNames.length > 0" class="graph-generation-parameters-field">
-                                <label for="param1">
-                                    {{paramsNames[0]}}
-                                </label>
-                                <input [(ngModel)]="graphParam1" min="1" oninput="validity.valid||(value='');" id="param1" type="number" name="param1">
-                            </div> <!-- .graph-generation-parameters-field -->
-                            
-                            <div *ngIf="paramsNames.length > 1" class="graph-generation-parameters-field">
-                                <label for="param2">
-                                    {{paramsNames[1]}}
-                                </label>
-                                <input [(ngModel)]="graphParam2" min="1" oninput="validity.valid||(value='');" id="param2" type="number" name="param2">
-                            </div> <!-- .graph-generation-parameters-field -->
+                    <div *ngIf="paramsNames.length > 0" class="graph-generation-parameters">
+                        <h2 class="subtitle">Paramètres supplémentaires</h2>
+                        <form class="form-field">
+                            <label *ngIf="paramsNames.length > 0" for="param1" class="form-field-labels">
+                                {{paramsNames[0]}}
+                            </label>
+                            <input *ngIf="paramsNames.length > 0" [(ngModel)]="graphParam1" min="1" oninput="validity.valid||(value='');" id="param1" class="form-field-inputs" type="number" name="param1">
+                            <label *ngIf="paramsNames.length > 1" for="param2" class="form-field-labels">
+                                {{paramsNames[1]}}
+                            </label>
+                            <input *ngIf="paramsNames.length > 1" [(ngModel)]="graphParam2" min="1" oninput="validity.valid||(value='');" id="param2" class="form-field-inputs" type="number" name="param2">
                         </form>
                     </div> <!-- .graph-generation-parameters -->
                 </div> <!-- .graph-generation -->
     
-                <div class="graph-importation" (click)="selectGraphImportation()" [class]="isSeletectedGraphImportation()">
+                <div class="graph-importation card" (click)="selectGraphImportation()" [class]="isSeletectedGraphImportation()">
                     <h2 class="subtitle">Importer un plateau de jeu</h2>
-                    <div>
-                        <input id="graph-file-input" type="file" accept="application/json" (change)="onFileChange($event.target.files[0])">
-                    </div>
+                    <input id="graph-file-input" type="file" accept="application/json" (change)="onFileChange($event.target.files[0])">
                 </div> <!-- .graph-importation -->
             </div> <!-- .graph-selection -->
         </div> <!-- .col1 -->
 
         <div class="col2">
-            <div class="oponent-selection">
+            <div class="oponent-selection card">
                 <h2 class="subtitle">Choisissez votre adversaire</h2>
                 <div class="player-option">
                     <img class="vs" *ngFor="let type of availableOpponentType" src="assets/vs_{{type}}.svg"
@@ -55,37 +49,42 @@
                 </div> <!-- .player-option -->
             </div> <!-- .oponent-selection -->
     
-            <div class="cops-number-selection">
+            <div class="cops-number-selection card">
                 <h2 class="subtitle">Choisissez un nombre de policiers</h2>
-                <div class="form-field">
-                    <label for="copsNum">
-                        Nombre de policier : 
-                    </label>
-                    <input [(ngModel)]="cops" min="1" max="5" oninput="validity.valid||(value='');" id="copsNum" type="number" name="cops">
-                </div> <!-- .form-field -->
+                <form class="form-field">
+                    <div class="form-field-labels">
+                        <label for="copsNum">
+                            Nombre de policier : 
+                        </label>
+                    </div>
+                    <div class="form-field-inputs">
+                        <input [(ngModel)]="cops" min="1" max="5" oninput="validity.valid||(value='');" id="copsNum" type="number" name="cops">
+                    </div>
+                </form> <!-- .form-field -->
             </div> <!-- .cops-number-selection -->
     
-            <div class="difficulty-selection">
+            <div class="difficulty-selection card">
                 <h2 class="subtitle">Choisissez une difficulté</h2>
-                <label for="mode1">facile</label>
-                <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile">
-                <label for="mode2">normal</label>
-                <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal">
-                <label for="mode3">difficile</label>
-                <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile">
+                <div class="difficulty-selection-list">
+                    <div class="difficulty-selection-list-item" [class]="isSelectedEasy()">
+                        <label for="mode1">facile</label>
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile">
+                    </div>
+                    <div class="difficulty-selection-list-item" [class]="isSelectedMedium()">
+                        <label for="mode2">normal</label>
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal">
+                    </div>
+                    <div class="difficulty-selection-list-item" [class]="isSelectedHard()">
+                        <label for="mode3">difficile</label>
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile">
+                    </div>
+                </div> <!-- .difficulty-selection-list -->
             </div> <!-- .difficulty-selection -->
         </div> <!-- .col2 -->
     </div> <!-- .game-param -->
 
-    <div class="buttons">
+    <div class="submit-buttons card">
         <button (click)="validateParams()">Commencer la partie</button>
     </div>
     
 </div>
-
-<!-- <div class="debug">
-    GRAPH PARAM = 
-        param 1 = {{graphParam1}}
-        param 2 = {{graphParam2}}
-    
-</div> -->

@@ -101,7 +101,7 @@ export class GameMenuComponent implements OnInit {
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
-      this.router.navigate(['/test-d3js'], extras);
+      this.router.navigate(['/board'], extras);
     }
   }
 
@@ -141,6 +141,18 @@ export class GameMenuComponent implements OnInit {
 
   isSeletectedGraphImportation() {
     return this.graphImportation ? 'selected' : '';
+  }
+
+  isSelectedEasy() {
+    return this.gameModeSelected === 'facile' ? 'selected' : '';
+  }
+
+  isSelectedMedium() {
+    return this.gameModeSelected === 'normal' ? 'selected' : '';
+  }
+
+  isSelectedHard() {
+    return this.gameModeSelected === 'difficile' ? 'selected' : '';
   }
 
   onFileChange(file) {
