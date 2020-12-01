@@ -68,15 +68,15 @@
                 <div class="difficulty-selection-list">
                     <div class="difficulty-selection-list-item" [class]="isSelectedEasy()">
                         <label for="mode1">facile</label>
-                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="facile">
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="easy">
                     </div>
                     <div class="difficulty-selection-list-item" [class]="isSelectedMedium()">
                         <label for="mode2">normal</label>
-                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="normal">
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="medium">
                     </div>
                     <div class="difficulty-selection-list-item" [class]="isSelectedHard()">
                         <label for="mode3">difficile</label>
-                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="difficile">
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="hard">
                     </div>
                 </div> <!-- .difficulty-selection-list -->
             </div> <!-- .difficulty-selection -->

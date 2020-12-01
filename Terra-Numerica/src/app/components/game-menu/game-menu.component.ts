@@ -20,7 +20,7 @@ export class GameMenuComponent implements OnInit {
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
-  public gameModeSelected = "facile";
+  public gameModeSelected = "easy";
 
   public paramsNames;
   public graphParam1: number = 1;
@@ -67,10 +67,6 @@ export class GameMenuComponent implements OnInit {
   }
 
   selectPlayer(opponent) {
-    if(opponent === 'ia') {
-      alert('AI opponent is not implemented yet');
-      return;
-    }
     this.selectedOpponentType = opponent;
   }
 
@@ -83,11 +79,11 @@ export class GameMenuComponent implements OnInit {
       //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       // }
       switch(this.gameModeSelected){
-        case "facile":
+        case "easy":
           break;
-        case "normal":
+        case "medium":
           break;
-        case "difficile":
+        case "hard":
           break;
       }
       const extras: NavigationExtras = {

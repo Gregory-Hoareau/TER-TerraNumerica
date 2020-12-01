@@ -47,24 +47,11 @@ export class GraphService {
     localStorage.setItem("method", "generate");
     localStorage.setItem("type", type);
     localStorage.setItem("args", JSON.stringify(args));
-    this.graph = null;
-    switch(type) {
-      case 'grid':
-        this.graph = this.generateGrid(args[0], args[1]);
-        break;
-      case 'cycle':
-        this. graph = this.generateCycle(args[0]);
-        break;
-      case 'tree':
-        this.graph = this.generateTree(args[0], args[1]);
-        break;
-      case 'random':
-        this.graph = this.generateRandom();
-        break;
-      case 'copsAlwaysWin':
-        this.graph = this.oneCopsGraph(args[0]);
-        break;
-    }
+    this.graph = null
+  
+  }
+  getGraph() {
+    return this.graph;
   }
 
   generatesNodes(n: number): any[] {
@@ -232,12 +219,11 @@ export class GraphService {
     const edges = this.graph.edges(vertex.__data__)
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
-    if(this.gameMode === "facile" || this.gameMode === "normal") {
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
       d3.selectAll(".circle").filter(function(d: any) {
         return edges.includes(d);
       }).style("fill", "red");
       vertex.style.fill = "blue"
-
     }
 
     return edges;

@@ -14,7 +14,6 @@ export abstract class Graph {
     }
 
     /* ---------- GRAPH DRAWING ---------- */
-
     draw(svg: any) {
 
         this.svgLinks = svg.selectAll("line")
@@ -38,6 +37,10 @@ export abstract class Graph {
     abstract ticked();
 
     /* ---------- GRAPH COMPUTATIONS ---------- */
+
+    getRandomEdge(): SimulationNodeDatum {
+        return Object.assign({}, this._nodes[this.getRandomInt(this._nodes.length-1)]);
+    }
 
     edges(node): SimulationNodeDatum[] {
         const edges = [];
@@ -65,17 +68,16 @@ export abstract class Graph {
         while(edges.length > 0) {
             distance++;
             for(const e of edges) {
-                if(e.index===n2.index) return distance;
+                if(e.index == n2.index) return distance;
             }
             const save =  edges;
             edges = []
             for(const e of save) {
-                const temp = this.edges(e).filter(i => !(i.index in marked)).forEach(edge => {
+                const temp = this.edges(e).filter(i => !(marked.includes(i.index))).forEach(edge => {
                     let isIn = false
                     for(const i of edges) {
                         if(i.index === edge.index) {
                             isIn = true;
-                            break;
                         }
                     }
                     if(!isIn) edges.push(edge)
@@ -89,6 +91,10 @@ export abstract class Graph {
     /* ---------- PROPERTIES ---------- */
 
     // GETTERS
+    getRandomAccessibleEdges(n) {
+        const edges = this.edges(n);
+        return edges[this.getRandomInt(edges.length)];
+    }
 
     get nodes() {
         return this._nodes
@@ -133,4 +139,7 @@ export abstract class Graph {
     }
 
     /* -------------------------------- */
+    private getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
 }

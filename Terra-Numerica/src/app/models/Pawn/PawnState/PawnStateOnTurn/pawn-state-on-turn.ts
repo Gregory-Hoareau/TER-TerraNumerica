@@ -45,6 +45,7 @@ export class PawnStateOnTurn implements PawnState {
         }
         const previousSlot = d.lastSlot;
         let distance = d.detectRadius;
+        let node;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
                 return edges.includes(nodeData);
@@ -52,6 +53,7 @@ export class PawnStateOnTurn implements PawnState {
             .each((nodeData:any, id:any, elements:any) => {
                 let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
                 if (h <= distance) {
+                    node = nodeData;
                     distance = h;
                     position.x = nodeData.x;
                     position.y = nodeData.y;
@@ -67,6 +69,7 @@ export class PawnStateOnTurn implements PawnState {
             d.settedPosition = false;
         }
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
+        d.updatePosition(node);
 
         if (!d.settedPosition) {
             return this;

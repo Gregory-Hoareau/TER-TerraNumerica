@@ -38,9 +38,11 @@ export class PawnStateWaitingPlacement implements PawnState {
         }
 
         let distance = d.detectRadius;
+        let node;
         d3.selectAll(".circle").each((nodeData:any, id:any, elements:any) => {
             let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
             if (h <= distance) {
+                node = nodeData;
                 distance = h;
                 position.x = nodeData.x;
                 position.y = nodeData.y;
@@ -51,6 +53,7 @@ export class PawnStateWaitingPlacement implements PawnState {
         })
 
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
+        d.updatePosition(node)
 
         if (!d.settedPosition) {
             return this;
