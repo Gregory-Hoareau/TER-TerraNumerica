@@ -88,10 +88,10 @@ export class GameMenuComponent implements OnInit {
       }
       const extras: NavigationExtras = {
         queryParams: {
-          copsNum: this.cops,
-          graphType: this.selectedGraphType,
-          oppenent: this.selectedOpponentType,
-          graphParams: [this.graphParam1, this.graphParam2],
+          // copsNum: this.cops,
+          // graphType: this.selectedGraphType,
+          // oppenent: this.selectedOpponentType,
+          // graphParams: [this.graphParam1, this.graphParam2],
           gameMode: this.gameModeSelected
         }
       }
@@ -140,15 +140,15 @@ export class GameMenuComponent implements OnInit {
   }
 
   isSelectedEasy() {
-    return this.gameModeSelected === 'facile' ? 'selected' : '';
+    return this.gameModeSelected === 'easy' ? 'selected' : '';
   }
 
   isSelectedMedium() {
-    return this.gameModeSelected === 'normal' ? 'selected' : '';
+    return this.gameModeSelected === 'medium' ? 'selected' : '';
   }
 
   isSelectedHard() {
-    return this.gameModeSelected === 'difficile' ? 'selected' : '';
+    return this.gameModeSelected === 'hard' ? 'selected' : '';
   }
 
   onFileChange(file) {

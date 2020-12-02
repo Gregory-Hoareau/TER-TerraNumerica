@@ -48,8 +48,27 @@ export class GraphService {
     localStorage.setItem("type", type);
     localStorage.setItem("args", JSON.stringify(args));
     this.graph = null
+
+    switch(type) {
+      case 'grid':
+        this.graph = this.generateGrid(args[0], args[1]);
+        break;
+      case 'cycle':
+        this. graph = this.generateCycle(args[0]);
+        break;
+      case 'tree':
+        this.graph = this.generateTree(args[0], args[1]);
+        break;
+      case 'random':
+        this.graph = this.generateRandom();
+        break;
+      case 'copsAlwaysWin':
+        this.graph = this.oneCopsGraph(args[0]);
+        break;
+    }
   
   }
+
   getGraph() {
     return this.graph;
   }
@@ -246,36 +265,4 @@ export class GraphService {
 
     return edges;
   }
-
-  // private oneCopsGraph(n) {
-  //   this.clearGraph
-  //   this.initNodes(n)
-  //   let numberOfSpecialNode = Math.floor(1 + Math.random() * Math.floor((n/2)-1));
-  //   for(let i=0; i<n-1; i++){
-  //     this.graph.links.push({source: i, target: i+1});
-  //   }
-  //   console.log(numberOfSpecialNode)
-  //   for(let i=0; i<numberOfSpecialNode; i++){
-  //     let idNode1 = Math.floor(Math.random() * Math.floor(n))
-  //     let node1 = this.graph.nodes[idNode1];
-  //     let node2 = this.graph.nodes[Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1))];
-  //     for(let i=0; i<3; i++){
-  //       let idOfNodeLinkedRandomly = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1));
-  //       console.log(node1)
-  //       console.log(node2)
-  //       this.graph.links.push({source: node1, target: idOfNodeLinkedRandomly});
-  //       this.graph.links.push({source: node2, target: idOfNodeLinkedRandomly});
-  //     }
-  //     this.graph.links.push({source: node1, target: node2});    
-  //   }
-  // }
-
-  // private randomGenerator(){
-  //   let rGraph = this.randomGraph.getRandomGraph();
-  //   this.clearGraph();
-  //   this.initNodes(rGraph.nodes.length);
-  //   rGraph.links.forEach(l => {
-  //     this.graph.links.push(l)
-  //   });
-  // }
 }
