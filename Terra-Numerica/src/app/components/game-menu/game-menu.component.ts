@@ -13,14 +13,15 @@ import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.
 export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
-  private selectedOpponentType = 'player';
+  public selectedOpponentType = 'player';
   public availableGraphType = ['grid', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
-  public availableOpponentType = ['ia', 'player'];
+  public availableOpponentType = ['ai', 'player'];
 
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
-  public gameModeSelected = "easy";
+  public gameModeSelected = 'easy';
+  public selectedAi = 'cops'
 
   public paramsNames;
   public graphParam1: number = 1;
@@ -97,6 +98,7 @@ export class GameMenuComponent implements OnInit {
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
+      if(this.selectedOpponentType === 'ai') this.gameService.setAiSide(this.selectedAi);
       this.router.navigate(['/board'], extras);
     }
   }
@@ -149,6 +151,14 @@ export class GameMenuComponent implements OnInit {
 
   isSelectedHard() {
     return this.gameModeSelected === 'hard' ? 'selected' : '';
+  }
+
+  isSelectedCopsAi() {
+    return this.selectedAi === 'cops' ? 'selected' : '';
+  }
+
+  isSelectedThiefAi() {
+    return this.selectedAi === 'thief' ? 'selected' : '';
   }
 
   onFileChange(file) {

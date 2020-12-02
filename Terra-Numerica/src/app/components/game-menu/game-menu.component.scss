@@ -151,6 +151,36 @@
                     }
     
                 } // .players-param
+
+                .ai-side {
+
+                    .side-selection {
+
+                        .side-selection-list {
+                            display: flex;
+    
+                            > * { flex: 1; }
+
+                            .side-selection-list-item {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin: 0.5em;
+                                box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+
+                                label {
+                                    font-weight: bold;
+                                    text-align: center;
+                                    width: 100%;
+                                }
+
+                                input {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
     
             } // .oponent-selection
     

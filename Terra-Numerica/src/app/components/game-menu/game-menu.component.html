@@ -12,7 +12,6 @@
                     <h2 class="subtitle">Générer un plateau de jeu</h2>
                     <div class="graph-generation-topology-selection">
                         <div class="graph-topology-preview-list">
-                            <!-- A remplacer par des images -->
                             <img class="graph-topology-preview-img" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)" src="assets/{{type}}.svg"> 
                         </div> <!-- .graph-topology-preview-list -->
                     </div> <!-- .graph-generation-topology-selection -->
@@ -47,6 +46,22 @@
                         [class]='isSelectedOponent(type)' 
                         (click)="selectPlayer(type)"/>
                 </div> <!-- .player-option -->
+
+                <div class="ai-side" *ngIf='selectedOpponentType === "ai"'>
+                    <h2 class="subtitle">Camp de l'ordinateur</h2>
+                    <div class="side-selection">
+                        <div class="side-selection-list">
+                            <div class="side-selection-list-item" [class]="isSelectedCopsAi()">
+                                <label for="cops">Police</label>
+                                <input [(ngModel)]="selectedAi" type="radio" id="cops" name="ai-side" value="cops">
+                            </div>
+                            <div class="side-selection-list-item" [class]="isSelectedThiefAi()">
+                                <label for="thief">Voleur</label>
+                                <input [(ngModel)]="selectedAi" type="radio" id="thief" name="ai-side" value="thief">
+                            </div>
+                        </div> <!-- .side-selection-list -->
+                    </div> <!-- .side-selection -->
+                </div> <!-- .ai-side -->
             </div> <!-- .oponent-selection -->
     
             <div class="cops-number-selection card">
@@ -67,15 +82,15 @@
                 <h2 class="subtitle">Choisissez une difficulté</h2>
                 <div class="difficulty-selection-list">
                     <div class="difficulty-selection-list-item" [class]="isSelectedEasy()">
-                        <label for="mode1">facile</label>
+                        <label for="mode1">Facile</label>
                         <input [(ngModel)]="gameModeSelected" type="radio" id="mode1" name="mode" value="easy">
                     </div>
                     <div class="difficulty-selection-list-item" [class]="isSelectedMedium()">
-                        <label for="mode2">normal</label>
+                        <label for="mode2">Normal</label>
                         <input [(ngModel)]="gameModeSelected" type="radio" id="mode2" name="mode" value="medium">
                     </div>
                     <div class="difficulty-selection-list-item" [class]="isSelectedHard()">
-                        <label for="mode3">difficile</label>
+                        <label for="mode3">Difficile</label>
                         <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="hard">
                     </div>
                 </div> <!-- .difficulty-selection-list -->
