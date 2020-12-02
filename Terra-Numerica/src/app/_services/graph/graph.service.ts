@@ -252,15 +252,32 @@ export class GraphService {
     const edges = this.graph.edges(vertex.__data__)
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
-    if(this.gameMode === "facile" || this.gameMode === "normal") {
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
       d3.selectAll(".circle").filter(function(d: any) {
         return edges.includes(d);
       }).style("fill", "orange");
       vertex.style.fill = "red"
       lastPos.style.fill = "blue"
 
-      
+    }
 
+    return edges;
+  }
+
+  showCopsPossibleMoves(cops, show) {
+    const edges = this.graph.edges(cops)
+    edges.push(cops)
+    console.log(show)
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
+      if(show){
+        d3.selectAll(".circle").filter(function(d: any) {
+          return edges.includes(d);
+        }).style("fill", "red");
+      }else{
+        d3.selectAll(".circle").filter(function(d: any) {
+          return edges.includes(d);
+        }).style("fill", '#69b3a2');
+      }
     }
 
     return edges;

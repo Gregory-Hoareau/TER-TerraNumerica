@@ -1,6 +1,8 @@
+import { IfStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
+import { thresholdFreedmanDiaconis } from 'd3';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
@@ -16,12 +18,13 @@ export class GameBoardComponent implements OnInit {
 
   private width;
   private height;
+  private warningZone: boolean = false;
   
 
   private svg;
   private thiefs: Thief[] = [];
   private cops: Cops[] = [];
-  private gameMode;
+  public gameMode;
 
   constructor(private graphService: GraphService,
               private gameManager: GameService,
@@ -125,5 +128,13 @@ export class GameBoardComponent implements OnInit {
   cancelAction() {
     this.gameManager.cancelAction();
   }
+
+  seeWarningZone(){
+    this.warningZone = !this.warningZone;
+    this.cops.forEach(c => {
+      this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
+  });
+  console.log(this.warningZone)
+}
 
 }
