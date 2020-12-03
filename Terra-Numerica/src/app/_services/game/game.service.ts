@@ -17,6 +17,8 @@ import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/t
 import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
 import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
+import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
+import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 
 
 @Injectable({
@@ -72,9 +74,9 @@ export class GameService {
     this.opponentType = type;
   }
 
-  setAiSide(side) {
+  setAiSide(side: string) {
     this.ai_side = side;
-    localStorage.setItem("ai", "side");
+    localStorage.setItem("ai", side);
   }
 
   chooseAIStrat() {
@@ -88,9 +90,23 @@ export class GameService {
         };
         break;
       case 'hard':
-        this.ai_cops_strat = () => {
-          return new WatchingStrategy();
-        };
+        switch(this.graphService.getGraph().typology) {
+          case 'grid':
+            this.ai_cops_strat = () => {
+              return new GridStrategy(this.graphService);
+            };
+            break;
+          case 'copsAlwaysWin':
+            this.ai_cops_strat = () => {
+              return new OneCopsWinStrategy();
+            };
+            break;
+          default:
+            this.ai_cops_strat = () => {
+              return new WatchingStrategy();
+            };
+            break;
+        }
         this.ai_thief_strat = () => {
           return new RunawayStrategy();
         };
@@ -98,7 +114,7 @@ export class GameService {
       case 'easy':
       default:
         this.ai_cops_strat = () => {
-          return new GridStrategy(this.graphService);
+          return new RandomStrategy();
         };
         this.ai_thief_strat = () => {
           return new RandomStrategy();
