@@ -1,6 +1,8 @@
 import { IStrategy } from '../../istrategy';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { Graph } from 'src/app/models/Graph/graph';
+import { getInterpolationArgsLength } from '@angular/compiler/src/render3/view/util';
+import { Grid } from 'src/app/models/Graph/Grid/grid';
 
 /**
  * This is a cop strategy. It will minimise the global distance with all thief.
@@ -11,11 +13,13 @@ export class GridStrategy implements IStrategy {
     constructor(private graphService: GraphService){}
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
-        let g //= this.graphService.getGrid();
         let nodes = this.graphService.getNodes();
-
+        let grid;
+        if (graph.typology === "grid"){
+            grid = graph as Grid;
+        }
         if(cops_position_slot.length === 0){
-            this.actual_place = nodes[(g.long * g.lar) - g.lar]
+            this.actual_place = nodes[(grid.long * grid.lar) - grid.lar]
 
         }else{
             let last_pos = cops_position_slot[cops_position_slot.length - 1];
@@ -23,7 +27,7 @@ export class GridStrategy implements IStrategy {
 
         }
         if(this.actual_place === undefined){
-            this.actual_place = nodes[(g.long * g.lar) - g.lar]
+            this.actual_place = nodes[(grid.long * grid.lar) - grid.lar]
 
         }
         return this.actual_place;

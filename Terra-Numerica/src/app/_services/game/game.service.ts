@@ -16,6 +16,7 @@ import { RandomStrategy } from 'src/app/models/Strategy/RandomStrategy/random-st
 import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/tracking-strategy';
 import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
 import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
+import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
 
 
 @Injectable({
@@ -46,7 +47,7 @@ export class GameService {
 
   private ai_thief_strat: () => IStrategy;
   private ai_cops_strat: () => IStrategy;
-  private ai_side = undefined; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
+  private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
 
   constructor(private router: Router, private graphService: GraphService) {
     this.actionStack = new GameActionStack();
@@ -93,7 +94,7 @@ export class GameService {
       case 'easy':
       default:
         this.ai_cops_strat = () => {
-          return new RandomStrategy();
+          return new GridStrategy(this.graphService);
         };
         this.ai_thief_strat = () => {
           return new RandomStrategy();
