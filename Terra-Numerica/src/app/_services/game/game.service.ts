@@ -54,6 +54,9 @@ export class GameService {
     if (localStorage.getItem("cops") !== null) {
       this.copsNumber = parseInt(localStorage.getItem("cops"));
     }
+    if (localStorage.getItem("ai") !== null) {
+      this.ai_side = localStorage.getItem("ai");
+    }
   }
 
   setCopsNumber(n: number) {
@@ -71,6 +74,7 @@ export class GameService {
 
   setAiSide(side) {
     this.ai_side = side;
+    localStorage.setItem("ai", "side");
   }
 
   chooseAIStrat() {
@@ -235,7 +239,7 @@ export class GameService {
   }
 
   checkCops(){
-    let num:number= 0;
+    let num: number = 0;
     let copsPile = [];
     let tmpCopsPile = []
     let alreadyWatchedCops = []

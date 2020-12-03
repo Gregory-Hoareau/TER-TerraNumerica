@@ -98,8 +98,11 @@ export class GameMenuComponent implements OnInit {
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
-      if(this.selectedOpponentType === 'ai') this.gameService.setAiSide(this.selectedAi);
-      else this.gameService.setAiSide(undefined);
+      if (this.selectedOpponentType === 'ai') {
+        this.gameService.setAiSide(this.selectedAi);
+      } else {
+        this.gameService.setAiSide(undefined);
+      }
       this.router.navigate(['/board'], extras);
     }
   }
