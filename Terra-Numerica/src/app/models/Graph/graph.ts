@@ -39,7 +39,7 @@ export abstract class Graph {
     /* ---------- GRAPH COMPUTATIONS ---------- */
 
     getRandomEdge(): SimulationNodeDatum {
-        return Object.assign({}, this._nodes[this.getRandomInt(this._nodes.length-1)]);
+        return {...this._nodes[this.getRandomInt(this._nodes.length-1)]};
     }
 
     edges(node): SimulationNodeDatum[] {

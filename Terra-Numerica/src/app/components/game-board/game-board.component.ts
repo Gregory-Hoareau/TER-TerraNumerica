@@ -49,6 +49,9 @@ export class GameBoardComponent implements OnInit {
 
     this.graphService.drawGraph(this.svg);
     this.init();
+    setTimeout(() => {
+      this.gameManager.update();
+    }, 2000)
   }
 
   drawGraph() {
@@ -69,7 +72,6 @@ export class GameBoardComponent implements OnInit {
     this.gameManager.setGameMode(this.gameMode);
     this.graphService.setGameMode(this.gameMode);
     this.gameManager.setPawns(this.thiefs, this.cops)
-    this.gameManager.update();
 
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")
