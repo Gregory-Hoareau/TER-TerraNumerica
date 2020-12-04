@@ -1,4 +1,4 @@
-import { IfStmt } from '@angular/compiler';
+import { IfStmt, templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
@@ -49,7 +49,12 @@ export class GameBoardComponent implements OnInit {
 
     this.graphService.drawGraph(this.svg);
     this.init();
+    const board = document.getElementById('visualizer')
+    board.style.visibility = 'hidden'
     setTimeout(() => {
+      d3.select('#top-hud-turn-information-details')
+        .text(() => 'Placez vos pions.')
+      board.style.visibility = 'visible'
       this.gameManager.update();
     }, 2000)
   }
@@ -106,9 +111,9 @@ export class GameBoardComponent implements OnInit {
                   .attr("height", 80)
                   .attr("width", 80)
 
-    d3.select("#hud").append("p")
+    /* d3.select("#hud").append("p")
       .attr("id", "main-message")
-      .text(() => "Veuillez placer vos pions")
+      .text(() => "Veuillez placer vos pions") */
   }
 
   // showPossibleMoves(event){
