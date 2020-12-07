@@ -356,26 +356,33 @@ export class GameService {
     if(this.checkEnd()) {
       Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : facile' + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
         if(result.isConfirmed){
-          this.watchingPositionList = []
-          this.watchingPositionListStep2 = []
-          this.alreadyEnconteredPos = false
-          window.location.reload();
+          this.replay();
         }else if(!result.isConfirmed){
-          this.reset();
-          this.router.navigate(['/menu']);
-
+          this.goBackToMenu();
         }
       })
     } else {
       this.update()
     }
+  }
+
+  goBackToMenu(){
+    this.reset();
+    this.router.navigate(['/menu']);
+  }
+
+  replay(){
+    this.watchingPositionList = []
+    this.watchingPositionListStep2 = []
+    this.alreadyEnconteredPos = false
+    window.location.reload();
   }
 
   reset(){

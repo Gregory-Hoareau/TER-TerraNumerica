@@ -27,7 +27,7 @@ export class GameBoardComponent implements OnInit {
   public gameMode;
 
   constructor(private graphService: GraphService,
-              private gameManager: GameService,
+              public gameManager: GameService,
               private activatedRoute: ActivatedRoute) {
 
   }
