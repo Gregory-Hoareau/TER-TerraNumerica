@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import * as d3 from 'd3';
 import { promise } from 'protractor';
 import { Common } from 'src/app/models/Graph/Common/common';
@@ -17,14 +18,16 @@ export class GraphService {
 
   private gameMode: string;
 
-  constructor(private randomGraph: RandomGraphService) {
+  constructor(private randomGraph: RandomGraphService, private router: Router) {
     if (localStorage.getItem("method") !== null) {
       switch(localStorage.getItem("method")) {
         case "generate":
           if (localStorage.getItem("type") !== null && localStorage.getItem("args") !== null) {
             const type = localStorage.getItem("type");
             const args = JSON.parse(localStorage.getItem("args"));
-            this.generateGraph(type, args)
+            if(router.url.includes('board')) {
+              this.generateGraph(type, args)
+            }
           }
           break;
         case "import":
