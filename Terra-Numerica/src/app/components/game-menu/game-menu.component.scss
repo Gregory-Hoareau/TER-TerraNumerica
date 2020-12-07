@@ -15,6 +15,10 @@
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
 }
 
+label{
+    font-weight: bold;
+}
+
 .form-field {
     height: 100%;
     margin: 0.5em;
@@ -87,17 +91,28 @@
                             display: flex;
                             flex-wrap: wrap;
                             justify-content: center;
+
+                            .graph-topology-preview-list-item {
+                                display: flex;
+                                flex-direction: column;
+                                flex: 1;
+                                align-items: center;
+                                
+                                label{
+                                    padding: 0 1em 1em 1em;
+                                }
+                        
+                                .graph-topology-preview-list-item-img {
+                                    min-width: 100px;
+                                    min-height: 100px;
+                                    width: 15%;
+                                    height: auto;
+                                    margin: 1em 1em 0 1em;
+                                    padding: 0.5em;
         
-                            .graph-topology-preview-img {
-                                min-width: 100px;
-                                min-height: 100px;
-                                width: 15%;
-                                height: auto;
-                                box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
-                                margin: 1em;
-                                padding: 0.5em;
-    
-                            } // .graph-topology-preview-img
+                                } // .graph-topology-preview-img
+
+                            } // .graph-topology-preview-list-item
     
                         } // .graph-topology-preview-list
     
@@ -120,6 +135,7 @@
                     justify-content: center;
                     align-items: center;
                     opacity: 0.5;
+                    padding: 1em 0;
                 }
     
             } // .graph-selection
@@ -139,15 +155,25 @@
                 .player-option {
                     display: flex;
                     justify-content: center;
+
+                    .player-option-item {
+                        display: flex;
+                        flex: 1;
+                        flex-direction: column;
+                        align-items: center;
+
+                        label{
+                            padding: 0 1em 1em 1em;
+                        }
     
-                    img {
-                        min-width: 100px;
-                        min-height: 100px;
-                        width: 15%;
-                        height: auto;
-                        margin: 1em;
-                        padding: 0.5em;
-                        box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+                        img {
+                            min-width: 100px;
+                            min-height: 100px;
+                            width: 15%;
+                            height: auto;
+                            margin: 1em 1em 0 1em;
+                            padding: 0.5em;
+                        }
                     }
     
                 } // .players-param
@@ -158,11 +184,14 @@
 
                         .side-selection-list {
                             display: flex;
-    
+                            max-height: 10em;
                             > * { flex: 1; }
 
                             .side-selection-list-item {
                                 display: flex;
+                                padding: 0.5em;
+                                flex-direction: column;
+                                align-items: center;
                                 justify-content: center;
                                 align-items: center;
                                 margin: 0.5em;
@@ -172,6 +201,12 @@
                                     font-weight: bold;
                                     text-align: center;
                                     width: 100%;
+                                }
+
+                                .side-selection-list-item-img-preview {
+                                    padding: 0.5em;
+                                    max-width: 100%;
+                                    max-height: 75%;
                                 }
 
                                 input {
@@ -244,102 +279,4 @@
     }
 
 } // .game-menu
-
-// .title {
-//     text-align: center;
-// }
-
-// .subtitle {
-//     text-align: center;
-// }
-
-// .game-param {
-//     display: flex;
-//     flex: 1;
-//     align-items: stretch;
-//     justify-content: space-around;
-// }
-
-// .graph-selection {
-//     flex: 1;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: stretch;
-//     border: 1px solid black;
-//     margin-right: 0.3em;
-// }
-
-// .graphImg {
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: center;
-// }
-
-// .topo {
-//     width: 150px;
-//     height: 150px;
-//     border: 1px solid black; //Temporaire
-//     margin: 2%;
-// }
-
-// .parameters {
-//     flex: 1;
-//     border: 1px solid black;
-//     margin-left: 0.3em;
-// } 
-
-// .form-field {
-//     margin: 1%;
-// }
-
-// .form-field label {
-//     display: inline-block;
-//     min-width: 25%;
-//     text-align: center;
-// }
-
-// .form-field input {
-//     padding: 1% 2%;
-//     outline: none;
-//     border: none;
-//     border-bottom: 1px solid gray;
-// }
-
-// form .form-field input {
-//     width: 5%;
-// }
-
-// div > .form-field input {
-//     width: 20%;
-// }
-
-// .form-field input:focus {
-//     border-bottom: 2px solid green;
-// }
-
-// .buttons {
-//     margin: 1% 0 1% 0;
-//     align-self: center;
-// }
-
-// .horizontal-separation {
-//     width: 90%;
-//     text-align: center;
-    
-// }
-
-// .vs {
-//     border: 1px solid black;
-//     width: 150px;
-//     height: 150px;
-//     margin: 1%;
-// }
-
-// .play-opt {
-//     display: flex;
-// }
-
-// .selected {
-//     border: 5px solid purple
-// }
 

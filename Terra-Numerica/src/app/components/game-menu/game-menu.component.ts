@@ -119,6 +119,10 @@ export class GameMenuComponent implements OnInit {
     return false;
   }
 
+  setSelectedAi(side: string){
+    this.selectedAi = side;
+  }
+
   isSelectedOponent(type) {
     return type === this.selectedOpponentType ? 'selected' : ''
   }
