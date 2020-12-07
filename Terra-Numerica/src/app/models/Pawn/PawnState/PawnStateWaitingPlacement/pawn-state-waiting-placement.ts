@@ -41,7 +41,8 @@ export class PawnStateWaitingPlacement implements PawnState {
         let node;
         d3.selectAll(".circle").each((nodeData:any, id:any, elements:any) => {
             let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
-            if (h <= distance) {
+            if (h <= distance 
+                && ((d.role.includes('thief') && d.gameManager.copsArePlaced()) || d.role.includes('cops')) ) {
                 node = nodeData;
                 distance = h;
                 position.x = nodeData.x;
