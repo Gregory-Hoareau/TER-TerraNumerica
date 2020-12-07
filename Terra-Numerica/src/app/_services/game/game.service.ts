@@ -19,6 +19,7 @@ import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/w
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
 import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 
 
 @Injectable({
@@ -92,9 +93,22 @@ export class GameService {
       case 'hard':
         switch(this.graphService.getGraph().typology) {
           case 'grid':
-            this.ai_cops_strat = () => {
-              return new GridStrategy(this.graphService);
-            };
+            if(this.copsNumber === 2){
+              console.log('watch')
+              this.ai_cops_strat = () => {
+                return new WatchingStrategy();
+              };
+            }else if(this.copsNumber>2){
+              console.log('grid')
+              this.ai_cops_strat = () => {
+                return new GridStrategy(this.graphService);
+              };
+            }else{
+              console.log('track')
+              this.ai_cops_strat = () => {
+                return new TrackingStrategy();
+              };
+            } 
             break;
           case 'copsAlwaysWin':
             this.ai_cops_strat = () => {

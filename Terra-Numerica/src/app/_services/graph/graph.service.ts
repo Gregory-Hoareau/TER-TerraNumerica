@@ -173,7 +173,7 @@ export class GraphService {
       }
     }
     links.push({source: node1, target: node2})
-    return new Common(nodes, links);
+    return new Common(nodes, links, 'copsAlwaysWin');
   }
 
   readAsync(file: File): Promise<Graph> {
@@ -265,9 +265,8 @@ export class GraphService {
   }
 
   showCopsPossibleMoves(cops, show) {
-    const edges = this.graph.edges(cops)
-    edges.push(cops)
-    console.log(show)
+    const edges = this.graph.edges(cops.__data__)
+    edges.push(cops.__data__)
     if(this.gameMode === "easy" || this.gameMode === "medium") {
       if(show){
         d3.selectAll(".circle").filter(function(d: any) {

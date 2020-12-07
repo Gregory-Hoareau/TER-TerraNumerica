@@ -2,8 +2,9 @@ import * as d3 from 'd3';
 import { Graph } from '../graph';
 
 export class Common extends Graph {
-    constructor(nodes, links) {
-        super(nodes, links, "common");
+    constructor(nodes, links, type: string = 'common') {
+        super(nodes, links, type);
+
     }
 
     simulate(svg: any) {
