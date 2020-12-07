@@ -5,7 +5,12 @@ import { getInterpolationArgsLength } from '@angular/compiler/src/render3/view/u
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 
 /**
- * This is a cop strategy. It will minimise the global distance with all thief.
+ * This is a cop strategy. This strategy will be chosen if they're more than 2 cops on a grid type graph.
+ * Cops following this strategy will all be placed one above the other on the last collumn of the grid and
+ * then they'll start to move to the left in order to find the thief. If the thief decide to try to pass below
+ * the cops column then all the column will go down to keep chasing the thief (this way it also work on torique grid)
+ * will be improved => one cops can be placed every 3 node before another cops is placed, it makes enough cops to 
+ * prevent the thief to try to go trough the cops column  
  */
 export class GridStrategy implements IStrategy {
     actual_place: any;   
