@@ -6,11 +6,11 @@ Pour lancer le site, vous aurez besoin d'avoir NodeJS installé sur votre machin
 
 [Lien de téléchargement de NodeJS](https://nodejs.org/en/download/).
 
-### Commandes pour lancer le back-end
+### Commandes pour lancer le back-end :
 
 Ouvrir un terminal de commande dans le dossier *Terra-Numerica-Backend*
 
-1. Installer les dépendaces du back-end
+1. Installer les dépendances du back-end
 ```bash
 npm install
 ```
@@ -21,11 +21,11 @@ npm run start
 ```
 Il faut laisser ouvert le terminal de commande qui à servit pour lancer le back-end, pendant tout le temps d'éxécution du front-end.
 
-### Commandes pour lancer le front-end
+### Commandes pour lancer le front-end :
 
 Dans un nouveau terminal de commande depuis le dossir *Terra-Numerica*
 
-1. Installer les dépendaces du front-end
+1. Installer les dépendances du front-end
 ```bash
 npm install
 ```
@@ -36,5 +36,8 @@ npm run start
 ```
 Après l'exécution de cette commande, rendez-vous dans votre navigateur sur l'url `http://localhost.com:4200`
 
-
+### Uniquement dans un environnement Windows :
+1. Installer les dependances en utilisant `setup.bat`
+2. Lancer le site en utilisant `run.bat`
+3. Rendez-vous ensuite à l'adresse http://localhost.com:4200
 
