@@ -53,7 +53,7 @@ export class GameBoardComponent implements OnInit {
     board.style.visibility = 'hidden'
     setTimeout(() => {
       d3.select('#top-hud-turn-information-details')
-        .text(() => 'Placez vos pions.')
+        .text(() => 'Les policiers doivent se placer.')
       board.style.visibility = 'visible'
       this.gameManager.update();
     }, 2000)
@@ -140,8 +140,7 @@ export class GameBoardComponent implements OnInit {
     this.warningZone = !this.warningZone;
     this.cops.forEach(c => {
       this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
-  });
-  console.log(this.warningZone)
+    });
 }
 
 }
