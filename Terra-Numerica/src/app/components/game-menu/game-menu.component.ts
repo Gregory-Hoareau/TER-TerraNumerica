@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
+import { TranslateService } from 'src/app/_services/translate/translate.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -31,8 +31,8 @@ export class GameMenuComponent implements OnInit {
   constructor(private graphService: GraphService,
               private gameService: GameService,
               private router: Router,
-              private formBuilder: FormBuilder,
-              private randomGraph: RandomGraphService) { }
+              private randomGraph: RandomGraphService,
+              public translator: TranslateService) { }
 
   ngOnInit(): void {
     this.updateParamsName();

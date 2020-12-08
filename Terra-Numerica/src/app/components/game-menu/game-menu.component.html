@@ -14,7 +14,7 @@
                         <div class="graph-topology-preview-list">
                             <div class="graph-topology-preview-list-item card" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)">
                                 <img id="{{type}}" class="graph-topology-preview-list-item-img" src="assets/{{type}}.svg">
-                                <label for="{{type}}">{{type}}</label>
+                                <label for="{{type}}">{{translator.graphTypeName(type)}}</label>
                             </div>
                         </div> <!-- .graph-topology-preview-list -->
                     </div> <!-- .graph-generation-topology-selection -->
@@ -47,7 +47,7 @@
                 <div class="player-option">
                     <div class="player-option-item card" *ngFor="let type of availableOpponentType" [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
                         <img id="{{type}}" class="vs" src="assets/vs_{{type}}.svg"/>
-                        <label for="{{type}}">{{type}}</label>
+                        <label for="{{type}}">{{translator.opponentTypeName(type)}}</label>
                     </div>
                 </div> <!-- .player-option -->
 
