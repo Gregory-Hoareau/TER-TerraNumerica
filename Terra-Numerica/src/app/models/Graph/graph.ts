@@ -63,7 +63,7 @@ export abstract class Graph {
         }
 
         
-        let edges = this.edges(n1).filter(e => !(e.index in marked));
+        let edges = this.edges(n1).filter(e => !(marked.includes(e.index)));
         
         while(edges.length > 0) {
             distance++;

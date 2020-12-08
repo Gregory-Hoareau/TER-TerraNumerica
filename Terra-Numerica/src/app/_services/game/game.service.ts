@@ -33,6 +33,7 @@ export class GameService {
   private turnCount = 0;
   private turnChanged: boolean = false;
   private placingPawns = true;
+  private placingCops = true;
   private winner: string;
   private actionStack: GameActionStack;
   private alreadyEnconteredPos: boolean = false
@@ -57,6 +58,10 @@ export class GameService {
     if (localStorage.getItem("ai") !== null) {
       this.ai_side = localStorage.getItem("ai");
     }
+  }
+
+  copsArePlaced() {
+    return this.cops_position.filter(p => p).length === this.copsNumber;
   }
 
   setCopsNumber(n: number) {
@@ -91,17 +96,14 @@ export class GameService {
         switch(this.graphService.getGraph().typology) {
           case 'grid':
             if(this.copsNumber === 2){
-              console.log('watch')
               this.ai_cops_strat = () => {
                 return new WatchingStrategy();
               };
             }else if(this.copsNumber>2){
-              console.log('grid')
               this.ai_cops_strat = () => {
-                return new GridStrategy(this.graphService);
+                return new GridStrategy(this.graphService, this);
               };
             }else{
-              console.log('track')
               this.ai_cops_strat = () => {
                 return new TrackingStrategy();
               };
@@ -169,13 +171,13 @@ export class GameService {
       //Check if there is AI
       if(this.ai_side) {
         // Check if the AI is a thief
-        if(this.ai_side === 'thief') {
+        if(this.ai_side === 'thief' && !this.placingCops) {
           for(const t of this.thiefs) {
             if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
         }
         //Check if AI is cops
-        if(this.ai_side === 'cops') {
+        if(this.ai_side === 'cops' && this.placingCops) {
           for(const c of this.cops) {
             if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
@@ -184,10 +186,15 @@ export class GameService {
       } //End check if there is AI
 
       this.checkPlacement();
+      if(!this.placingCops && this.placingPawns) {
+        d3.select(this.HUD_TURN_DETAILS)
+          .text(() => 'Le voleur doit se placer.');
+        if(this.ai_side === 'thief') this.update();
+      }
       if(!this.placingPawns) {
         d3.select(this.HUD_TURN_DETAILS)
-          .style('color', 'green')
-          .text(() => 'C\'est au tour du voleur.');
+          .style('color', 'blue')
+          .text(() => 'C\'est au tour des policiers.');
         this.startGame();
       }
     } else {
@@ -203,7 +210,6 @@ export class GameService {
         // check if this is thief turn and if AI is thief
         else if(this.ai_side === 'thief' && this.thiefTurn) {
           for(const t of this.thiefs) {
-            console.log('HEY HO')
             t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
           this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
@@ -238,13 +244,16 @@ export class GameService {
 
   private checkPlacement() {
     let placing = false;
+    let cops = false;
     for(let i=0; i<this.thiefs.length; i++) {
       placing = placing || this.thiefs[i].isWaitingPlacement();
     }
     for(let i=0; i<this.cops.length; i++) {
       placing = placing || this.cops[i].isWaitingPlacement();
+      cops = cops || this.cops[i].isWaitingPlacement();
     }
     this.placingPawns = placing;
+    this.placingCops = cops
   }
 
   notificate(pos, number){
@@ -292,8 +301,8 @@ export class GameService {
   }
 
   private startGame() {
-    this.thiefTurn = true;
-    this.setPlayersState(this.thiefs, environment.onTurnState);
+    this.thiefTurn = false;
+    this.setPlayersState(this.cops, environment.onTurnState);
     this.turnCount++;
     this.update();
   }
@@ -353,26 +362,33 @@ export class GameService {
     if(this.checkEnd()) {
       Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : facile' + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
         if(result.isConfirmed){
-          this.watchingPositionList = []
-          this.watchingPositionListStep2 = []
-          this.alreadyEnconteredPos = false
-          window.location.reload();
+          this.replay();
         }else if(!result.isConfirmed){
-          this.reset();
-          this.router.navigate(['/menu']);
-
+          this.goBackToMenu();
         }
       })
     } else {
       this.update()
     }
+  }
+
+  goBackToMenu(){
+    this.reset();
+    this.router.navigate(['/menu']);
+  }
+
+  replay(){
+    this.watchingPositionList = []
+    this.watchingPositionListStep2 = []
+    this.alreadyEnconteredPos = false
+    window.location.reload();
   }
 
   reset(){

@@ -23,6 +23,7 @@ export class OneCopsWinStrategy implements IStrategy {
         let closest;
         let distance = graph.nodes.length;
         const edges = graph.edges(this.actual_place);
+        edges.push(this.actual_place);
         if(!this.thiefFound){
             for(const e of edges) {
                 let globalDist = 0;

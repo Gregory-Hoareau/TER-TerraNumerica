@@ -1,5 +1,9 @@
 <div id="top-hud">
     <div id="top-hud-turn-information">
+        <div class="card menu-button">
+            <button (click)="gameManager.goBackToMenu()"><img class="menu-button-img-preview" src="assets/home.svg"/></button>
+            <button (click)="gameManager.replay()"><img class="menu-button-img-preview" src="assets/refresh.svg"/></button>
+        </div>
         <div id="top-hud-turn-information-number" class="card">
             Tour n°{{getTurnCount()}}
         </div>
