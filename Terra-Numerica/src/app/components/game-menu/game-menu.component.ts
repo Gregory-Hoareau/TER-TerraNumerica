@@ -3,6 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
+import { StatisticService } from 'src/app/_services/statistic/statistic.service';
 import { TranslateService } from 'src/app/_services/translate/translate.service';
 
 @Component({
@@ -32,7 +33,8 @@ export class GameMenuComponent implements OnInit {
               private gameService: GameService,
               private router: Router,
               private randomGraph: RandomGraphService,
-              public translator: TranslateService) { }
+              public translator: TranslateService,
+              private statisticService: StatisticService) { }
 
   ngOnInit(): void {
     this.updateParamsName();

@@ -14,6 +14,7 @@ import { RandomGraphService } from './_services/random-graph/random-graph.servic
 import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { TranslateService } from './_services/translate/translate.service';
+import { StatisticService } from './_services/statistic/statistic.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { TranslateService } from './_services/translate/translate.service';
     GameService,
     BackendService,
     RandomGraphService,
-    TranslateService
+    TranslateService,
+    StatisticService
   ],
   bootstrap: [AppComponent]
 })
