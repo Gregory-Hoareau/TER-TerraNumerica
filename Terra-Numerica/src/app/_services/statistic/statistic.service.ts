@@ -10,14 +10,22 @@ export class StatisticService {
   private statistics = [];
 
   constructor(private backend: BackendService) {
-    this.backend.get(this.route).subscribe((stats) => {
-      this.statistics = stats;
-      console.log(stats);
-    })
+    this.getStatistics();
   }
 
-  getStatistics() {
-    return this.statistics;
+  getStatistics(): Promise<Object[]> {
+    let resolveFunc: (res: Object[]) => void;
+    const promise = new Promise<Object[]>((resolve) => {
+      resolveFunc = resolve;
+    })
+
+    this.backend.get(this.route).subscribe(stats => {
+      this.statistics = stats;
+      console.log(this.statistics);
+      resolveFunc(this.statistics);
+    })
+
+    return promise;
   }
 
   postStatistic(stat) {
