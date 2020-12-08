@@ -14,7 +14,7 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
+  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
   public availableOpponentType = ['ai', 'player'];
 
   private inputGraphJSONFile: File = null;
@@ -48,6 +48,9 @@ export class GameMenuComponent implements OnInit {
   updateParamsName() {
     switch(this.selectedGraphType) {
       case 'grid':
+        this.paramsNames = ['Largeur :', 'Longueur :'];
+        break;
+      case 'tore':
         this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
       case 'cycle':

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { openStdin } from 'process';
 import * as d3 from 'd3';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
 import { Pawns } from 'src/app/models/Pawn/pawn';
@@ -17,9 +16,7 @@ import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/t
 import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
 import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
-import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
 
 
 @Injectable({

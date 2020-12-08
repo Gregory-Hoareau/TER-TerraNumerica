@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
-import { Graph } from '../graph';
+import { Graph } from '../../graph';
 
-export class Grid extends Graph {
+export class Tore extends Graph {
 
     private grid_width: number;
     private grid_height: number;
@@ -33,7 +33,7 @@ export class Grid extends Graph {
     }
 
     constructor(nodes, links, width: number, height: number) {
-        super(nodes, links, "grid");
+        super(nodes, links, "tore");
         this.grid_width = width;
         this.grid_height = height;
     }
@@ -44,29 +44,43 @@ export class Grid extends Graph {
         const canvas_height = parseInt(svg.style("height"), 10);
 
         this.grid.init(this.grid_width, this.grid_height, canvas_width, canvas_height);
-        // Horizontal lines
         for (let row = 0 ; row < this.grid_height ; ++row) {
             const y = row * canvas_height/this.grid_height + (canvas_height/this.grid_height)/2;
-            const x1 = (canvas_width/this.grid_width)/2;
-            const x2 = canvas_width - (canvas_width/this.grid_width)/2;
+            const margin = ((canvas_width/this.grid_width)/2)/2
+            const x1 = (canvas_width/this.grid_width)/2 - margin;
+            const x2 = canvas_width - (canvas_width/this.grid_width)/2 + margin;
+            svg.append('line')
+                .attr('x1', 0)
+                .attr('y1', y)
+                .attr('x2', canvas_width)
+                .attr('y2', y)
+                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke-dasharray', '4, 10');
             svg.append('line')
                 .attr('x1', x1)
                 .attr('y1', y)
                 .attr('x2', x2)
                 .attr('y2', y)
-                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke', 'rgb(170, 170, 170)');
         }
-        // Vertical lines
         for (let col = 0 ; col < this.grid_width ; ++col) {
             const x = col * canvas_width/this.grid_width + (canvas_width/this.grid_width)/2;
-            const y1 = (canvas_height/this.grid_height)/2;
-            const y2 = canvas_height - (canvas_height/this.grid_height)/2;
+            const margin = ((canvas_height/this.grid_height)/2)/2
+            const y1 = (canvas_height/this.grid_height)/2 - margin;
+            const y2 = canvas_height - (canvas_height/this.grid_height)/2 + margin;
             svg.append('line')
                 .attr('x1', x)
                 .attr('y1', y1)
                 .attr('x2', x)
                 .attr('y2', y2)
                 .style('stroke', 'rgb(170, 170, 170)')
+            svg.append('line')
+                .attr('x1', x)
+                .attr('y1', 0)
+                .attr('x2', x)
+                .attr('y2', canvas_height)
+                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke-dasharray', '4, 10');
         }
 
         this.svgLinks = svg.selectAll("links")
@@ -85,16 +99,13 @@ export class Grid extends Graph {
     }
 
     simulate(svg: any) {
-        const width = parseInt(svg.style("width"), 10);
-        const height = parseInt(svg.style("height"), 10);
-        this.grid.init(this.grid_width, this.grid_height, width, height);
         d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink()
                 .links(this.links)
             )
             .on("tick", this.ticked.bind(this));
     }
-    
+
     ticked() {
         this.svgLinks
             .attr("x1", function(d) { return d.source.x; })

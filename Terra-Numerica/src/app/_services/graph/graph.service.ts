@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as d3 from 'd3';
-import { promise } from 'protractor';
 import { Common } from 'src/app/models/Graph/Common/common';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
+import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
 import { Tree } from 'src/app/models/Graph/Tree/tree';
 import { RandomGraphService } from '../random-graph/random-graph.service';
 
@@ -55,6 +55,9 @@ export class GraphService {
     switch(type) {
       case 'grid':
         this.graph = this.generateGrid(args[0], args[1]);
+        break;
+      case 'tore':
+        this.graph = this.generateTore(args[0], args[1]);
         break;
       case 'cycle':
         this. graph = this.generateCycle(args[0]);
@@ -114,6 +117,48 @@ export class GraphService {
     }
 
     return new Grid(nodes, links, width, height);
+  }
+  
+  generateTore(width: number, height: number) {
+    const size = width*height;
+    let nodes = this.generatesNodes(size);
+    let links = [];
+
+    // LINKS HORIZONTALS
+    for (let i = 0 ; i < height*width ; i += width) {
+      for (let j = 0 ; j < width-1 ; ++j) {
+        links.push({
+          source: i+j,
+          target: (i+j)+1
+        })
+      }
+    }
+
+    // LINKS VERTICAL
+    for (let i = 0 ; i < (height-1)*width ; ++i) {
+      links.push({
+        source: i,
+        target: i+width
+      })
+    }
+
+    // VERTICAL TORE
+    for (let i = 0 ; i < width ; ++i) {
+      links.push({
+        source: i,
+        target: i+((width*height)-width)
+      })
+    }
+
+    // HORIZONTAL TORE
+    for (let i = 0 ; i < height*width ; i += width) {
+      links.push({
+        source: i,
+        target: i+(width-1)
+      })
+    }
+
+    return new Tore(nodes, links, width, height);
   }
 
   generateCycle(size: number): Cycle {
