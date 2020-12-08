@@ -199,8 +199,8 @@ export class GameService {
       }
       if(!this.placingPawns) {
         d3.select(this.HUD_TURN_DETAILS)
-          .style('color', 'green')
-          .text(() => 'C\'est au tour du voleur.');
+          .style('color', 'blue')
+          .text(() => 'C\'est au tour des policiers.');
         this.startGame();
       }
     } else {
@@ -307,8 +307,8 @@ export class GameService {
   }
 
   private startGame() {
-    this.thiefTurn = true;
-    this.setPlayersState(this.thiefs, environment.onTurnState);
+    this.thiefTurn = false;
+    this.setPlayersState(this.cops, environment.onTurnState);
     this.turnCount++;
     this.update();
   }
