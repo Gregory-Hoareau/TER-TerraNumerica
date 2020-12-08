@@ -1,0 +1,24 @@
+<div id="top-hud">
+    <div id="top-hud-turn-information">
+        <div class="card menu-button">
+            <button (click)="gameManager.goBackToMenu()"><img class="menu-button-img-preview" src="assets/home.svg"/></button>
+            <button (click)="gameManager.replay()"><img class="menu-button-img-preview" src="assets/refresh.svg"/></button>
+        </div>
+        <div id="top-hud-turn-information-number" class="card">
+            Tour n°{{getTurnCount()}}
+        </div>
+        <div id="top-hud-turn-information-details" class="card">
+            Chargement du plateau de jeu ...
+        </div>
+    </div>
+</div>
+
+<div id="visualizer" class="card"></div>
+
+<div id="bottom-hud" class="card">
+    <div id="games-action">
+        <button *ngIf="gameMode == 'easy'" (click)="seeWarningZone()">Zone de danger</button>
+        <button *ngIf='getTurnCount() !== 0' (click)="validateTurn()">Valider le tour</button>
+        <button *ngIf='!isGameActionEmpty() && getTurnCount() !== 0' (click)="cancelAction()">Annuler action</button>
+    </div>
+</div>

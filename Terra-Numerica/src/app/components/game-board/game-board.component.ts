@@ -1,31 +1,33 @@
+import { IfStmt, templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import * as d3 from 'd3';
-import { Simulation, SimulationLinkDatum, SimulationNodeDatum } from 'd3';
-import { GraphService } from '../_services/graph/graph.service';
-import { Thief } from '../models/Pawn/Thief/thief';
-import { Cops } from '../models/Pawn/Cops/cops';
-import { GameService } from '../_services/game/game.service';
 import { ActivatedRoute } from '@angular/router';
-import { Graph } from '../models/Graph/graph';
-import { RandomStrategy } from '../models/Strategy/RandomStrategy/random-strategy';
+import * as d3 from 'd3';
+import { thresholdFreedmanDiaconis } from 'd3';
+import { Graph } from 'src/app/models/Graph/graph';
+import { Cops } from 'src/app/models/Pawn/Cops/cops';
+import { Thief } from 'src/app/models/Pawn/Thief/thief';
+import { GameService } from 'src/app/_services/game/game.service';
+import { GraphService } from 'src/app/_services/graph/graph.service';
 
 @Component({
-  selector: 'app-test-d3js',
-  templateUrl: './test-d3js.component.html',
-  styleUrls: ['./test-d3js.component.scss']
+  selector: 'app-game-board',
+  templateUrl: './game-board.component.html',
+  styleUrls: ['./game-board.component.scss']
 })
-export class TestD3jsComponent implements OnInit {
+export class GameBoardComponent implements OnInit {
+
   private width;
   private height;
+  private warningZone: boolean = false;
   
 
   private svg;
   private thiefs: Thief[] = [];
   private cops: Cops[] = [];
-  private gameMode;
+  public gameMode;
 
   constructor(private graphService: GraphService,
-              private gameManager: GameService,
+              public gameManager: GameService,
               private activatedRoute: ActivatedRoute) {
 
   }
@@ -47,7 +49,12 @@ export class TestD3jsComponent implements OnInit {
 
     this.graphService.drawGraph(this.svg);
     this.init();
+    const board = document.getElementById('visualizer')
+    board.style.visibility = 'hidden'
     setTimeout(() => {
+      d3.select('#top-hud-turn-information-details')
+        .text(() => 'Les policiers doivent se placer.')
+      board.style.visibility = 'visible'
       this.gameManager.update();
     }, 2000)
   }
@@ -69,8 +76,7 @@ export class TestD3jsComponent implements OnInit {
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
     this.gameManager.setGameMode(this.gameMode);
     this.graphService.setGameMode(this.gameMode);
-    this.gameManager.setPawns(this.thiefs, this.cops);
-    this.gameManager.update();
+    this.gameManager.setPawns(this.thiefs, this.cops)
 
     let patternPawn = this.svg.append("svg")
                                 .attr("id", "mySvg")
@@ -83,8 +89,8 @@ export class TestD3jsComponent implements OnInit {
                 .attr("id", "pawnThiefImage")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("height", 80)
-                .attr("width", 80)
+                .attr('height','1')
+                .attr('width','1')
                 .append("image")
                   .attr("xlink:href", "../../assets/thief.svg")
                   .attr("x", 0)
@@ -96,8 +102,8 @@ export class TestD3jsComponent implements OnInit {
                 .attr("id", "pawnCopsImage")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("height", 80)
-                .attr("width", 80)
+                .attr('height','1')
+                .attr('width','1')
                 .append("image")
                   .attr("xlink:href", "../../assets/police.svg")
                   .attr("x", 0)
@@ -105,12 +111,9 @@ export class TestD3jsComponent implements OnInit {
                   .attr("height", 80)
                   .attr("width", 80)
 
-    d3.select("#hud").append("p")
+    /* d3.select("#hud").append("p")
       .attr("id", "main-message")
-      .text(() => "Veuillez placer vos pions")
-    
-      
-    
+      .text(() => "Veuillez placer vos pions") */
   }
 
   // showPossibleMoves(event){
@@ -132,5 +135,12 @@ export class TestD3jsComponent implements OnInit {
   cancelAction() {
     this.gameManager.cancelAction();
   }
+
+  seeWarningZone(){
+    this.warningZone = !this.warningZone;
+    this.cops.forEach(c => {
+      this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
+    });
+}
 
 }

@@ -10,6 +10,16 @@ import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stac
 import { GameAction } from 'src/app/models/GameAction/game-action';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { GraphService } from '../graph/graph.service';
+import { IStrategy } from 'src/app/models/Strategy/istrategy';
+import { RandomStrategy } from 'src/app/models/Strategy/RandomStrategy/random-strategy';
+import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/tracking-strategy';
+import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
+import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
+import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
+import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
+import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 
 
 @Injectable({
@@ -20,12 +30,13 @@ export class GameService {
   private gameMode;
   private cops: Cops[];
   private thiefs: Thief[];
-  private thiefTurn = true;
+  private thiefTurn = false;
   private watchingPositionList = [];
   private watchingPositionListStep2 = [];
   private turnCount = 0;
   private turnChanged: boolean = false;
   private placingPawns = true;
+  private placingCops = true;
   private winner: string;
   private actionStack: GameActionStack;
   private alreadyEnconteredPos: boolean = false
@@ -33,11 +44,27 @@ export class GameService {
   private copsNumber = 0;
   private opponentType = null;
 
-  constructor(private router: Router) {
+  private HUD_TURN_DETAILS: string = '#top-hud-turn-information-details';
+
+  private cops_position = [];
+  private thiefs_position = [];
+
+  private ai_thief_strat: () => IStrategy;
+  private ai_cops_strat: () => IStrategy;
+  private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
+
+  constructor(private router: Router, private graphService: GraphService) {
     this.actionStack = new GameActionStack();
     if (localStorage.getItem("cops") !== null) {
       this.copsNumber = parseInt(localStorage.getItem("cops"));
     }
+    if (localStorage.getItem("ai") !== null) {
+      this.ai_side = localStorage.getItem("ai");
+    }
+  }
+
+  copsArePlaced() {
+    return this.cops_position.filter(p => p).length === this.copsNumber;
   }
 
   setCopsNumber(n: number) {
@@ -53,27 +80,145 @@ export class GameService {
     this.opponentType = type;
   }
 
-  setThief(thiefs) {
-    this.thiefs = thiefs;
+  setAiSide(side: string) {
+    this.ai_side = side;
+    localStorage.setItem("ai", side);
   }
 
-  setCops(cops) {
+  chooseAIStrat() {
+    switch(this.gameMode) {
+      case 'medium':
+        this.ai_cops_strat = () => {
+          return new TrackingStrategy();
+        };
+        this.ai_thief_strat = () => {
+          return new RunawayStrategy();
+        };
+        break;
+      case 'hard':
+        switch(this.graphService.getGraph().typology) {
+          case 'grid':
+            if(this.copsNumber === 2){
+              this.ai_cops_strat = () => {
+                return new WatchingStrategy();
+              };
+            }else if(this.copsNumber>2){
+              this.ai_cops_strat = () => {
+                return new GridStrategy(this.graphService, this);
+              };
+            }else{
+              this.ai_cops_strat = () => {
+                return new TrackingStrategy();
+              };
+            } 
+            break;
+          case 'copsAlwaysWin':
+            this.ai_cops_strat = () => {
+              return new OneCopsWinStrategy();
+            };
+            break;
+          default:
+            this.ai_cops_strat = () => {
+              return new WatchingStrategy();
+            };
+            break;
+        }
+        this.ai_thief_strat = () => {
+          return new RunawayStrategy();
+        };
+        break;
+      case 'easy':
+      default:
+        this.ai_cops_strat = () => {
+          return new RandomStrategy();
+        };
+        this.ai_thief_strat = () => {
+          return new RandomStrategy();
+        };
+        break;
+    }
+  }
+
+  setPawns(thiefs, cops) {
+    this.chooseAIStrat();
+    this.setThief(thiefs);
+    this.setCops(cops);
+  }
+
+  private setThief(thiefs) {
+    this.thiefs = thiefs;
+    for(const t of this.thiefs) {
+      t.setStrategy(this.ai_thief_strat());
+    }
+  }
+
+  private setCops(cops) {
     this.cops = cops;
+    for(const c of this.cops) {
+      c.setStrategy(this.ai_cops_strat());
+    }
+  }
+
+  updateThiefPosition(thief, pos) {
+    let index = this.thiefs.findIndex(t => t == thief);
+    this.thiefs_position[index] = pos;
+  }
+
+  updateCopsPosition(cop, pos) {
+    let index = this.cops.findIndex(c => c == cop);
+    this.cops_position[index] = pos;
   }
 
   update() {
     if(this.placingPawns) {
+      //Check if there is AI
+      if(this.ai_side) {
+        // Check if the AI is a thief
+        if(this.ai_side === 'thief' && !this.placingCops) {
+          for(const t of this.thiefs) {
+            if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+        }
+        //Check if AI is cops
+        if(this.ai_side === 'cops' && this.placingCops) {
+          for(const c of this.cops) {
+            if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+        }
+      
+      } //End check if there is AI
+
       this.checkPlacement();
-      if(!this.placingPawns) {
-        this.startGame();
-        d3.select('#main-message')
-          .style('color', 'green')
-          .text(() => 'C\'est au tour du voleur.');
+      if(!this.placingCops && this.placingPawns) {
+        d3.select(this.HUD_TURN_DETAILS)
+          .text(() => 'Le voleur doit se placer.');
+        if(this.ai_side === 'thief') this.update();
       }
+      if(!this.placingPawns) {
+        d3.select(this.HUD_TURN_DETAILS)
+          .style('color', 'blue')
+          .text(() => 'C\'est au tour des policiers.');
+        this.startGame();
+      }
+    } else {
+      // Check if there is an AI
+      if(this.ai_side) {
+        // Check if this is cops turn and if AI is cops
+        if(this.ai_side === 'cops' && !this.thiefTurn) {
+          for(const c of this.cops) {
+            c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
+        } 
+        // check if this is thief turn and if AI is thief
+        else if(this.ai_side === 'thief' && this.thiefTurn) {
+          for(const t of this.thiefs) {
+            t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+          }
+          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
+        }
+      } // End Check if there is an AI
     }
-    /* else {
-      this.updateStates();
-    } */
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
     if(pile.length != this.cops.length){
@@ -102,13 +247,16 @@ export class GameService {
 
   private checkPlacement() {
     let placing = false;
+    let cops = false;
     for(let i=0; i<this.thiefs.length; i++) {
       placing = placing || this.thiefs[i].isWaitingPlacement();
     }
     for(let i=0; i<this.cops.length; i++) {
       placing = placing || this.cops[i].isWaitingPlacement();
+      cops = cops || this.cops[i].isWaitingPlacement();
     }
     this.placingPawns = placing;
+    this.placingCops = cops
   }
 
   notificate(pos, number){
@@ -130,7 +278,7 @@ export class GameService {
   }
 
   checkCops(){
-    let num:number= 0;
+    let num: number = 0;
     let copsPile = [];
     let tmpCopsPile = []
     let alreadyWatchedCops = []
@@ -156,25 +304,11 @@ export class GameService {
   }
 
   private startGame() {
-    this.setPlayersState(this.thiefs, environment.onTurnState);
+    this.thiefTurn = false;
+    this.setPlayersState(this.cops, environment.onTurnState);
     this.turnCount++;
+    this.update();
   }
-
-  /* private updateStates() {
-    if(this.thiefTurn) {
-      let allThiefHasPlayed = true;
-      for(let i=0; i< this.thiefs.length; i++) {
-        allThiefHasPlayed = allThiefHasPlayed && !this.thiefs[i].onTurn();
-      }
-      this.thiefTurn = !allThiefHasPlayed;
-    } else {
-      let allCopsHasPlayed = true;
-      for(let i=0; i< this.cops.length; i++) {
-        allCopsHasPlayed = allCopsHasPlayed && !this.cops[i].onTurn();
-      }
-      this.thiefTurn = allCopsHasPlayed;
-    }
-  } */
 
   private setPlayersState(players: Pawns[], state: PawnState) {
     for(let i=0; i<players.length; i++) {
@@ -190,8 +324,8 @@ export class GameService {
         allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
       }
     }
-    let timerEnd = this.turnCount > 15
-    let startWatchingThiefWin = this.turnCount > 5
+    let timerEnd = this.turnCount > 25
+    let startWatchingThiefWin = this.turnCount > 10
     if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
     else if(timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
     else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
@@ -209,7 +343,7 @@ export class GameService {
   }
 
   validateTurn() {
-
+    d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
     if(this.thiefTurn) {
@@ -217,39 +351,47 @@ export class GameService {
       this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
       this.setPlayersState(this.thiefs, environment.onTurnState);
-      d3.select('#main-message')
+      d3.select(this.HUD_TURN_DETAILS)
         .style('color', 'green')
         .text(() => 'C\'est au tour du voleur.');
     } 
     else {
       this.setPlayersState(this.thiefs, environment.waitingTurnState);
       this.setPlayersState(this.cops, environment.onTurnState);
-      d3.select('#main-message')
+      d3.select(this.HUD_TURN_DETAILS)
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }
-    this.update()
     if(this.checkEnd()) {
       Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : facile' + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
         if(result.isConfirmed){
-          this.watchingPositionList = []
-          this.watchingPositionListStep2 = []
-          this.alreadyEnconteredPos = false
-          window.location.reload();
+          this.replay();
         }else if(!result.isConfirmed){
-          this.reset();
-          this.router.navigate(['/menu']);
-
+          this.goBackToMenu();
         }
       })
+    } else {
+      this.update()
     }
+  }
+
+  goBackToMenu(){
+    this.reset();
+    this.router.navigate(['/menu']);
+  }
+
+  replay(){
+    this.watchingPositionList = []
+    this.watchingPositionListStep2 = []
+    this.alreadyEnconteredPos = false
+    window.location.reload();
   }
 
   reset(){

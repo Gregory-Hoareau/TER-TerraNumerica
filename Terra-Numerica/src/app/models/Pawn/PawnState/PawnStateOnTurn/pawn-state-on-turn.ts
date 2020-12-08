@@ -15,7 +15,7 @@ export class PawnStateOnTurn implements PawnState {
     }
     dragged(event: any, d: any) {
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
-        if(d.graphService.gameMode == "facile"){
+        if(d.graphService.gameMode == "easy"){
             let edges = this.edges
             d3.selectAll(".circle")
                 .filter(function(nodeData:any){
@@ -25,7 +25,7 @@ export class PawnStateOnTurn implements PawnState {
                     let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
                     let distance = d.detectRadius;
                     if (h <= distance) {
-                        d.graphService.showPossibleMove(elements[id]);
+                        d.graphService.showPossibleMoveDragging(elements[id], d.lastSlot);
                     }
                 })
         }
@@ -45,6 +45,7 @@ export class PawnStateOnTurn implements PawnState {
         }
         const previousSlot = d.lastSlot;
         let distance = d.detectRadius;
+        let node;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
                 return edges.includes(nodeData);
@@ -52,11 +53,12 @@ export class PawnStateOnTurn implements PawnState {
             .each((nodeData:any, id:any, elements:any) => {
                 let h = Math.hypot(event.x - nodeData.x, event.y - nodeData.y);
                 if (h <= distance) {
+                    node = nodeData;
                     distance = h;
                     position.x = nodeData.x;
                     position.y = nodeData.y;
                     d.settedPosition = true;
-                    d.possiblePoints = d.graphService.showPossibleMove(elements[id]);
+                    d.possiblePoints = d.graphService.showPossibleMoveDragging(elements[id], d.lastSlot);
                     d.lastSlot = elements[id]
                 }
             })
@@ -67,6 +69,7 @@ export class PawnStateOnTurn implements PawnState {
             d.settedPosition = false;
         }
         d3.select("."+d.role).attr("cx", d.x = position.x).attr("cy", d.y = position.y);
+        d.updatePosition(node);
 
         if (!d.settedPosition) {
             return this;

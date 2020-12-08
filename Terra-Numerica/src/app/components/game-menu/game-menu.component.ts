@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
+import { TranslateService } from 'src/app/_services/translate/translate.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -13,14 +13,15 @@ import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.
 export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
-  private selectedOpponentType = 'player';
+  public selectedOpponentType = 'player';
   public availableGraphType = ['grid', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
-  public availableOpponentType = ['ia', 'player'];
+  public availableOpponentType = ['ai', 'player'];
 
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
-  public gameModeSelected = "facile";
+  public gameModeSelected = 'easy';
+  public selectedAi = 'cops'
 
   public paramsNames;
   public graphParam1: number = 1;
@@ -30,8 +31,8 @@ export class GameMenuComponent implements OnInit {
   constructor(private graphService: GraphService,
               private gameService: GameService,
               private router: Router,
-              private formBuilder: FormBuilder,
-              private randomGraph: RandomGraphService) { }
+              private randomGraph: RandomGraphService,
+              public translator: TranslateService) { }
 
   ngOnInit(): void {
     this.updateParamsName();
@@ -67,10 +68,6 @@ export class GameMenuComponent implements OnInit {
   }
 
   selectPlayer(opponent) {
-    if(opponent === 'ia') {
-      alert('AI opponent is not implemented yet');
-      return;
-    }
     this.selectedOpponentType = opponent;
   }
 
@@ -83,25 +80,30 @@ export class GameMenuComponent implements OnInit {
       //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       // }
       switch(this.gameModeSelected){
-        case "facile":
+        case "easy":
           break;
-        case "normal":
+        case "medium":
           break;
-        case "difficile":
+        case "hard":
           break;
       }
       const extras: NavigationExtras = {
         queryParams: {
-          copsNum: this.cops,
-          graphType: this.selectedGraphType,
-          oppenent: this.selectedOpponentType,
-          graphParams: [this.graphParam1, this.graphParam2],
+          // copsNum: this.cops,
+          // graphType: this.selectedGraphType,
+          // oppenent: this.selectedOpponentType,
+          // graphParams: [this.graphParam1, this.graphParam2],
           gameMode: this.gameModeSelected
         }
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
-      this.router.navigate(['/test-d3js'], extras);
+      if (this.selectedOpponentType === 'ai') {
+        this.gameService.setAiSide(this.selectedAi);
+      } else {
+        this.gameService.setAiSide(undefined);
+      }
+      this.router.navigate(['/board'], extras);
     }
   }
 
@@ -115,6 +117,10 @@ export class GameMenuComponent implements OnInit {
       return true
     }
     return false;
+  }
+
+  setSelectedAi(side: string){
+    this.selectedAi = side;
   }
 
   isSelectedOponent(type) {
@@ -141,6 +147,26 @@ export class GameMenuComponent implements OnInit {
 
   isSeletectedGraphImportation() {
     return this.graphImportation ? 'selected' : '';
+  }
+
+  isSelectedEasy() {
+    return this.gameModeSelected === 'easy' ? 'selected' : '';
+  }
+
+  isSelectedMedium() {
+    return this.gameModeSelected === 'medium' ? 'selected' : '';
+  }
+
+  isSelectedHard() {
+    return this.gameModeSelected === 'hard' ? 'selected' : '';
+  }
+
+  isSelectedCopsAi() {
+    return this.selectedAi === 'cops' ? 'selected' : '';
+  }
+
+  isSelectedThiefAi() {
+    return this.selectedAi === 'thief' ? 'selected' : '';
   }
 
   onFileChange(file) {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import * as d3 from 'd3';
 import { promise } from 'protractor';
 import { Common } from 'src/app/models/Graph/Common/common';
@@ -17,14 +18,16 @@ export class GraphService {
 
   private gameMode: string;
 
-  constructor(private randomGraph: RandomGraphService) {
+  constructor(private randomGraph: RandomGraphService, private router: Router) {
     if (localStorage.getItem("method") !== null) {
       switch(localStorage.getItem("method")) {
         case "generate":
           if (localStorage.getItem("type") !== null && localStorage.getItem("args") !== null) {
             const type = localStorage.getItem("type");
             const args = JSON.parse(localStorage.getItem("args"));
-            this.generateGraph(type, args)
+            if(router.url.includes('board')) {
+              this.generateGraph(type, args)
+            }
           }
           break;
         case "import":
@@ -47,7 +50,8 @@ export class GraphService {
     localStorage.setItem("method", "generate");
     localStorage.setItem("type", type);
     localStorage.setItem("args", JSON.stringify(args));
-    this.graph = null;
+    this.graph = null
+
     switch(type) {
       case 'grid':
         this.graph = this.generateGrid(args[0], args[1]);
@@ -65,6 +69,11 @@ export class GraphService {
         this.graph = this.oneCopsGraph(args[0]);
         break;
     }
+  
+  }
+
+  getGraph() {
+    return this.graph;
   }
 
   generatesNodes(n: number): any[] {
@@ -167,7 +176,7 @@ export class GraphService {
       }
     }
     links.push({source: node1, target: node2})
-    return new Common(nodes, links);
+    return new Common(nodes, links, 'copsAlwaysWin');
   }
 
   readAsync(file: File): Promise<Graph> {
@@ -232,46 +241,47 @@ export class GraphService {
     const edges = this.graph.edges(vertex.__data__)
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
-    if(this.gameMode === "facile" || this.gameMode === "normal") {
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
       d3.selectAll(".circle").filter(function(d: any) {
         return edges.includes(d);
       }).style("fill", "red");
       vertex.style.fill = "blue"
+    }
+
+    return edges;
+  }
+
+  showPossibleMoveDragging(vertex, lastPos) {
+    const edges = this.graph.edges(vertex.__data__)
+    edges.push(vertex.__data__)
+    d3.selectAll(".circle").style("fill", '#69b3a2');
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
+      d3.selectAll(".circle").filter(function(d: any) {
+        return edges.includes(d);
+      }).style("fill", "orange");
+      vertex.style.fill = "red"
+      lastPos.style.fill = "blue"
 
     }
 
     return edges;
   }
 
-  // private oneCopsGraph(n) {
-  //   this.clearGraph
-  //   this.initNodes(n)
-  //   let numberOfSpecialNode = Math.floor(1 + Math.random() * Math.floor((n/2)-1));
-  //   for(let i=0; i<n-1; i++){
-  //     this.graph.links.push({source: i, target: i+1});
-  //   }
-  //   console.log(numberOfSpecialNode)
-  //   for(let i=0; i<numberOfSpecialNode; i++){
-  //     let idNode1 = Math.floor(Math.random() * Math.floor(n))
-  //     let node1 = this.graph.nodes[idNode1];
-  //     let node2 = this.graph.nodes[Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1))];
-  //     for(let i=0; i<3; i++){
-  //       let idOfNodeLinkedRandomly = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1));
-  //       console.log(node1)
-  //       console.log(node2)
-  //       this.graph.links.push({source: node1, target: idOfNodeLinkedRandomly});
-  //       this.graph.links.push({source: node2, target: idOfNodeLinkedRandomly});
-  //     }
-  //     this.graph.links.push({source: node1, target: node2});    
-  //   }
-  // }
+  showCopsPossibleMoves(cops, show) {
+    const edges = this.graph.edges(cops.__data__)
+    edges.push(cops.__data__)
+    if(this.gameMode === "easy" || this.gameMode === "medium") {
+      if(show){
+        d3.selectAll(".circle").filter(function(d: any) {
+          return edges.includes(d);
+        }).style("fill", "red");
+      }else{
+        d3.selectAll(".circle").filter(function(d: any) {
+          return edges.includes(d);
+        }).style("fill", '#69b3a2');
+      }
+    }
 
-  // private randomGenerator(){
-  //   let rGraph = this.randomGraph.getRandomGraph();
-  //   this.clearGraph();
-  //   this.initNodes(rGraph.nodes.length);
-  //   rGraph.links.forEach(l => {
-  //     this.graph.links.push(l)
-  //   });
-  // }
+    return edges;
+  }
 }

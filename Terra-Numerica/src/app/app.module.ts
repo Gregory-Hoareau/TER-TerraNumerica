@@ -12,12 +12,15 @@ import { CommonModule } from '@angular/common';
 import { BackendService } from './_services/backend/backend.service';
 import { RandomGraphService } from './_services/random-graph/random-graph.service';
 import { HttpClientModule } from '@angular/common/http';
+import { GameBoardComponent } from './components/game-board/game-board.component';
+import { TranslateService } from './_services/translate/translate.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestD3jsComponent,
-    GameMenuComponent
+    GameMenuComponent,
+    GameBoardComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     GraphService,
     GameService,
     BackendService,
-    RandomGraphService
+    RandomGraphService,
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })
