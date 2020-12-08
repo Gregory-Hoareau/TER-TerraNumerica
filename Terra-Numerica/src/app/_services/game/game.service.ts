@@ -104,7 +104,7 @@ export class GameService {
               };
             }else if(this.copsNumber>2){
               this.ai_cops_strat = () => {
-                return new GridStrategy(this.graphService);
+                return new GridStrategy(this.graphService, this);
               };
             }else{
               this.ai_cops_strat = () => {
