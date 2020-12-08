@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+button {
+    color: white;
+    font-weight: bold;
+    background-color: purple;
+    border-radius: 8px;
+}
