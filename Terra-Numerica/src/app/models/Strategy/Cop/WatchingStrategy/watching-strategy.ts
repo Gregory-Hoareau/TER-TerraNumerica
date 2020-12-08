@@ -28,10 +28,10 @@ export class WatchingStrategy implements IStrategy {
 
     move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
         const edges = graph.edges(this.actual_place);
+        edges.push(this.actual_place);
         let vertex;
 
         let closest_vertex;
-        
         //Calculer le nombre de sommet maximal qui peuvent être gardé par le policier
         let watchVertex = [];
         let thief_possible_move = [];

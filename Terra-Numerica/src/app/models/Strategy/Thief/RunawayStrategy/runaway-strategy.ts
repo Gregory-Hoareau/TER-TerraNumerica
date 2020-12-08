@@ -16,6 +16,7 @@ export class RunawayStrategy implements IStrategy {
         let farthest;
         let dist = 0;
         const edges = graph.edges(this.actual_place);
+        edges.push(this.actual_place);
         for(const e of edges) {
             let globalDist = 0;
             for(const c of cops_position_slot) {

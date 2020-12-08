@@ -99,17 +99,14 @@ export class GameService {
         switch(this.graphService.getGraph().typology) {
           case 'grid':
             if(this.copsNumber === 2){
-              console.log('watch')
               this.ai_cops_strat = () => {
                 return new WatchingStrategy();
               };
             }else if(this.copsNumber>2){
-              console.log('grid')
               this.ai_cops_strat = () => {
                 return new GridStrategy(this.graphService);
               };
             }else{
-              console.log('track')
               this.ai_cops_strat = () => {
                 return new TrackingStrategy();
               };
