@@ -15,6 +15,7 @@ import { GameService } from 'src/app/_services/game/game.service';
  */
 export class GridStrategy implements IStrategy {
     actual_place: any; 
+    cops_placement: string;
 
     constructor(private graphService: GraphService, private gameService: GameService){}
 
@@ -26,15 +27,19 @@ export class GridStrategy implements IStrategy {
         }
         let first_pos
         let next_pos
-        if(this.gameService.getCopsNumber() === grid.long){
+
+        if(this.gameService.getCopsNumber() === grid.width){
+            this.cops_placement = 'vertical';
             first_pos = 0;
-            next_pos = grid.lar;
-        }else if(this.gameService.getCopsNumber() >= grid.lar - 1){
-            first_pos = (grid.long * grid.lar) - grid.lar;
             next_pos = 1;
+        }else if(this.gameService.getCopsNumber() >= grid.height - 1){
+            this.cops_placement = 'horizontal';
+            first_pos = grid.width - 1;
+            next_pos = grid.width;
         }else{
-            first_pos = (grid.long * grid.lar) - grid.lar;
-            next_pos = 3;
+            this.cops_placement = 'horizontal1/3';
+            first_pos = grid.width - 1;
+            next_pos = grid.width * 3;
         }
 
         if(cops_position_slot.length === 0){
@@ -47,6 +52,7 @@ export class GridStrategy implements IStrategy {
         }
         if(this.actual_place === undefined){
             this.actual_place = nodes[first_pos]
+            console.log(first_pos)
 
         }
         return this.actual_place;
@@ -59,22 +65,38 @@ export class GridStrategy implements IStrategy {
         if (graph.typology === "grid"){
             grid = graph as Grid;
         }
-        let distance = graph.nodes.length;
-        let edges = graph.edges(this.actual_place);
-        edges.push(this.actual_place);
-        edges = edges.filter(e => !(cops_position_slot.includes(e)))
-        for(const e of edges) {
-            let globalDist = 0;
-            for(const t of thiefs_position_slot) {
-                const d = graph.distance(e, t);
-                globalDist += d !== -1 ? d : 0;
-            }
-            if(!closest || globalDist <= distance) {
-                closest = e;
-                distance = globalDist;
-            }
+        switch (this.cops_placement) {
+            case 'vertical':
+                if(nodes[this.actual_place.index + grid.width] !== undefined){
+                    this.actual_place = nodes[this.actual_place.index + grid.width]
+                }
+                break;
+            case 'horizontal':
+                if(nodes[this.actual_place.index - 1] !== undefined){
+                    this.actual_place = nodes[this.actual_place.index - 1]
+                }
+                break;
+            case 'horizontal1/3':
+                if(nodes[this.actual_place.index - 1] !== undefined){
+                    this.actual_place = nodes[this.actual_place.index - 1]
+                }               
+                break;
         }
-        this.actual_place = closest;
+        // let distance = graph.nodes.length;
+        // let edges = graph.edges(this.actual_place);
+        // edges.push(this.actual_place);
+        // edges = edges.filter(e => !(cops_position_slot.includes(e)))
+        // for(const e of edges) {
+        //     let globalDist = 0;
+        //     for(const t of thiefs_position_slot) {
+        //         const d = graph.distance(e, t);
+        //         globalDist += d !== -1 ? d : 0;
+        //     }
+        //     if(globalDist <= 1) {
+        //         this.actual_place = e;
+        //         distance = globalDist;
+        //     }
+        // }
         return this.actual_place;
     }
 

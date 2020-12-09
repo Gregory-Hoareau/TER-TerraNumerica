@@ -3,8 +3,15 @@ import { Graph } from '../graph';
 
 export class Grid extends Graph {
 
-    private grid_width: number;
-    private grid_height: number;
+    private _grid_width: number;
+    get width(): number {
+        return this._grid_width;
+    }
+
+    private _grid_height: number;
+    get height(): number {
+        return this._grid_height;
+    }
     private grid = {
         cells: [],
         init: function(tab_width, tab_height, canvas_width, canvas_height) {
@@ -34,8 +41,8 @@ export class Grid extends Graph {
 
     constructor(nodes, links, width: number, height: number) {
         super(nodes, links, "grid");
-        this.grid_width = width;
-        this.grid_height = height;
+        this._grid_width = width;
+        this._grid_height = height;
     }
 
     draw(svg: any) {
@@ -43,12 +50,12 @@ export class Grid extends Graph {
         const canvas_width = parseInt(svg.style("width"), 10);
         const canvas_height = parseInt(svg.style("height"), 10);
 
-        this.grid.init(this.grid_width, this.grid_height, canvas_width, canvas_height);
+        this.grid.init(this._grid_width, this._grid_height, canvas_width, canvas_height);
         // Horizontal lines
-        for (let row = 0 ; row < this.grid_height ; ++row) {
-            const y = row * canvas_height/this.grid_height + (canvas_height/this.grid_height)/2;
-            const x1 = (canvas_width/this.grid_width)/2;
-            const x2 = canvas_width - (canvas_width/this.grid_width)/2;
+        for (let row = 0 ; row < this._grid_height ; ++row) {
+            const y = row * canvas_height/this._grid_height + (canvas_height/this._grid_height)/2;
+            const x1 = (canvas_width/this._grid_width)/2;
+            const x2 = canvas_width - (canvas_width/this._grid_width)/2;
             svg.append('line')
                 .attr('x1', x1)
                 .attr('y1', y)
@@ -57,10 +64,10 @@ export class Grid extends Graph {
                 .style('stroke', 'rgb(170, 170, 170)')
         }
         // Vertical lines
-        for (let col = 0 ; col < this.grid_width ; ++col) {
-            const x = col * canvas_width/this.grid_width + (canvas_width/this.grid_width)/2;
-            const y1 = (canvas_height/this.grid_height)/2;
-            const y2 = canvas_height - (canvas_height/this.grid_height)/2;
+        for (let col = 0 ; col < this._grid_width ; ++col) {
+            const x = col * canvas_width/this._grid_width + (canvas_width/this._grid_width)/2;
+            const y1 = (canvas_height/this._grid_height)/2;
+            const y2 = canvas_height - (canvas_height/this._grid_height)/2;
             svg.append('line')
                 .attr('x1', x)
                 .attr('y1', y1)

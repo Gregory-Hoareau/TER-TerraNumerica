@@ -17,6 +17,7 @@ import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/r
 import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
+import { StatisticService } from '../statistic/statistic.service';
 
 
 @Injectable({
@@ -45,12 +46,13 @@ export class GameService {
 
   private cops_position = [];
   private thiefs_position = [];
+  private gameTimer;
 
   private ai_thief_strat: () => IStrategy;
   private ai_cops_strat: () => IStrategy;
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
 
-  constructor(private router: Router, private graphService: GraphService) {
+  constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
     if (localStorage.getItem("cops") !== null) {
       this.copsNumber = parseInt(localStorage.getItem("cops"));
@@ -302,6 +304,7 @@ export class GameService {
 
   private startGame() {
     this.thiefTurn = false;
+    this.gameTimer = Date.now();
     this.setPlayersState(this.cops, environment.onTurnState);
     this.turnCount++;
     this.update();
@@ -360,6 +363,8 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     if(this.checkEnd()) {
+      let endTime:any = Date.now();
+      this.gameTimer = endTime - this.gameTimer;
       Swal.fire({
         title: this.winner,
         text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
@@ -368,6 +373,10 @@ export class GameService {
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
+        let min = Math.trunc(this.gameTimer / 60000);
+        let sec = ((this.gameTimer / 60000) - min) * 60;
+        this.gameTimer = min.toString() + ',' + sec.toString();
+        this.registerStats();
         if(result.isConfirmed){
           this.replay();
         }else if(!result.isConfirmed){
@@ -377,6 +386,16 @@ export class GameService {
     } else {
       this.update()
     }
+  }
+
+  registerStats(){
+    this.stat.postStatistic({
+      gameMode: this.gameMode,
+      turnCount: this.turnCount,
+      copsNumber: this.copsNumber,
+      timer: this.gameTimer,
+      graphType: this.graphService.getGraph().typology,
+    })
   }
 
   goBackToMenu(){
@@ -398,6 +417,7 @@ export class GameService {
     this.turnCount = 0;
     this.thiefTurn = true;
     this.placingPawns = true;
+    this.gameTimer = 0;
   }
   
   checkTurn(){
