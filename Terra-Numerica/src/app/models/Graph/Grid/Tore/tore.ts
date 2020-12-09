@@ -44,6 +44,7 @@ export class Tore extends Graph {
         const canvas_height = parseInt(svg.style("height"), 10);
 
         this.grid.init(this.grid_width, this.grid_height, canvas_width, canvas_height);
+        
         for (let row = 0 ; row < this.grid_height ; ++row) {
             const y = row * canvas_height/this.grid_height + (canvas_height/this.grid_height)/2;
             const margin = ((canvas_width/this.grid_width)/2)/2

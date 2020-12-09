@@ -95,25 +95,22 @@ export class GraphService {
     let nodes = this.generatesNodes(size);
     let links = [];
 
-    let count = 0;
-    for(let i = 0 ; i < width ; ++i) {
-        for(let j = 0 ; j < height-1 ; ++j) {
-            links.push({
-              source: count,
-              target: count+1
-            })
-            count++;
-        }
-        count++
+    // LINKS HORIZONTALS
+    for (let i = 0 ; i < height*width ; i += width) {
+      for (let j = 0 ; j < width-1 ; ++j) {
+        links.push({
+          source: i+j,
+          target: (i+j)+1
+        })
+      }
     }
 
-    for(let i = 0 ; i < width-1 ; ++i) {
-        for(let j = 0 ; j < height ; ++j) {
-            links.push({
-              source: (height*i)+j,
-              target: (height*i)+j+height
-            });
-        }
+    // LINKS VERTICAL
+    for (let i = 0 ; i < (height-1)*width ; ++i) {
+      links.push({
+        source: i,
+        target: i+width
+      })
     }
 
     return new Grid(nodes, links, width, height);

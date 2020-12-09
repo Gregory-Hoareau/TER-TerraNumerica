@@ -85,9 +85,6 @@ export class Grid extends Graph {
     }
 
     simulate(svg: any) {
-        const width = parseInt(svg.style("width"), 10);
-        const height = parseInt(svg.style("height"), 10);
-        this.grid.init(this.grid_width, this.grid_height, width, height);
         d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink()
                 .links(this.links)
