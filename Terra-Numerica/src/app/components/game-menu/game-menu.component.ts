@@ -112,6 +112,10 @@ export class GameMenuComponent implements OnInit {
     }
   }
 
+  navigateToDashboard(){
+    this.router.navigate(['/dashboard']);
+  }
+
   private paramSafetyCheck() {
     if (this.inputGraphJSONFile && this.graphImportation) {
       return true;

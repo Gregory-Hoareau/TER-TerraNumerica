@@ -15,13 +15,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { TranslateService } from './_services/translate/translate.service';
 import { StatisticService } from './_services/statistic/statistic.service';
+import { GameDashboardComponent } from './components/game-dashboard/game-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestD3jsComponent,
     GameMenuComponent,
-    GameBoardComponent
+    GameBoardComponent,
+    GameDashboardComponent
   ],
   imports: [
     BrowserModule,

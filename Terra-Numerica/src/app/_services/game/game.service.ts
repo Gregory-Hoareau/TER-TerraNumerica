@@ -373,9 +373,7 @@ export class GameService {
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
-        let min = Math.trunc(this.gameTimer / 60000);
-        let sec = ((this.gameTimer / 60000) - min) * 60;
-        this.gameTimer = min.toString() + ',' + sec.toString();
+        this.gameTimer = Math.trunc(this.gameTimer / 1000);
         this.registerStats();
         if(result.isConfirmed){
           this.replay();
