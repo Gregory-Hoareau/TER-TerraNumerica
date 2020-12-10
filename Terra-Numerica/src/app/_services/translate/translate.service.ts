@@ -19,6 +19,8 @@ export class TranslateService {
         return '???'; // TODO : Changer le nom d'affichage de ce type de graph
       case 'random':
         return 'Aléatoire';
+      case 'tore':
+        return 'Grille torique';
       default:
         return '';
     }
