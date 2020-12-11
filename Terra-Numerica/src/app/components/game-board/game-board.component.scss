@@ -10,18 +10,6 @@
     margin: 8px;
 }
 
-// TRICKS TO SELECT THE BODY FROM COMPONENT
-::ng-deep body {
-    background-color: Gainsboro;
-}
-
-/* .card {
-    margin: 0.2em;
-    background-color: snow;
-    border-radius: 1em;
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
-} */
-
 #top-hud {
     display: flex;
     align-items: stretch;
