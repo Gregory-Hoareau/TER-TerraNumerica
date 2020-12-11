@@ -39,6 +39,12 @@ export class GameDashboardComponent implements OnInit {
       .style("align-items", "stretch")
       .style("height", "50vh");
 
+    card.append("div")
+    .style("text-align", "center")
+      .append("h2")
+        .text(this.abcisse + " en fonction du " + this.ordonne)
+        .style("margin-bottom", 0)
+
     const chart = card.append("div")
       .attr("class", "chart")
       .style("flex", "1");
