@@ -1,22 +1,26 @@
 <div class="game-dashboard">
     <div id="stat-form" class="card">
-        <h1>Graph</h1>
-        <select id="bonjour" [(ngModel)]="ordonne">
-            <option>Nombre de Tour</option>
-            <option>Durée de la Partie</option>
-        </select>
-        <p>en fonction du</p>
-        <select id="aurevoir" [(ngModel)]="abcisse">
-            <option>Nombre de Policier</option>
-            <option>Type de Graph</option>
-            <option>Mode de Jeu</option>
-        </select>
+        <div class="title">
+            <h1>Veuillez choisir les données qui vous intéressent :</h1>
+        </div>
+        <div class="form-sentence">
+            <select class="form-y" [(ngModel)]="ordonne">
+                <option selected>Nombre de Tour</option>
+                <option>Durée de la Partie</option>
+            </select>
+            <h2 class="middle-sentence" > en fonction du </h2>
+            <select class="form-x" [(ngModel)]="abcisse">
+                <option selected>Nombre de Policier</option>
+                <option>Type de Graph</option>
+                <option>Mode de Jeu</option>
+            </select>
+        </div>
+        <div *ngIf="abcisse !== undefined && ordonne !== undefined" class="refresh">
+            <button (click)="refreshGraph()" class="refresh-graph">
+                Afficher
+            </button>
+        </div>
     </div>
-    
-    <h1>vous avez choisi : {{abcisse}} en fonction du {{ordonne}}</h1>
-    <button (click)="refreshGraph()" class="refresh-graph">
-        <img class="refresh-graph-img"src="assets/refresh.svg"/>
-    </button>
-    
+
     <div id="charts"></div>
 </div>
