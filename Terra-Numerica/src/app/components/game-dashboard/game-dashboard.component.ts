@@ -36,8 +36,8 @@ export class GameDashboardComponent implements OnInit {
   }
 
   refreshGraph(){
-    const svg = d3.select("#chart").append("svg")
-    .attr("id", "svg")
+    const svg = d3.select("#charts").append("svg")
+    // .attr("id", "svg")
     .attr("width", this.width + this.margin.left + this.margin.right)
     .attr("height", this.height + this.margin.top + this.margin.bottom)
     .append("g")

@@ -1,12 +1,39 @@
-
-button{
-    display: flex;
-    width: 7%;
-    padding: 0.5em;
-
-    .refresh-graph-img{
-        flex: 1;
-        width: 20%;
-        height: 100%;
-    }
+::ng-deep body {
+    background-color: Gainsboro;
 }
+
+.card {
+    margin: 0.2em;
+    background-color: snow;
+    border-radius: 1em;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+}
+
+.game-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: flex-start;
+
+    #header {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #stat-form {
+        
+    }
+
+    button{
+        display: flex;
+        width: 7%;
+        padding: 0.5em;
+    
+        .refresh-graph-img{
+            flex: 1;
+            width: 20%;
+            height: 100%;
+        }
+    }
+} // .game-dashboard
+

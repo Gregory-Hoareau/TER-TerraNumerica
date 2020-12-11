@@ -1,16 +1,24 @@
-<h1>Graph</h1>
-<select id="bonjour" [(ngModel)]="ordonne">
-    <option>Nombre de Tour</option>
-    <option>Durée de la Partie</option>
-</select>
-<p>en fonction du</p>
-<select id="aurevoir" [(ngModel)]="abcisse">
-    <option>Nombre de Policier</option>
-    <option>Type de Graph</option>
-    <option>Mode de Jeu</option>
-</select>
-<h1>vous avez choisi : {{abcisse}} en fonction du {{ordonne}}</h1>
-<button (click)="refreshGraph()" class="refresh-graph">
-    <img class="refresh-graph-img"src="assets/refresh.svg"/>
-</button>
-<div id="chart"></div>
+<div class="game-dashboard">
+    <div id="header" class="card">
+        <h1>Tableau de bord</h1>
+    </div>
+    <div id="stat-form" class="card">
+        <h1>Graph</h1>
+        <select id="bonjour" [(ngModel)]="ordonne">
+            <option>Nombre de Tour</option>
+            <option>Durée de la Partie</option>
+        </select>
+        <p>en fonction du</p>
+        <select id="aurevoir" [(ngModel)]="abcisse">
+            <option>Nombre de Policier</option>
+            <option>Type de Graph</option>
+            <option>Mode de Jeu</option>
+        </select>
+    </div>
+    
+    <h1>vous avez choisi : {{abcisse}} en fonction du {{ordonne}}</h1>
+    <button (click)="refreshGraph()" class="refresh-graph">
+        <img class="refresh-graph-img"src="assets/refresh.svg"/>
+    </button>
+    <div id="charts"></div>
+</div>
