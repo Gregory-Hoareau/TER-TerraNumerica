@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendService } from 'src/app/_services/backend/backend.service';
+import { GraphFileValidatorService } from 'src/app/_services/graph-file-validator/graph-file-validator.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,8 +14,11 @@ export class AdminGraphComponent implements OnInit {
   public fileContent;
   public line_in_file = 10;
   private reader: FileReader;
+  public valide_file = undefined;
+  public missingProperties = [];
+  public invalidProperties = [];
 
-  constructor(private backend: BackendService) { }
+  constructor(private backend: BackendService, private graphFileValidator: GraphFileValidatorService) { }
 
   ngOnInit(): void {
     this.reader = new FileReader();
@@ -28,11 +32,23 @@ export class AdminGraphComponent implements OnInit {
   private readFile() {
     this.reader.onload = (ev) => {
       this.fileContent = ev.target.result;
+      this.checkFileContent();
     }
     if(this.inputFile)
       this.reader.readAsText(this.inputFile, 'utf-8');
-    else 
-      this.fileContent = undefined
+    else {
+      this.fileContent = undefined;
+      this.valide_file = undefined;
+    }
+  }
+
+  private checkFileContent() {
+    console.warn('CHECKING FILE CONTENT');
+    const jsonFileContent = JSON.parse(this.fileContent);
+    this.graphFileValidator.setContentToValidate(jsonFileContent);
+    this.missingProperties = this.graphFileValidator.missing_properties;
+    this.invalidProperties = this.graphFileValidator.invalid_properties;
+    this.valide_file = this.missingProperties.length === 0 && this.invalidProperties.length === 0;
   }
 
   uploadGraph() {
