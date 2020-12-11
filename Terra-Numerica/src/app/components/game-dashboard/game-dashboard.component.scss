@@ -1,3 +1,15 @@
+::ng-deep body {
+    background-color: Gainsboro;
+}
+
+.card {
+    margin: 0.2em;
+    background-color: snow;
+    border-radius: 1em;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+
+}
+
 .game-dashboard {
     display: flex;
     flex-direction: column;
@@ -10,7 +22,7 @@
     }
 
     #stat-form {
-        
+
     }
 
     button{
@@ -24,5 +36,14 @@
             height: 100%;
         }
     }
+
+    #charts {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        align-content: flex-start;        
+
+    } // #charts
+
 } // .game-dashboard
 

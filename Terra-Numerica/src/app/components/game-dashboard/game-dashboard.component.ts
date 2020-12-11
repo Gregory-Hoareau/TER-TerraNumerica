@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { StatisticService } from 'src/app/_services/statistic/statistic.service';
 
-
 @Component({
   selector: 'app-game-dashboard',
   templateUrl: './game-dashboard.component.html',
@@ -23,25 +22,50 @@ export class GameDashboardComponent implements OnInit {
   public yData
 
   constructor(private stat: StatisticService) {
-    this.x = d3.scaleBand()
-      .range([this.width, 0])
-      .padding(0.1);
 
-    this.y = d3.scaleLinear()
-        .range([this.height, 0]);
   }
 
   async ngOnInit(): Promise<void> {
-    this.statistics = await this.stat.getStatistics()
+    this.statistics = await this.stat.getStatistics();
   }
 
   refreshGraph(){
-    const svg = d3.select("#charts").append("svg")
-    // .attr("id", "svg")
-    .attr("width", this.width + this.margin.left + this.margin.right)
-    .attr("height", this.height + this.margin.top + this.margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+    const card = d3.select('#charts').append("div")
+      .attr("class", "card")
+      .style("padding", "0.5em")
+      .style("display", "flex")
+      .style("flex-direction", "column")
+      .style("align-items", "stretch")
+      .style("height", "50vh");
+
+    const chart = card.append("div")
+      .attr("class", "chart")
+      .style("flex", "1");
+
+    const svg_width = parseInt(chart.style("width"));
+    const svg_height = parseInt(chart.style("height"));
+
+    const svg = chart.append("svg")
+      .attr("width", svg_width)
+      .attr("height", svg_height)
+
+    const padding = 40;
+    const g_width = svg_width - (2*padding)
+    const g_height = svg_height - (2*padding)
+
+    const g = svg.append("g")
+      .attr("width", g_width)
+      .attr("height", g_height)
+      .attr("transform", "translate(" + padding + "," + padding + ")");
+
+    this.x = d3.scaleBand()
+      .range([g_width, 0])
+      .padding(0.1);
+
+    this.y = d3.scaleLinear()
+        .range([g_height, 0]);
+
     switch (this.abcisse){
       case 'Nombre de Policier':
         this.xData = 'copsNumber'
@@ -64,15 +88,10 @@ export class GameDashboardComponent implements OnInit {
         break;  
     }
 
-    let xAxis = d3.axisBottom(this.x)
-    .ticks(6);
-    
-    let yAxis = d3.axisLeft(this.y)
-    .ticks(5);
+    let xAxis = d3.axisBottom(this.x).ticks(6);
+    let yAxis = d3.axisLeft(this.y).ticks(5);
 
     this.averageStats = this.statistics.map(s => {
-      const xDat = this.xData
-      const yDat = this.yData
       return {xDat: s[this.xData], yDat: s[this.yData]}
     })
 
@@ -102,24 +121,24 @@ export class GameDashboardComponent implements OnInit {
       data.push(JSON.parse("{\"" + this.xData + "\":" + this.quote + d + this.quote + ",\"" + this.yData + "\":" + this.averageStats[d] + "}"))
     }
 
-    svg.append("g")
-        .attr("transform", "translate(0," + this.height + ")")
+    g.append("g")
+        .attr("transform", "translate(0," + (g_height) + ")")
         .call(xAxis)
         .selectAll("text")	
             .style("text-anchor", "end")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", "rotate(-65)");
-    svg.append("g")
+    g.append("g")
         .call(yAxis)
-    svg.selectAll(".bar")
+    g.selectAll(".bar")
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", d => this.x(d[this.xData]))
         .attr("width", this.x.bandwidth())
         .attr("y", d => this.y(d[this.yData]))
-        .attr("height", d => this.height - this.y(d[this.yData]))
+        .attr("height", d => (g_height) - this.y(d[this.yData]))
 
   }
 
