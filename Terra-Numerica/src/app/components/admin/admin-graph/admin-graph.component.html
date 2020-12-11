@@ -1,0 +1,25 @@
+<div class="admin-graph">
+    
+    <div class="graphs">
+        
+        <div class="card import">
+            <h2 class="subtitle">
+                Choissisez un fichier
+            </h2>
+            <input id="file_selector" name="file_selector" class="input-file" type="file" accept="application/json" (change)='fileChange($event)' />
+            <label for="file_selector" class="file-label">Choisir un fichier</label>
+        </div>
+
+        <div  class="display" [class]="isCard()">
+            <h2 *ngIf='fileContent' class="subtitle">Contenu du fichier sélectionné</h2>
+
+            <div class="content">
+                {{fileContent}}
+            </div>
+        </div>
+    </div>
+
+    <div class="upload card">
+        <button (click)="uploadGraph()">Envoie vers le serveur</button>
+    </div>
+</div>

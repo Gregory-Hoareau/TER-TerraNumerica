@@ -16,6 +16,8 @@ import { GameBoardComponent } from './components/game-board/game-board.component
 import { TranslateService } from './_services/translate/translate.service';
 import { StatisticService } from './_services/statistic/statistic.service';
 import { GameDashboardComponent } from './components/game-dashboard/game-dashboard.component';
+import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
+import { AdminGraphComponent } from './components/admin/admin-graph/admin-graph.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { GameDashboardComponent } from './components/game-dashboard/game-dashboa
     TestD3jsComponent,
     GameMenuComponent,
     GameBoardComponent,
-    GameDashboardComponent
+    GameDashboardComponent,
+    AdminBoardComponent,
+    AdminGraphComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { GameDashboardComponent } from './components/game-dashboard/game-dashboard.component';
 import { GameMenuComponent } from './components/game-menu/game-menu.component';
@@ -10,7 +11,8 @@ const routes: Routes = [
   {path: 'test-d3js', component: TestD3jsComponent},
   {path: 'board', component: GameBoardComponent},
   {path: 'menu', component: GameMenuComponent},
-  {path: 'dashboard', component: GameDashboardComponent}
+  //{path: 'dashboard', component: GameDashboardComponent},
+  {path: 'admin', component: AdminBoardComponent}
 ];
 
 @NgModule({

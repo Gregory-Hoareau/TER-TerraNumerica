@@ -2,18 +2,18 @@
     background-color: Gainsboro;
 }
 
-.selected {
+/* .selected {
     border: 5px solid purple !important;
     border-radius: 0.5em;
     opacity: 1 !important;
-}
+} */
 
-.card {
+/* .card {
     margin: 0.2em;
     background-color: snow;
     border-radius: 1em;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
-}
+} */
 
 label{
     font-weight: bold;
@@ -48,10 +48,10 @@ label{
     justify-content: stretch;
     height: 100%;
 
-    .title, .subtitle {
+    /* .title, .subtitle {
         text-align: center;
 
-    } // all .title and .subtitle in .game-menu
+    } */ // all .title and .subtitle in .game-menu
 
     .subtitle {
         margin: 0;
