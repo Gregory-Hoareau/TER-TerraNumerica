@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = {
+const RestOperator = {
     name: '',
     filename: '',
     items: [],
@@ -57,4 +57,8 @@ class ItemNotFoundError extends Error {
         this.name = "ItemNotFoundError";
         this.message = mess;
     }
+}
+
+module.exports.create_restOperator = () => {
+    return {...RestOperator}
 }

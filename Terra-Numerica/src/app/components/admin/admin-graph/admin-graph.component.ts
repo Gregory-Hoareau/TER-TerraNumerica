@@ -64,8 +64,9 @@ export class AdminGraphComponent implements OnInit {
         console.log(err);
         Swal.fire({
           icon: 'error',
-          title: 'La mise en ligne à échoué',
-          text: 'La graph n\'a pas pu être mis en ligne'
+          title: 'La mise en ligne a échoué',
+          text: 'Le graph n\'a pas pu être mis en ligne',
+          footer: `${err.message}`
         })
       })
     else 
