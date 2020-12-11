@@ -1,9 +1,9 @@
 const {Router} = require('express');
 const graphs = require('./graphs.json');
-const {create_restOperator} = require('../utils/rest-operator')
+const RestOperator = require('../utils/rest-operator')
 
 //Configuration du RestOperator
-const rest_operator = create_restOperator();
+const rest_operator = new RestOperator();
 rest_operator.setName('graph');
 rest_operator.setFilename('graph/graphs.json');
 rest_operator.load();
