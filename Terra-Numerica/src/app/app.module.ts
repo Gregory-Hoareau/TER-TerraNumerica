@@ -18,6 +18,7 @@ import { StatisticService } from './_services/statistic/statistic.service';
 import { GameDashboardComponent } from './components/game-dashboard/game-dashboard.component';
 import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
 import { AdminGraphComponent } from './components/admin/admin-graph/admin-graph.component';
+import { GraphFileValidatorService } from './_services/graph-file-validator/graph-file-validator.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AdminGraphComponent } from './components/admin/admin-graph/admin-graph.
     BackendService,
     RandomGraphService,
     TranslateService,
-    StatisticService
+    StatisticService,
+    GraphFileValidatorService
   ],
   bootstrap: [AppComponent]
 })

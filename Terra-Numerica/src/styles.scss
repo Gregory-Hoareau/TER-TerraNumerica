@@ -1,4 +1,5 @@
 $button_color: purple;
+$button_disabled_color: gray;
 $button_text_color: white;
 $button_radius: 8px;
 
@@ -32,6 +33,10 @@ button {
     font-weight: bold;
     background-color: $button_color;
     border-radius: $button_radius;
+}
+
+button:disabled {
+    background-color: $button_disabled_color;
 }
 
 .card {

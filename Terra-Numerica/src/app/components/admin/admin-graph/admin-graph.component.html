@@ -1,7 +1,6 @@
 <div class="admin-graph">
     
-    <div class="graphs">
-        
+    <div class="graphs"> 
         <div class="card import">
             <h2 class="subtitle">
                 Choissisez un fichier
@@ -11,7 +10,7 @@
         </div>
 
         <div  class="display" [class]="isCard()">
-            <h2 *ngIf='fileContent' class="subtitle">Contenu du fichier sélectionné</h2>
+            <h2 *ngIf='fileContent' class="subtitle">Contenu du fichier : {{inputFile.name}}</h2>
 
             <div class="content">
                 {{fileContent}}
@@ -19,7 +18,23 @@
         </div>
     </div>
 
+    <div *ngIf="valide_file === false" class="card errors">
+        <div *ngIf="missingProperties.length !== 0" class="missing">
+            Les propriétés suivante ne sont pas présente dans le fichier JSON sélectionné :
+            <ul>
+                <li class="err" *ngFor="let m of missingProperties">{{m}}</li>
+            </ul>
+        </div>
+
+        <div *ngIf="invalidProperties.length !== 0" class="invalid">
+            Certaines propriété présente dans le fichiers ne sont pas valide :
+            <ul>
+                <li class="err" *ngFor="let i of invalidProperties">{{i}}</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="upload card">
-        <button (click)="uploadGraph()">Envoie vers le serveur</button>
+        <button [disabled]="valide_file === undefined || valide_file === false" (click)="uploadGraph()">Envoie vers le serveur</button>
     </div>
 </div>
