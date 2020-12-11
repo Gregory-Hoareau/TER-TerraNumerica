@@ -18,6 +18,7 @@ export class GameMenuComponent implements OnInit {
   public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
   public availableOpponentType = ['ai', 'player'];
 
+  public selectedFileName = undefined;
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
@@ -179,10 +180,13 @@ export class GameMenuComponent implements OnInit {
   }
 
   onFileChange(file) {
-    if (file.type === "application/json") {
+    if (file) {
       this.inputGraphJSONFile = file;
+      this.selectedFileName = this.inputGraphJSONFile.name;
       this.graphService.loadGraphFromFile(file);
-    } 
+    } else {
+      this.selectedFileName = undefined
+    }
   }
 
 }
