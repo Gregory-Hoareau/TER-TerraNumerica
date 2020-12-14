@@ -7,6 +7,7 @@ import { StatisticService } from 'src/app/_services/statistic/statistic.service'
   templateUrl: './game-dashboard.component.html',
   styleUrls: ['./game-dashboard.component.scss']
 })
+
 export class GameDashboardComponent implements OnInit {
   private statistics;
   private quote = '';

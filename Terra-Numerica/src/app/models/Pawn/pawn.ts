@@ -60,31 +60,60 @@ export abstract class Pawns {
         this.state = environment.waitingTurnState;
     }
 
+    /**
+     * Event handled on start of the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragstarted(event, d) {
         this.state.dragstarted(event, d);
     }
 
+    /**
+     * Event handled during the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragged(event, d) {
         this.state.dragged(event, d);
     }
 
+    /**
+     * Event handled at the end of the the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragended(event, d) {
         this.state = this.state.dragended(event, d, this.gameManager);
         this.gameManager.update();
     }
 
+    /**
+     * Function to check if the pawn state is on WaitingPlacement
+     */
     isWaitingPlacement() {
         return this.state === environment.waitingPlacementState;
     }
 
+    /**
+     * Function to check if the pawn state is on his turn
+     */
     onTurn() {
         return this.state === environment.onTurnState;
     }
 
+    /**
+     * Function to check if the pawn as moved
+     */
     isAtSamePostionAs(pawn: Pawns) {
         return pawn.x - 5 < this.x && this.x < pawn.x + 5 && pawn.y - 5 < this.y && this.y < pawn.y + 5
     }
 
+    /**
+     * Function used by startegy and robot to apply a move to a pawn
+     * The game service will use this function recursively on each turn to ask a pawn to move if it is associated to a robot
+     * @param node 
+     */
     abstract updatePosition(node)
 
 }
