@@ -280,3 +280,8 @@ label{
 
 } // .game-menu
 
+@media (max-width: 480px) { // Règle d'affichage pour les écran de téléphone
+    .graph-importation {
+        display: none !important;
+    }
+}
