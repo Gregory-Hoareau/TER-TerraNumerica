@@ -1,7 +1,6 @@
 import { IStrategy } from '../../istrategy';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { Graph } from 'src/app/models/Graph/graph';
-import { getInterpolationArgsLength } from '@angular/compiler/src/render3/view/util';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { GameService } from 'src/app/_services/game/game.service';
 

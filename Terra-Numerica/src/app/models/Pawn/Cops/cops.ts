@@ -2,9 +2,6 @@ import * as d3 from 'd3';
 import { Pawns } from '../pawn';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { GameService } from 'src/app/_services/game/game.service';
-import { TrackingStrategy } from '../../Strategy/Cop/TrackingStrategy/tracking-strategy';
-import { WatchingStrategy } from '../../Strategy/Cop/WatchingStrategy/watching-strategy';
-import { GridStrategy } from '../../Strategy/Cop/GridStrategy/grid-strategy';
 import { OneCopsWinStrategy } from '../../Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 
 export class Cops extends Pawns {

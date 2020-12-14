@@ -1,6 +1,4 @@
 import { IStrategy } from '../../istrategy';
-import { GraphService } from 'src/app/_services/graph/graph.service';
-import { tickStep } from 'd3';
 import { Graph } from 'src/app/models/Graph/graph';
 
 /**
