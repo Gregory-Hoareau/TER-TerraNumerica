@@ -25,34 +25,6 @@ export class GameDashboardComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.statistics = await this.stat.getStatistics();
-
-    const card = d3.select('#charts').append("div")
-      .attr("class", "card")
-      .style("padding", "0.5em")
-      .style("display", "flex")
-      .style("flex-direction", "column")
-      .style("align-items", "stretch")
-      .style("height", "50vh");
-
-    const chart = card.append("div")
-      .attr("class", "chart")
-      .style("flex", "1");
-
-    const svg_width = parseInt(chart.style("width"));
-    const svg_height = parseInt(chart.style("height"));
-
-    const svg = chart.append("svg")
-      .attr("width", svg_width)
-      .attr("height", svg_height)
-
-    const padding = 40;
-    const g_width = svg_width - (2*padding)
-    const g_height = svg_height - (2*padding)
-
-    const g = svg.append("g")
-      .attr("width", g_width)
-      .attr("height", g_height)
-      .attr("transform", "translate(" + padding + "," + padding + ")");
   }
 
   refreshGraph(){
