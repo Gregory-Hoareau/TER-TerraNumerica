@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
 app.use('/graph', graphRouter);
-app.use('/stat', statRouter)
+app.use('/stat', statRouter);
 
 const port = 8080
 const hostname = 'localhost';
