@@ -67,7 +67,7 @@ export class AdminBoardComponent implements OnInit {
    * 
    * @param pwd mot de passe saissie par l'utilisateur
    */
-  private checkPassword(pwd) {
+  private checkPassword(pwd: string) {
     return pwd === this.PASSWORD;
   }
 

@@ -3,10 +3,7 @@ const graphs = require('./graphs.json');
 const RestOperator = require('../utils/rest-operator')
 
 //Configuration du RestOperator
-const rest_operator = new RestOperator();
-rest_operator.setName('graph');
-rest_operator.setFilename('graph/graphs.json');
-rest_operator.load();
+const rest_operator = new RestOperator('graph', 'graph/graphs.json');
 
 const router = new Router();
 router.get('/', (req, res) => {
