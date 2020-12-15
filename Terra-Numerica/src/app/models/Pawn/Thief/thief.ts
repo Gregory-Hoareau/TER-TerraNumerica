@@ -6,6 +6,13 @@ import { Pawns } from '../pawn';
 
 export class Thief extends Pawns {
 
+    /**
+     * Concrete Pawn object
+     * @param gameM 
+     * @param graphServ 
+     * @param {number} x - X position of the pawn when drawed for the first time on a canvas
+     * @param {number} y - Y position of the pawn when drawed for the first time on a canvas
+     */
     constructor(private gameM: GameService, private graphServ: GraphService, x: number, y: number){
         super(gameM, graphServ, x, y);
         this.role = "thief"

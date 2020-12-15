@@ -40,12 +40,12 @@ export abstract class Graph {
      * Function to generate de the D3 network datum for the good use of the graph
      * @param svg d3 selection of an html svg
      */
-    abstract simulate(svg: any);
+    abstract simulate(svg: any): void;
 
     /**
      * Function needed by the force simulation of D3.js library
      */
-    abstract ticked();
+    abstract ticked(): void;
 
     /* ---------- GRAPH COMPUTATIONS ---------- */
 
@@ -55,7 +55,7 @@ export abstract class Graph {
 
     /**
      * Tool function to compute the edges of a node for a graph
-     * @param {any} node from where you need to computes edges
+     * @param {any} node - from where you need to computes edges
      * @returns {SimulationNodeDatum[]} list of edges of the node param
      */
     edges(node): SimulationNodeDatum[] {
