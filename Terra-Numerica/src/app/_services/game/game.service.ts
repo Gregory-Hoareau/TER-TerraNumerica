@@ -87,9 +87,17 @@ export class GameService {
   chooseAIStrat() {
     switch(this.gameMode) {
       case 'medium':
-        this.ai_cops_strat = () => {
-          return new TrackingStrategy();
-        };
+        switch(this.graphService.getGraph().typology) {
+          case 'grid':
+            this.ai_cops_strat = () => {
+              return new GridStrategy(this.graphService, this);
+            };
+          break;
+          default: 
+            this.ai_cops_strat = () => {
+              return new TrackingStrategy();
+            }
+        }
         this.ai_thief_strat = () => {
           return new RunawayStrategy();
         };
@@ -97,19 +105,9 @@ export class GameService {
       case 'hard':
         switch(this.graphService.getGraph().typology) {
           case 'grid':
-            if(this.copsNumber === 2){
               this.ai_cops_strat = () => {
                 return new WatchingStrategy();
-              };
-            }else if(this.copsNumber>2){
-              this.ai_cops_strat = () => {
-                return new GridStrategy(this.graphService, this);
-              };
-            }else{
-              this.ai_cops_strat = () => {
-                return new TrackingStrategy();
-              };
-            } 
+              }; 
             break;
           case 'copsAlwaysWin':
             this.ai_cops_strat = () => {
