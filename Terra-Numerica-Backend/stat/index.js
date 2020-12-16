@@ -1,13 +1,15 @@
 const {Router} = require('express');
-const stats = require('./stats.json');
 const RestOperator = require('../utils/rest-operator')
 
 //Configuration du RestOperator
-const rest_operator = new RestOperator();
-rest_operator.setName('stat');
-rest_operator.setFilename('stat/stats.json');
-rest_operator.load();
+/**
+ * @see RestOperator
+ */
+const rest_operator = new RestOperator('stat', 'stat/stats.json');
 
+/**
+ * @see [Router]{@link https://expressjs.com/fr/guide/routing.html#express-router}
+ */
 const router = new Router();
 router.get('/', (req, res) => {
     res.status(200).json(rest_operator.get());

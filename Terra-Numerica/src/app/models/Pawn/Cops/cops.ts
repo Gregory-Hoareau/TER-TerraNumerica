@@ -6,6 +6,14 @@ import { OneCopsWinStrategy } from '../../Strategy/Cop/OneCopsWinStrategy/one-co
 
 export class Cops extends Pawns {
 
+    /**
+     * Concrete Pawn object
+     * @param gameM 
+     * @param graphServ 
+     * @param {number} x - X position of the pawn when drawed for the first time on a canvas
+     * @param {number} y - Y position of the pawn when drawed for the first time on a canvas
+     * @param {number} id - Needed to differanciate a cops from another 
+     */
     constructor(private gameM: GameService, private graphServ: GraphService, x: number, y: number, id: number){
         super(gameM, graphServ, x, y);
         this.role = "cops"+id
