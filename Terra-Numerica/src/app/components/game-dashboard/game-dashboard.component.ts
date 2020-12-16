@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { StatisticService } from 'src/app/_services/statistic/statistic.service';
@@ -53,6 +54,24 @@ export class GameDashboardComponent implements OnInit {
         .text(this.abcisse + " en fonction du " + this.ordonne)
         .style("margin-bottom", 0)
 
+    const title = card.append("div")
+    .style("text-align", "center")
+    .style("display", "flex")
+
+    title.append("div")
+          .style("flex", "1")
+            .append("h2")
+            .text(this.abcisse + " en fonction du " + this.ordonne)
+            .style("margin-bottom", 0)
+    title.append("button")
+          .style("width", "3em")
+          .attr("fill", "red")
+          .on("click", () => {
+            card.remove()
+          })
+            .append("img")
+            .attr("src", "assets/close.svg")
+            .style("width", "100%")
 
     const chart = card.append("div")
       .attr("class", "chart")
@@ -118,23 +137,22 @@ export class GameDashboardComponent implements OnInit {
       }
       return acc;
     }, {}) 
-
+    console.log(tmp)
+    this.averageStats = {}
     for(const key in tmp){
       const length = tmp[key].length
-      tmp[key] = tmp[key].reduce((acc, cur) => {
+      this.averageStats[key] = tmp[key].reduce((acc, cur) => {
         return acc + cur;
       }, 0)
-      tmp[key] = tmp[key]/length
+      this.averageStats[key] = this.averageStats[key]/length
     }
-    this.averageStats = tmp;
-
     this.x.domain(Object.keys(this.averageStats))
 
     this.y.domain([0,d3.max(Object.values(this.averageStats))])
     let data = [];
+    console.log(this.averageStats)
     for( const d in this.averageStats){
       data.push(JSON.parse("{\"" + this.xData + "\":" + this.quote + d + this.quote + ",\"" + this.yData + "\":" + this.averageStats[d] + "}"))
-    }
 
     g.append("g")
         .attr("transform", "translate(0," + (g_height) + ")")
@@ -158,5 +176,5 @@ export class GameDashboardComponent implements OnInit {
 
   }
 
-
+  }
 }
