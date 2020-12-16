@@ -16,7 +16,7 @@ export class TranslateService {
       case 'tree':
         return 'Arbre';
       case 'copsAlwaysWin':
-        return '???'; // TODO : Changer le nom d'affichage de ce type de graph
+        return 'Cop-Win';
       case 'random':
         return 'Aléatoire';
       case 'tore':
