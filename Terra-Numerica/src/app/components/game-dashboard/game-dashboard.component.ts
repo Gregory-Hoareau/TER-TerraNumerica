@@ -38,21 +38,6 @@ export class GameDashboardComponent implements OnInit {
       .style("flex-direction", "column")
       .style("align-items", "stretch")
       .style("height", "50vh");
-    card.append("button")
-      .style("width", "5%")
-      .attr("fill", "red")
-      .on("click", () => {
-        card.remove()
-      })
-      .append("img")
-        .attr("src", "assets/close.svg")
-        .style("width", "100%")
-
-    card.append("div")
-      .style("text-align", "center")
-      .append("h2")
-        .text(this.abcisse + " en fonction du " + this.ordonne)
-        .style("margin-bottom", 0)
 
     const title = card.append("div")
     .style("text-align", "center")
