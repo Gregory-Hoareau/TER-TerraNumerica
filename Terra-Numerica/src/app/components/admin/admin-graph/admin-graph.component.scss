@@ -36,3 +36,23 @@
         padding: 1%;
     }
 }
+
+.errors {
+    padding: 1%;
+
+    .missing {
+        color: red;
+
+        .err {
+            
+        }
+    }
+
+    .invalid {
+        color: red;
+
+        .err {
+
+        }
+    }
+}
