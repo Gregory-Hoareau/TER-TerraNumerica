@@ -48,10 +48,19 @@ label{
     justify-content: stretch;
     height: 100%;
 
-    /* .title, .subtitle {
-        text-align: center;
+    .header {
+        display: flex;
+        padding: 1%;
 
-    } */ // all .title and .subtitle in .game-menu
+        .title {
+            flex: 7;
+        }
+
+        button {
+            margin: 1% 0;
+            flex: 1;
+        }
+    }
 
     .subtitle {
         margin: 0;
