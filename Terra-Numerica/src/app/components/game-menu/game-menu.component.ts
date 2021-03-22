@@ -3,6 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
+import { StatisticService } from 'src/app/_services/statistic/statistic.service';
 import { TranslateService } from 'src/app/_services/translate/translate.service';
 
 @Component({
@@ -14,9 +15,10 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
+  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
   public availableOpponentType = ['ai', 'player'];
 
+  public selectedFileName = undefined;
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
   private graphImportation: boolean = false;
@@ -32,7 +34,8 @@ export class GameMenuComponent implements OnInit {
               private gameService: GameService,
               private router: Router,
               private randomGraph: RandomGraphService,
-              public translator: TranslateService) { }
+              public translator: TranslateService,
+              private statisticService: StatisticService) { }
 
   ngOnInit(): void {
     this.updateParamsName();
@@ -48,6 +51,9 @@ export class GameMenuComponent implements OnInit {
   updateParamsName() {
     switch(this.selectedGraphType) {
       case 'grid':
+        this.paramsNames = ['Largeur :', 'Longueur :'];
+        break;
+      case 'tore':
         this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
       case 'cycle':
@@ -105,6 +111,10 @@ export class GameMenuComponent implements OnInit {
       }
       this.router.navigate(['/board'], extras);
     }
+  }
+
+  navigateToDashboard(){
+    this.router.navigate(['/dashboard']);
   }
 
   private paramSafetyCheck() {
@@ -170,10 +180,13 @@ export class GameMenuComponent implements OnInit {
   }
 
   onFileChange(file) {
-    if (file.type === "application/json") {
+    if (file) {
       this.inputGraphJSONFile = file;
+      this.selectedFileName = this.inputGraphJSONFile.name;
       this.graphService.loadGraphFromFile(file);
-    } 
+    } else {
+      this.selectedFileName = undefined
+    }
   }
 
 }

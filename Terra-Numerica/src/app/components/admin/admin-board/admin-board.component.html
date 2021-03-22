@@ -1,0 +1,29 @@
+<div class="admin-board">
+    <div class="card header">
+        <h1 class="title">Tableau d'Administration</h1>
+
+        <div class="menu">
+            <div class="card btn" (click)="selectDisplay(ADD_GRAPH)" [class]='isSelected(ADD_GRAPH)'>
+                Ajout de graph
+            </div>
+
+            <div class="card btn" (click)="selectDisplay(DASHBOARD)" [class]='isSelected(DASHBOARD)'>
+                Dashboard
+            </div>
+
+        </div>
+    </div>
+
+    <div class="admin-panel">
+
+        <!--DISPLAY PART-->
+        <div *ngIf="type === 'add-graph'" class="add-graph">
+            <app-admin-graph></app-admin-graph>
+        </div>
+
+        <div *ngIf="type === 'dashboard'" class="dashboard">
+            <app-game-dashboard></app-game-dashboard>
+        </div>
+        
+    </div>
+</div>

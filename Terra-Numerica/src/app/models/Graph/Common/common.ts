@@ -2,11 +2,15 @@ import * as d3 from 'd3';
 import { Graph } from '../graph';
 
 export class Common extends Graph {
+
     constructor(nodes, links, type: string = 'common') {
         super(nodes, links, type);
-
     }
 
+    /**
+     * Initialise the d3 force simulation to work with a network
+     * @param svg d3 selection of an html svg
+     */
     simulate(svg: any) {
         const width = parseInt(svg.style("width"), 10);
         const height = parseInt(svg.style("height"), 10);
@@ -18,6 +22,10 @@ export class Common extends Graph {
             .force("charge", d3.forceManyBody().strength(-500))
             .on("tick", this.ticked.bind(this));
     }
+
+    /**
+     * Function needed for the placement of the nodes and links in the d3 force simulation
+     */
     ticked() {
         this.svgLinks
             .attr("x1", function(d) { return d.source.x; })

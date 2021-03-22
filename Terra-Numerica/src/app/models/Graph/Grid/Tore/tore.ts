@@ -1,18 +1,16 @@
 import * as d3 from 'd3';
-import { Graph } from '../graph';
+import { Graph } from '../../graph';
 
-export class Grid extends Graph {
+export class Tore extends Graph {
 
     private _grid_width: number;
     get width(): number {
         return this._grid_width;
     }
-
     private _grid_height: number;
     get height(): number {
         return this._grid_height;
     }
-
     /**
      * Inner class to make a grid layer to help at positionate the nodes of the graph on it
      */
@@ -56,13 +54,13 @@ export class Grid extends Graph {
     }
 
     constructor(nodes, links, width: number, height: number) {
-        super(nodes, links, "grid");
+        super(nodes, links, "tore");
         this._grid_width = width;
         this._grid_height = height;
     }
 
     /**
-     * The draw() function is overrided here beacause we need a particular behavior to draw a grid
+     * The draw() function is overrided here beacause we need a particular behavior to draw a tore grid
      * @param svg d3 selection of an html svg
      */
     draw(svg: any) {
@@ -74,30 +72,50 @@ export class Grid extends Graph {
         // Initialize the inner grid object
         this.grid.init(this._grid_width, this._grid_height, canvas_width, canvas_height);
         
-        // Draw Horizontal lines
+        // Draw Vertical lines
         for (let row = 0 ; row < this._grid_height ; ++row) {
             const y = row * canvas_height/this._grid_height + (canvas_height/this._grid_height)/2;
-            const x1 = (canvas_width/this._grid_width)/2;
-            const x2 = canvas_width - (canvas_width/this._grid_width)/2;
+            const margin = ((canvas_width/this._grid_width)/2)/2
+            const x1 = (canvas_width/this._grid_width)/2 - margin;
+            const x2 = canvas_width - (canvas_width/this._grid_width)/2 + margin;
+            // Draw full canvas size dashed lines
+            svg.append('line')
+                .attr('x1', 0)
+                .attr('y1', y)
+                .attr('x2', canvas_width)
+                .attr('y2', y)
+                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke-dasharray', '4, 10');
+            // Draw no dashed lines in front of dashed lines
             svg.append('line')
                 .attr('x1', x1)
                 .attr('y1', y)
                 .attr('x2', x2)
                 .attr('y2', y)
-                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke', 'rgb(170, 170, 170)');
         }
 
-        //Draw vertical lines
+        // Draw Horizontal lines
         for (let col = 0 ; col < this._grid_width ; ++col) {
             const x = col * canvas_width/this._grid_width + (canvas_width/this._grid_width)/2;
-            const y1 = (canvas_height/this._grid_height)/2;
-            const y2 = canvas_height - (canvas_height/this._grid_height)/2;
+            const margin = ((canvas_height/this._grid_height)/2)/2
+            const y1 = (canvas_height/this._grid_height)/2 - margin;
+            const y2 = canvas_height - (canvas_height/this._grid_height)/2 + margin;
+            // Draw full canvas size dashed lines
             svg.append('line')
                 .attr('x1', x)
                 .attr('y1', y1)
                 .attr('x2', x)
                 .attr('y2', y2)
                 .style('stroke', 'rgb(170, 170, 170)')
+            // Draw no dashed lines in front of dashed lines
+            svg.append('line')
+                .attr('x1', x)
+                .attr('y1', 0)
+                .attr('x2', x)
+                .attr('y2', canvas_height)
+                .style('stroke', 'rgb(170, 170, 170)')
+                .style('stroke-dasharray', '4, 10');
         }
 
         // Generates links for the d3 force simulation but don't draw them
@@ -115,7 +133,6 @@ export class Grid extends Graph {
         
         // This function will positionnate all the nodes to the good place on the canvas
         this.simulate(svg);
-
     }
 
     /**
@@ -129,7 +146,7 @@ export class Grid extends Graph {
             )
             .on("tick", this.ticked.bind(this));
     }
-    
+
     /**
      * For a grid, this function is important because it will place the nodes of the graph on the inner grid object
      * to have a good grid printed on the canvas screen

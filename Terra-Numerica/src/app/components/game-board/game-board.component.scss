@@ -10,35 +10,29 @@
     margin: 8px;
 }
 
-// TRICKS TO SELECT THE BODY FROM COMPONENT
-::ng-deep body {
-    background-color: Gainsboro;
-}
-
-.card {
-    margin: 0.2em;
-    background-color: snow;
-    border-radius: 1em;
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
-}
-
-.menu-button{
-    display: flex;
-    padding: 1em;
-    button{
-        margin: 2%;
-    }
-    .menu-button-img-preview{
-        width: 2em;
-    }
-}
-
 #top-hud {
     display: flex;
-    flex-direction: column;
     align-items: stretch;
     justify-content: center;
     height: 10%;
+
+    #top-hud-menu-button{
+        display: flex;
+        padding: 1em;
+        width: 8%;
+
+        button{
+            display: flex;
+            width: 50%;
+            padding: 0.5em;
+
+            .menu-button-img-preview{
+                flex: 1;
+                width: 20%;
+                height: 100%;
+            }
+        }
+    }
 
     #top-hud-turn-information {
         flex: 1;
@@ -88,4 +82,10 @@
     }
 
 } // #bottom-hud
+
+@media (max-width: 480px) { // Règle d'affichage pour les écran de téléphone
+    #top-hud-menu-button {
+        display: none !important;
+    }
+}
 

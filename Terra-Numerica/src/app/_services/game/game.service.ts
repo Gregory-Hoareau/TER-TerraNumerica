@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { openStdin } from 'process';
 import * as d3 from 'd3';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
 import { Pawns } from 'src/app/models/Pawn/pawn';
@@ -17,9 +16,8 @@ import { TrackingStrategy } from 'src/app/models/Strategy/Cop/TrackingStrategy/t
 import { RunawayStrategy } from 'src/app/models/Strategy/Thief/RunawayStrategy/runaway-strategy';
 import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/watching-strategy';
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
-import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import { StatisticService } from '../statistic/statistic.service';
 
 
 @Injectable({
@@ -48,12 +46,13 @@ export class GameService {
 
   private cops_position = [];
   private thiefs_position = [];
+  private gameTimer;
 
   private ai_thief_strat: () => IStrategy;
   private ai_cops_strat: () => IStrategy;
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
 
-  constructor(private router: Router, private graphService: GraphService) {
+  constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
     if (localStorage.getItem("cops") !== null) {
       this.copsNumber = parseInt(localStorage.getItem("cops"));
@@ -88,9 +87,17 @@ export class GameService {
   chooseAIStrat() {
     switch(this.gameMode) {
       case 'medium':
-        this.ai_cops_strat = () => {
-          return new TrackingStrategy();
-        };
+        switch(this.graphService.getGraph().typology) {
+          case 'grid':
+            this.ai_cops_strat = () => {
+              return new GridStrategy(this.graphService, this);
+            };
+          break;
+          default: 
+            this.ai_cops_strat = () => {
+              return new TrackingStrategy();
+            }
+        }
         this.ai_thief_strat = () => {
           return new RunawayStrategy();
         };
@@ -98,19 +105,9 @@ export class GameService {
       case 'hard':
         switch(this.graphService.getGraph().typology) {
           case 'grid':
-            if(this.copsNumber === 2){
               this.ai_cops_strat = () => {
                 return new WatchingStrategy();
-              };
-            }else if(this.copsNumber>2){
-              this.ai_cops_strat = () => {
-                return new GridStrategy(this.graphService, this);
-              };
-            }else{
-              this.ai_cops_strat = () => {
-                return new TrackingStrategy();
-              };
-            } 
+              }; 
             break;
           case 'copsAlwaysWin':
             this.ai_cops_strat = () => {
@@ -305,6 +302,7 @@ export class GameService {
 
   private startGame() {
     this.thiefTurn = false;
+    this.gameTimer = Date.now();
     this.setPlayersState(this.cops, environment.onTurnState);
     this.turnCount++;
     this.update();
@@ -363,14 +361,18 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     if(this.checkEnd()) {
+      let endTime:any = Date.now();
+      this.gameTimer = endTime - this.gameTimer;
       Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       }).then((result) => {
+        this.gameTimer = Math.trunc(this.gameTimer / 1000);
+        this.registerStats();
         if(result.isConfirmed){
           this.replay();
         }else if(!result.isConfirmed){
@@ -380,6 +382,29 @@ export class GameService {
     } else {
       this.update()
     }
+  }
+
+  private getGameMode(mode: string){
+    switch(mode){
+      case 'easy':
+        return 'Facile';
+      case 'medium':
+        return 'Normal';
+      case 'hard':
+        return 'Difficile';
+      default:
+        return 'Inconnu';
+    }
+  }
+
+  registerStats(){
+    this.stat.postStatistic({
+      gameMode: this.gameMode,
+      turnCount: this.turnCount,
+      copsNumber: this.copsNumber,
+      timer: this.gameTimer,
+      graphType: this.graphService.getGraph().typology,
+    })
   }
 
   goBackToMenu(){
@@ -401,6 +426,7 @@ export class GameService {
     this.turnCount = 0;
     this.thiefTurn = true;
     this.placingPawns = true;
+    this.gameTimer = 0;
   }
   
   checkTurn(){

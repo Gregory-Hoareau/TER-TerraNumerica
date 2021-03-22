@@ -2,13 +2,18 @@ import * as d3 from 'd3';
 import { Pawns } from '../pawn';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { GameService } from 'src/app/_services/game/game.service';
-import { TrackingStrategy } from '../../Strategy/Cop/TrackingStrategy/tracking-strategy';
-import { WatchingStrategy } from '../../Strategy/Cop/WatchingStrategy/watching-strategy';
-import { GridStrategy } from '../../Strategy/Cop/GridStrategy/grid-strategy';
 import { OneCopsWinStrategy } from '../../Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 
 export class Cops extends Pawns {
 
+    /**
+     * Concrete Pawn object
+     * @param gameM 
+     * @param graphServ 
+     * @param {number} x - X position of the pawn when drawed for the first time on a canvas
+     * @param {number} y - Y position of the pawn when drawed for the first time on a canvas
+     * @param {number} id - Needed to differanciate a cops from another 
+     */
     constructor(private gameM: GameService, private graphServ: GraphService, x: number, y: number, id: number){
         super(gameM, graphServ, x, y);
         this.role = "cops"+id

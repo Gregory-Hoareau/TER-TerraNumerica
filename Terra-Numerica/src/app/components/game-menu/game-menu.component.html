@@ -1,6 +1,7 @@
 <div class="game-menu">
 
-    <div class="card">
+    <div class="card header">
+        <button routerLink="/admin">Administration</button>
         <h1 class="title">Voici le menu de paramétrage du jeu</h1>
     </div>
     
@@ -36,7 +37,11 @@
     
                 <div class="graph-importation card" (click)="selectGraphImportation()" [class]="isSeletectedGraphImportation()">
                     <h2 class="subtitle">Importer un plateau de jeu</h2>
-                    <input id="graph-file-input" type="file" accept="application/json" (change)="onFileChange($event.target.files[0])">
+                    <input id="graph-file-input" name="graph-file-input" class="input-file" type="file" accept="application/json" (change)="onFileChange($event.target.files[0])">
+                    <label id="label-import-file" for="graph-file-input" class="file-label"> 
+                        <span *ngIf="!selectedFileName">Choissisez un fichier...</span>
+                        <span *ngIf="selectedFileName"> {{selectedFileName}} </span>
+                    </label>
                 </div> <!-- .graph-importation -->
             </div> <!-- .graph-selection -->
         </div> <!-- .col1 -->
