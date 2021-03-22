@@ -365,7 +365,7 @@ export class GameService {
       this.gameTimer = endTime - this.gameTimer;
       Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.gameMode + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
@@ -381,6 +381,19 @@ export class GameService {
       })
     } else {
       this.update()
+    }
+  }
+
+  private getGameMode(mode: string){
+    switch(mode){
+      case 'easy':
+        return 'Facile';
+      case 'medium':
+        return 'Normal';
+      case 'hard':
+        return 'Difficile';
+      default:
+        return 'Inconnu';
     }
   }
 

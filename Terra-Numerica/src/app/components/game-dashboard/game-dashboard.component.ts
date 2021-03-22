@@ -46,7 +46,7 @@ export class GameDashboardComponent implements OnInit {
     title.append("div")
           .style("flex", "1")
             .append("h2")
-            .text(this.abcisse + " en fonction du " + this.ordonne)
+            .text(this.ordonne + " en fonction du " + this.abcisse)
             .style("margin-bottom", 0)
     title.append("button")
           .style("width", "3em")

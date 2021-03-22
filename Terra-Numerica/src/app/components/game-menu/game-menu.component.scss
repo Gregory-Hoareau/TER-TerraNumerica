@@ -50,14 +50,14 @@ label{
 
     .header {
         display: flex;
-        padding: 1%;
+        padding: 1px;
 
         .title {
             flex: 7;
         }
 
         button {
-            margin: 1% 0;
+            margin: 1%;
             flex: 1;
         }
     }
