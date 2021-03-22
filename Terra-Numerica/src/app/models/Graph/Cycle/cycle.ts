@@ -23,6 +23,7 @@ export class Cycle extends Graph {
         d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink()
                 .links(this.links)
+                .distance(() => {return 30 / this.links.length})
             )
             .force("radial", d3.forceRadial(poolRadius(), width / 2, height / 2))
             .force("center", d3.forceCenter(width / 2, height / 2))
