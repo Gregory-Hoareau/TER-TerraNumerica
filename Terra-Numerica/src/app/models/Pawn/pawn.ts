@@ -19,9 +19,17 @@ export abstract class Pawns {
     lastPosX;
     lastPosY;
     settedPosition = true;
-    strategy: IStrategy;
 
+    strategy: IStrategy;
     state: PawnState;
+
+    /**
+     * Abstract Pawn object
+     * @param gameManager 
+     * @param graphService 
+     * @param {number} x - X position of the pawn when drawed for the first time on a canvas
+     * @param {number} y - Y position of the pawn when drawed for the first time on a canvas
+     */
     constructor(private gameManager: GameService, public graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
@@ -30,13 +38,24 @@ export abstract class Pawns {
         this.lastSlot = [];
         this.yourTurn = true;
 
+        // Default state of a pawn : waiting placement on the game board
         this.state = environment.waitingPlacementState;
     }
 
-    setStrategy(strat) {
+    /**
+     * Function to set the strategy of a pawn
+     * @param {IStrategy} strat - the next strategy of the pawn
+     */
+    setStrategy(strat: IStrategy) {
         this.strategy = strat;
     }
 
+    /**
+     * TODO
+     * @param graph 
+     * @param cops 
+     * @param thiefs 
+     */
     place(graph, cops = [], thiefs = []) {
         const pos = this.strategy.placement(graph, cops, thiefs);
         this.updatePosition(pos);
@@ -48,6 +67,12 @@ export abstract class Pawns {
         this.state = environment.waitingTurnState;
     }
 
+    /**
+     * TODO
+     * @param graph 
+     * @param cops 
+     * @param thiefs 
+     */
     move(graph, cops = [], thiefs = []) {
         const pos = this.strategy.move(graph, cops, thiefs);
         this.updatePosition(pos);
@@ -60,31 +85,60 @@ export abstract class Pawns {
         this.state = environment.waitingTurnState;
     }
 
+    /**
+     * Event handled on start of the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragstarted(event, d) {
         this.state.dragstarted(event, d);
     }
 
+    /**
+     * Event handled during the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragged(event, d) {
         this.state.dragged(event, d);
     }
 
+    /**
+     * Event handled at the end of the the drag of the pawn
+     * @param event d3 drag event
+     * @param d data associated to the svg element dragged, it the pawn object itself
+     */
     dragended(event, d) {
         this.state = this.state.dragended(event, d, this.gameManager);
         this.gameManager.update();
     }
 
+    /**
+     * Function to check if the pawn state is on WaitingPlacement
+     */
     isWaitingPlacement() {
         return this.state === environment.waitingPlacementState;
     }
 
+    /**
+     * Function to check if the pawn state is on his turn
+     */
     onTurn() {
         return this.state === environment.onTurnState;
     }
 
+    /**
+     * Function to check if the pawn is at the same position of another pawn
+     * @param {Pawn} pawn - Pawn which we want to check if the pawn is at same position
+     */
     isAtSamePostionAs(pawn: Pawns) {
         return pawn.x - 5 < this.x && this.x < pawn.x + 5 && pawn.y - 5 < this.y && this.y < pawn.y + 5
     }
 
+    /**
+     * Function used to notify the game service of the new position of pawn
+     * @param node - new position on a graph of the pawn
+     */
     abstract updatePosition(node)
 
 }

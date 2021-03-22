@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TestD3jsComponent } from './test-d3js.component';
+import { AdminGraphComponent } from './admin-graph.component';
 
-describe('TestD3jsComponent', () => {
-  let component: TestD3jsComponent;
-  let fixture: ComponentFixture<TestD3jsComponent>;
+describe('AdminGraphComponent', () => {
+  let component: AdminGraphComponent;
+  let fixture: ComponentFixture<AdminGraphComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TestD3jsComponent ]
+      declarations: [ AdminGraphComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestD3jsComponent);
+    fixture = TestBed.createComponent(AdminGraphComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

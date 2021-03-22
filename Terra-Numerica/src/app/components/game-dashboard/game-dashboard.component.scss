@@ -1,0 +1,77 @@
+::ng-deep body {
+    background-color: Gainsboro;
+}
+
+.card {
+    margin: 0.2em;
+    background-color: snow;
+    border-radius: 1em;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+
+}
+
+.game-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: flex-start;
+
+    #header {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #stat-form {    
+        .title{
+            display: flex;
+            justify-content: center;
+        }
+        .form-sentence{
+            display: flex;            
+            align-items: center;
+            justify-content: center;
+            select {
+                margin: 50px;
+                width: 210px;
+                padding: 5px 0 5px 5px;
+                border-radius: 10px;
+                font-size: 20px;
+                border: 4px solid hsla(300, 56%, 24%, 0.904);
+                height: 40px;
+                
+            }
+
+            .form-x{
+                margin: 1%;
+            }
+            .middle-sentence{
+                margin: 1%;
+            }
+            .form-y{
+                margin: 1%;
+            }
+        }
+
+    }
+
+   
+    .refresh{
+        margin: 1%;
+        display: flex;
+        justify-content: center;
+        button{
+            display: flex;
+            padding: 0.5em 1em;
+        }
+    }
+
+    #charts {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        align-content: flex-start;        
+
+    } // #charts
+
+} // .game-dashboard
+

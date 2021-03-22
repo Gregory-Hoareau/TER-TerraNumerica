@@ -14,6 +14,10 @@ export abstract class Graph {
     }
 
     /* ---------- GRAPH DRAWING ---------- */
+    /**
+     * Function who populate an html svg canvas with circles and lines to represent a graph
+     * @param svg d3 selection of an html svg
+     */
     draw(svg: any) {
 
         this.svgLinks = svg.selectAll("line")
@@ -32,9 +36,16 @@ export abstract class Graph {
 
     }
 
-    abstract simulate(svg: any);
+    /**
+     * Function to generate de the D3 network datum for the good use of the graph
+     * @param svg d3 selection of an html svg
+     */
+    abstract simulate(svg: any): void;
 
-    abstract ticked();
+    /**
+     * Function needed by the force simulation of D3.js library
+     */
+    abstract ticked(): void;
 
     /* ---------- GRAPH COMPUTATIONS ---------- */
 
@@ -42,6 +53,11 @@ export abstract class Graph {
         return {...this._nodes[this.getRandomInt(this._nodes.length-1)]};
     }
 
+    /**
+     * Tool function to compute the edges of a node for a graph
+     * @param {any} node - from where you need to computes edges
+     * @returns {SimulationNodeDatum[]} list of edges of the node param
+     */
     edges(node): SimulationNodeDatum[] {
         const edges = [];
         for(const l of this.links) {
@@ -52,6 +68,16 @@ export abstract class Graph {
             }
         }
         return edges;
+    }
+
+    /**
+     * Function to get a random edge of a node of a graph
+     * @param n node from where you need to get a random edge
+     * @returns a random edge of the input node
+     */
+    getRandomAccessibleEdges(n) {
+        const edges = this.edges(n);
+        return edges[this.getRandomInt(edges.length)];
     }
 
     distance(n1, n2) {
@@ -91,11 +117,6 @@ export abstract class Graph {
     /* ---------- PROPERTIES ---------- */
 
     // GETTERS
-    getRandomAccessibleEdges(n) {
-        const edges = this.edges(n);
-        return edges[this.getRandomInt(edges.length)];
-    }
-
     get nodes() {
         return this._nodes
     }
