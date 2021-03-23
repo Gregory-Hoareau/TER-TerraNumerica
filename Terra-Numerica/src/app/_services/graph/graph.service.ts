@@ -205,19 +205,35 @@ export class GraphService {
 
     let idNode1 = Math.floor(Math.random() * Math.floor(n))
     let node1 = nodes[idNode1];
-    let idNode2 = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1 - 1))
-    let node2 = nodes[idNode2];
 
+    //Construct a line graph
     for(let i=0; i<idNode1; i++){
       links.push({source: i, target: i+1});
     }
-    for(let i=idNode1 + 1; i<n; i++){
-      if(i!=idNode2){
-        links.push({source: node1, target: i});
-        links.push({source: node2, target: i});
+
+    const marked = [];
+    const times = Math.floor(n / 3)
+    for (let k = 0; k < times; k++) {
+
+      idNode1 = Math.floor(Math.random() * Math.floor(n))
+      node1 = nodes[idNode1];
+      let idNode2 = Math.floor(idNode1 + Math.random() * Math.floor(n - idNode1 - 1))
+      let node2 = nodes[idNode2];
+      
+      if(!marked.includes(node2) && idNode2 !== idNode1) {
+        marked.push(node2);
+        marked.push(node1)
+        for(let i=idNode1 + 1; i<n; i++){
+          if(i!=idNode2){
+            links.push({source: node1, target: i});
+            links.push({source: node2, target: i});
+          }
+        }
+        links.push({source: node1, target: node2})
+        idNode1 = Math.floor(Math.random() * Math.floor(n))
+        node1 = nodes[idNode1];
       }
     }
-    links.push({source: node1, target: node2})
     return new Common(nodes, links, 'copsAlwaysWin');
   }
 

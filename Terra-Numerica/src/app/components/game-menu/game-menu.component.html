@@ -26,11 +26,11 @@
                             <label *ngIf="paramsNames.length > 0" for="param1" class="form-field-labels">
                                 {{paramsNames[0]}}
                             </label>
-                            <input *ngIf="paramsNames.length > 0" [(ngModel)]="graphParam1" min="1" oninput="validity.valid||(value='');" id="param1" class="form-field-inputs" type="number" name="param1">
+                            <input *ngIf="paramsNames.length > 0" [(ngModel)]="graphParam1" [min]="paramsBoundaries[selectedGraphType].param1" oninput="validity.valid||(value='');" id="param1" class="form-field-inputs" type="number" name="param1">
                             <label *ngIf="paramsNames.length > 1" for="param2" class="form-field-labels">
                                 {{paramsNames[1]}}
                             </label>
-                            <input *ngIf="paramsNames.length > 1" [(ngModel)]="graphParam2" min="1" oninput="validity.valid||(value='');" id="param2" class="form-field-inputs" type="number" name="param2">
+                            <input *ngIf="paramsNames.length > 1" [(ngModel)]="graphParam2" [min]="paramsBoundaries[selectedGraphType].param2" oninput="validity.valid||(value='');" id="param2" class="form-field-inputs" type="number" name="param2">
                         </form>
                     </div> <!-- .graph-generation-parameters -->
                 </div> <!-- .graph-generation -->

@@ -13,10 +13,36 @@ import { TranslateService } from 'src/app/_services/translate/translate.service'
 })
 export class GameMenuComponent implements OnInit {
 
-  private selectedGraphType = 'grid';
+  public selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
   public availableOpponentType = ['ai', 'player'];
+  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
+  public paramsBoundaries = {
+    grid: {
+      param1: 3,
+      param2: 3
+    },
+    tore: {
+      param1: 3,
+      param2: 3
+    },
+    cycle: {
+      param1: 5,
+      param2: -1
+    },
+    tree: {
+      param1: 5,
+      param2: 2
+    },
+    copsAlwaysWin: {
+      param1: 6,
+      param2: -1
+    },
+    random: {
+      param1: -1,
+      param2: -1
+    }
+  }
 
   public selectedFileName = undefined;
   private inputGraphJSONFile: File = null;
@@ -26,8 +52,8 @@ export class GameMenuComponent implements OnInit {
   public selectedAi = 'cops'
 
   public paramsNames;
-  public graphParam1: number = 1;
-  public graphParam2: number = 1;
+  public graphParam1: number;
+  public graphParam2: number;
   public cops: number = 1;
 
   constructor(private graphService: GraphService,
@@ -38,6 +64,7 @@ export class GameMenuComponent implements OnInit {
               private statisticService: StatisticService) { }
 
   ngOnInit(): void {
+    this.selectGraphType('grid')
     this.updateParamsName();
     this.randomGraph.loadGraphs();
   }
@@ -45,7 +72,13 @@ export class GameMenuComponent implements OnInit {
   selectGraphType(type: string) {
     this.selectedGraphType = type;
     this.updateParamsName();
+    this.updateGraphParams();
     this.paramSafetyCheck();
+  }
+
+  updateGraphParams() {
+    this.graphParam1 = this.paramsBoundaries[this.selectedGraphType].param1;
+    this.graphParam2 = this.paramsBoundaries[this.selectedGraphType].param2;
   }
 
   updateParamsName() {
