@@ -18,6 +18,7 @@ import { GameDashboardComponent } from './components/game-dashboard/game-dashboa
 import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
 import { AdminGraphComponent } from './components/admin/admin-graph/admin-graph.component';
 import { GraphFileValidatorService } from './_services/graph-file-validator/graph-file-validator.service';
+import { GraphConstructorComponent } from './components/graph-constructor/graph-constructor.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { GraphFileValidatorService } from './_services/graph-file-validator/grap
     GameBoardComponent,
     GameDashboardComponent,
     AdminBoardComponent,
-    AdminGraphComponent
+    AdminGraphComponent,
+    GraphConstructorComponent
   ],
   imports: [
     BrowserModule,

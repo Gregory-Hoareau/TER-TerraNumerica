@@ -19,6 +19,8 @@ export abstract class Graph {
      * @param svg d3 selection of an html svg
      */
     draw(svg: any) {
+        /* console.log('LINKS', this.links)
+        console.log('NODES', this.nodes) */
 
         this.svgLinks = svg.selectAll("line")
             .data(this.links)
