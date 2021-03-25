@@ -44,7 +44,7 @@ export class TranslateService {
       case 'add-link':
         return 'Ajouter une arrête';
       case 'remove':
-        return 'Effacer';
+        return 'Effacer un élément';
       case 'save':
         return 'Enregistrer';
       default:
