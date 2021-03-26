@@ -22,6 +22,8 @@ export class GraphConstructorComponent implements OnInit {
   private placing_link = false;
   private from = null;
 
+  private movingCircleOriginalPosition = null
+
   constructor(private translator: TranslateService,
     private graphConstructorService: GraphConstructorService) { }
 
@@ -59,6 +61,18 @@ export class GraphConstructorComponent implements OnInit {
                               .attr('cx', position.x)
                               .attr('cy', position.y)
                               .style('z-index', 1)
+                              .call(
+                                d3.drag()
+                                  .on('start', (event: DragEvent) => {
+                                    this.dragstarted(event)
+                                  })
+                                  .on('drag', (event: DragEvent) => {
+                                    this.dragged(event)
+                                  })
+                                  .on('end', (event: DragEvent) => {
+                                    this.dragended(event)
+                                  })
+                              )
                               .on('click', (event: MouseEvent) => {
                                 this.handleClickOnNode(event.target)
                               })
@@ -157,6 +171,7 @@ export class GraphConstructorComponent implements OnInit {
     this.resetNodeColor();
     this.placing_link = false;
     this.selected_tool = tool;
+    console.log(this.selected_tool)
   }
 
   getToolName(tool: string) {
@@ -165,6 +180,43 @@ export class GraphConstructorComponent implements OnInit {
 
   saveGraph() {
     this.graphConstructorService.selectGraphType()
+  }
+
+  // Drag & Drop Functions
+  dragstarted(event) {
+    if(this.selected_tool === 'move') {
+      this.movingCircleOriginalPosition = {
+        x: event.sourceEvent.target.cx.baseVal.value,
+        y: event.sourceEvent.target.cy.baseVal.value
+      }
+      d3.select(event.sourceEvent.target).attr('stroke', 'black');
+    }
+  }
+
+  dragged(event) {
+    if(this.selected_tool === 'move') {
+      const circle = event.sourceEvent.target
+      d3.select(circle).raise().attr("cx", event.x).attr("cy", event.y);
+      this.links.forEach(link => {
+        if(link.source === circle) {
+          d3.select(link.line).attr('x1', event.x).attr('y1', event.y)
+        } else if(link.target === circle) {
+          d3.select(link.line).attr('x2', event.x).attr('y2', event.y)
+        }
+      })
+    }
+  }
+
+  dragended(event) {
+    if(this.selected_tool === 'move') {
+      const circle = d3.select(event.sourceEvent.target)
+      circle.attr('stroke', null);
+      const endPositon = {
+        x: +circle.attr('cx'),
+        y: +circle.attr('cy')
+      }
+      this.graphConstructorService.toolAction(this.selected_tool, this.movingCircleOriginalPosition, endPositon)
+    }
   }
 
 }

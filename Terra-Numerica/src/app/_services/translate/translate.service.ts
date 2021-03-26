@@ -47,6 +47,8 @@ export class TranslateService {
         return 'Effacer un élément';
       case 'save':
         return 'Enregistrer';
+      case 'move':
+        return 'Déplacer un sommet';
       default:
         return '';
     }

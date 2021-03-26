@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver'
 
 @Injectable({
@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver'
 })
 export class GraphConstructorService {
 
-  readonly tools = ['add-node', 'add-link', 'remove'];
+  readonly tools = ['add-node', 'add-link', 'remove', 'move'];
   readonly originalNodeColor = '#69b3a2';
   readonly selectedNodeColor = 'red'
   private graphTypes = {
@@ -58,7 +58,7 @@ export class GraphConstructorService {
     const resultSwal = await Swal.fire({
       title: 'Définir les propriétés de la grille',
       html: '<label>Longueur : </label><input id="swal-input1" class="swal2-input" type="number" min="3" value="3" /><br>'
-            + '<label>Largeur : </label><input id="swal-input2" class="swal2-input"  type="number" min="3" value="3"/>',
+        + '<label>Largeur : </label><input id="swal-input2" class="swal2-input"  type="number" min="3" value="3"/>',
       allowOutsideClick: false,
       allowEscapeKey: false,
       preConfirm: () => {
@@ -106,6 +106,9 @@ export class GraphConstructorService {
           this.removeLink(source, target)
         }
         break;
+      case 'move':
+        this.moveNode(source, target)
+        break;
       default:
         break;
     }
@@ -113,9 +116,9 @@ export class GraphConstructorService {
 
   private save(type: string, args: number[]) {
     const graphJson = this.convertGraphToJsonFile(type, args);
-    console.log('JSON GRAPH', graphJson);
-    const blobGraphFromJson = new Blob([graphJson], {type : 'application/json'})
-    console.log('JSON BLOB', blobGraphFromJson);
+    //console.log('JSON GRAPH', graphJson);
+    const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' })
+    //console.log('JSON BLOB', blobGraphFromJson);
     saveAs(blobGraphFromJson, 'graph.json');
   }
 
@@ -157,6 +160,24 @@ export class GraphConstructorService {
 
   private removeLink(source, target) {
     this.links = this.links.filter(link => !this.checkCirclePosition(link.source, source) || !this.checkCirclePosition(link.target, target))
+  }
+
+  private moveNode(movingCircle, endPosition) {
+    console.log('MOVING CIRCLE', movingCircle);
+    console.log('TO', endPosition);
+    const nodeIndex = this.nodes.findIndex(node => node.x === movingCircle.x && node.y === movingCircle.y)
+    this.nodes[nodeIndex].x = endPosition.x
+    this.nodes[nodeIndex].y = endPosition.y
+    
+    this.links.forEach(link => {
+      if(this.checkCirclePosition(link.source, movingCircle)) {
+        link.source.x = endPosition.x;
+        link.source.y = endPosition.y;
+      } else if(this.checkCirclePosition(link.target, movingCircle)) {
+        link.target.x = endPosition.x;
+        link.target.y = endPosition.y;
+      }
+    })
   }
 
   /**
