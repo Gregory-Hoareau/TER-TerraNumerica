@@ -116,7 +116,7 @@ export class GraphConstructorService {
 
   private save(type: string, args: number[]) {
     const graphJson = this.convertGraphToJsonFile(type, args);
-    //console.log('JSON GRAPH', graphJson);
+    console.log('JSON GRAPH', graphJson);
     const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' })
     //console.log('JSON BLOB', blobGraphFromJson);
     saveAs(blobGraphFromJson, 'graph.json');
@@ -124,11 +124,17 @@ export class GraphConstructorService {
 
   private convertGraphToJsonFile(type: string, args: number[]) {
     this.nodes.forEach((node, i) => { node['index'] = i });
-    this.links.forEach((link, i) => { link['index'] = i });
+    const jsonLinks = [];
+    this.links.forEach((link) => {
+      jsonLinks.push({
+        source: this.foundNodeIndex(link.source),
+        target: this.foundNodeIndex(link.target)
+      })
+    })
     let graphJson = {
       typology: type,
       nodes: this.nodes,
-      links: this.links,
+      links: jsonLinks,
     }
     switch (type) {
       case 'grid':
@@ -142,6 +148,10 @@ export class GraphConstructorService {
         break;
     }
     return JSON.stringify(graphJson, null, 2)
+  }
+
+  private foundNodeIndex(nodePosition) {
+    return this.nodes.findIndex(node => node.x === nodePosition.x && node.y === nodePosition.y)
   }
 
   private addNode(x, y) {
