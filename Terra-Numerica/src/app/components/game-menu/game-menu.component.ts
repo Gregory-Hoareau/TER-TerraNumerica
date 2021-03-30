@@ -15,7 +15,7 @@ export class GameMenuComponent implements OnInit {
 
   private selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'random'];
+  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin'] //, 'random'];
   public availableOpponentType = ['ai', 'player'];
 
   public selectedFileName = undefined;
