@@ -9,7 +9,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "generate": "node ./parser.js",
-    "g": "node ./parser.js"
+    "g": "node ./parser.js",
+    "build-wamp": "ng build --prod --base-href http://localhost/Terra-Numerica/",
+    "build-prod": "ng build --prod --base-href http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +27,7 @@
     "@angular/router": "~11.0.0",
     "@types/d3": "^6.2.0",
     "d3": "^6.2.0",
+    "file-saver": "^2.0.5",
     "rxjs": "~6.6.0",
     "sweetalert2": "^10.10.2",
     "tslib": "^2.0.0",
@@ -35,6 +38,7 @@
     "@angular/cli": "~11.0.1",
     "@angular/compiler-cli": "~11.0.0",
     "@types/angular": "^1.8.0",
+    "@types/file-saver": "^2.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.19.7",
     "codelyzer": "^6.0.0",

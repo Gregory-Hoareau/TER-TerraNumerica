@@ -8,7 +8,7 @@ export class TranslateService {
   constructor() { }
 
   graphTypeName(type: string): string {
-    switch(type) {
+    switch (type) {
       case 'grid':
         return 'Grille';
       case 'cycle':
@@ -27,7 +27,7 @@ export class TranslateService {
   }
 
   opponentTypeName(type: string): string {
-    switch(type) {
+    switch (type) {
       case 'ai':
         return 'Jouer contre un ordinateur';
       case 'player':
@@ -36,4 +36,22 @@ export class TranslateService {
         return '';
     }
   }
+
+  graphConstructorToolsName(tool: string) {
+    switch (tool) {
+      case 'add-node':
+        return 'Ajouter un sommet';
+      case 'add-link':
+        return 'Ajouter une arrête';
+      case 'remove':
+        return 'Effacer un élément';
+      case 'save':
+        return 'Enregistrer';
+      case 'move':
+        return 'Déplacer un sommet';
+      default:
+        return '';
+    }
+  }
+
 }

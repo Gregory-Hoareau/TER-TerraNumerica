@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { GameActionStack } from 'src/app/models/GameActionStack/game-action-stack';
 import { GameAction } from 'src/app/models/GameAction/game-action';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { GraphService } from '../graph/graph.service';
 import { IStrategy } from 'src/app/models/Strategy/istrategy';
 import { RandomStrategy } from 'src/app/models/Strategy/RandomStrategy/random-strategy';
@@ -416,7 +416,20 @@ export class GameService {
     this.watchingPositionList = []
     this.watchingPositionListStep2 = []
     this.alreadyEnconteredPos = false
-    window.location.reload();
+
+    this.turnCount = 0;
+    this.turnChanged = false;
+    this.placingPawns = true;
+    this.placingCops = true;
+    this.actionStack = new GameActionStack()
+    //window.location.reload();
+    
+    const extras: NavigationExtras = {
+      queryParams: {
+        gameMode: this.gameMode
+      }
+    }
+    this.router.navigate(['/board'], extras)
   }
 
   reset(){

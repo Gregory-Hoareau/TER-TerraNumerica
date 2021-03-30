@@ -22,8 +22,8 @@ export class GameBoardComponent implements OnInit {
   
 
   private svg;
-  private thiefs: Thief[] = [];
-  private cops: Cops[] = [];
+  private thiefs: Thief[];
+  private cops: Cops[];
   public gameMode;
 
   constructor(private graphService: GraphService,
@@ -33,6 +33,8 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.thiefs = []
+    this.cops = []
     this.activatedRoute.queryParams.subscribe(params => {
       // this.graphType = params['graphType'];
       // this.copsNum = +params['copsNum'];
@@ -92,7 +94,7 @@ export class GameBoardComponent implements OnInit {
                 .attr('height','1')
                 .attr('width','1')
                 .append("image")
-                  .attr("xlink:href", "../../assets/thief.svg")
+                  .attr("xlink:href", "assets/thief.svg")
                   .attr("x", 0)
                   .attr("y", 0)
                   .attr("height", 80)
@@ -105,7 +107,7 @@ export class GameBoardComponent implements OnInit {
                 .attr('height','1')
                 .attr('width','1')
                 .append("image")
-                  .attr("xlink:href", "../../assets/police.svg")
+                  .attr("xlink:href", "assets/police.svg")
                   .attr("x", 0)
                   .attr("y", 0)
                   .attr("height", 80)
@@ -141,6 +143,15 @@ export class GameBoardComponent implements OnInit {
     this.cops.forEach(c => {
       this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
     });
-}
+  }
+
+  replay() {
+    this.gameManager.replay();
+    d3.select('#top-hud-turn-information-details')
+      .style('color', 'black')
+      .text(() => 'Chargement du plateau de jeu ...');
+    this.svg.remove();
+    this.ngOnInit();
+  }
 
 }
