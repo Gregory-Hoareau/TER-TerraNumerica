@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
@@ -12,6 +12,10 @@ import { TranslateService } from 'src/app/_services/translate/translate.service'
   styleUrls: ['./game-menu.component.scss']
 })
 export class GameMenuComponent implements OnInit {
+
+  @ViewChild('param1Input', { static: false }) param1InputRef: ElementRef;
+  @ViewChild('param2Input', { static: false }) param2InputRef: ElementRef;
+  @ViewChild('copsNumberInput', { static: true }) copsNumberInputRef: ElementRef;
 
   public selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
@@ -44,6 +48,7 @@ export class GameMenuComponent implements OnInit {
     }
   }
 
+
   public selectedFileName = undefined;
   private inputGraphJSONFile: File = null;
   private graphGeneration: boolean = true;
@@ -57,16 +62,25 @@ export class GameMenuComponent implements OnInit {
   public cops: number = 1;
 
   constructor(private graphService: GraphService,
-              private gameService: GameService,
-              private router: Router,
-              private randomGraph: RandomGraphService,
-              public translator: TranslateService,
-              private statisticService: StatisticService) { }
+    private gameService: GameService,
+    private router: Router,
+    private randomGraph: RandomGraphService,
+    public translator: TranslateService,
+    private statisticService: StatisticService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.selectGraphType('grid')
     this.updateParamsName();
     this.randomGraph.loadGraphs();
+  }
+
+  ngAfterContentChecked() {
+    this.cdr.detectChanges()
+  }
+
+  print(mes) {
+    console.log(this.param1InputRef)
   }
 
   selectGraphType(type: string) {
@@ -82,7 +96,7 @@ export class GameMenuComponent implements OnInit {
   }
 
   updateParamsName() {
-    switch(this.selectedGraphType) {
+    switch (this.selectedGraphType) {
       case 'grid':
         this.paramsNames = ['Largeur :', 'Longueur :'];
         break;
@@ -118,7 +132,7 @@ export class GameMenuComponent implements OnInit {
       // else if (this.graphImportation) {
       //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       // }
-      switch(this.gameModeSelected){
+      switch (this.gameModeSelected) {
         case "easy":
           break;
         case "medium":
@@ -146,7 +160,7 @@ export class GameMenuComponent implements OnInit {
     }
   }
 
-  navigateToDashboard(){
+  navigateToDashboard() {
     this.router.navigate(['/dashboard']);
   }
 
@@ -155,14 +169,14 @@ export class GameMenuComponent implements OnInit {
       return true;
     }
     if (this.graphGeneration) {
-      if(!this.graphParam1) this.graphParam1 = 0;
-      if(!this.graphParam2) this.graphParam2 = 0;
+      if (!this.graphParam1) this.graphParam1 = 0;
+      if (!this.graphParam2) this.graphParam2 = 0;
       return true
     }
     return false;
   }
 
-  setSelectedAi(side: string){
+  setSelectedAi(side: string) {
     this.selectedAi = side;
   }
 
@@ -220,6 +234,32 @@ export class GameMenuComponent implements OnInit {
     } else {
       this.selectedFileName = undefined
     }
+  }
+
+  onBlur(event) {
+    if (+event.target.min > +event.target.value) {
+      event.target.value = event.target.min
+    }
+
+    if (event.target.max !== '') {
+      if (+event.target.max < +event.target.value) {
+        event.target.value = event.target.max
+      }
+    }
+  }
+
+  checkGraphParamIssues() {
+    let paramValidity = this.copsNumberInputRef.nativeElement.validity.valid;
+
+    if (this.param1InputRef && this.paramsNames.length > 0) {
+      paramValidity = paramValidity && this.param1InputRef.nativeElement.validity.valid && this.param1InputRef.nativeElement.value !== ''
+      if (this.param2InputRef && this.paramsNames.length > 1) {
+        paramValidity = paramValidity && this.param2InputRef.nativeElement.validity.valid && this.param2InputRef.nativeElement.value !== ''
+      }
+
+    }
+
+    return !paramValidity;
   }
 
 }
