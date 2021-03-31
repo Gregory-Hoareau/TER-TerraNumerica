@@ -324,7 +324,7 @@ export class GameService {
     }
     let timerEnd = this.turnCount > 25
     let startWatchingThiefWin = this.turnCount > 10
-    if(allThiefCapture) this.winner = 'Les Policiers ont gagnés';
+    if(allThiefCapture) this.winner = 'Les Policiers ont gagné';
     else if(timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
     else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
         this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
