@@ -17,6 +17,8 @@ export class GraphConstructorComponent implements OnInit {
   public zoom_level: number = 0;
   private graphConstructorID = 'graphConstructorSvg';
   private graphConstructorSVG;
+  private lineLayer;
+  private circleLayer;
 
   private links = []
   private placing_link = false;
@@ -36,7 +38,9 @@ export class GraphConstructorComponent implements OnInit {
         .attr('width', '100%')
         .attr('height', '100%')
         .on('click', this.toolAction.bind(this))
-    this.graphConstructorSVG = d3.select(`#${this.graphConstructorID}`)
+    this.graphConstructorSVG = d3.select(`#${this.graphConstructorID}`);
+    this.lineLayer = this.graphConstructorSVG.append('g').attr('id', 'lineLayer');
+    this.circleLayer = this.graphConstructorSVG.append('g').attr('id', 'circleLayer')
     console.log(this.graphConstructorSVG)
   }
 
@@ -54,7 +58,7 @@ export class GraphConstructorComponent implements OnInit {
 
   drawNode(position) {
     this.graphConstructorService.toolAction(this.selected_tool, position)
-    this.graphConstructorSVG.append('circle')
+    this.circleLayer.append('circle')
                               .attr('r', 20)
                               .attr('class', 'circle')
                               .style('fill', this.graphConstructorService.originalNodeColor)
@@ -124,7 +128,7 @@ export class GraphConstructorComponent implements OnInit {
     const fromPosition = this.convertCircleToPosition(from);
     const toPosition = this.convertCircleToPosition(to);
     this.graphConstructorService.toolAction(this.selected_tool, fromPosition, toPosition)
-    const line = this.graphConstructorSVG.append('line')
+    const line = this.lineLayer.append('line')
                                           .attr('class', 'line')
                                           .attr('stroke', '#aaa')
                                           .attr('stroke-width', 3)
