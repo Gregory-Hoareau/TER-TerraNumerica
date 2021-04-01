@@ -31,6 +31,11 @@ export class GraphConstructorComponent implements OnInit {
 
   ngOnInit(): void {
     this.tools = this.graphConstructorService.tools;
+    this.initGraphEdition()
+  }
+
+  private initGraphEdition() {
+    this.graphConstructorService.reset();
     this.selected_tool = this.tools[0];
     d3.select('#canvas')
       .append('svg')
@@ -41,7 +46,7 @@ export class GraphConstructorComponent implements OnInit {
     this.graphConstructorSVG = d3.select(`#${this.graphConstructorID}`);
     this.lineLayer = this.graphConstructorSVG.append('g').attr('id', 'lineLayer');
     this.circleLayer = this.graphConstructorSVG.append('g').attr('id', 'circleLayer')
-    console.log(this.graphConstructorSVG)
+    //console.log(this.graphConstructorSVG)
   }
 
   toolAction(event: MouseEvent) {
@@ -183,7 +188,10 @@ export class GraphConstructorComponent implements OnInit {
   }
 
   saveGraph() {
-    this.graphConstructorService.selectGraphType()
+    this.graphConstructorService.selectGraphType().then(success => {
+      if(success === true) this.resetGraphEdition();
+    })
+    
   }
 
   // Drag & Drop Functions
@@ -221,6 +229,11 @@ export class GraphConstructorComponent implements OnInit {
       }
       this.graphConstructorService.toolAction(this.selected_tool, this.movingCircleOriginalPosition, endPositon)
     }
+  }
+
+  resetGraphEdition() {
+    this.graphConstructorSVG.remove();
+    this.initGraphEdition();
   }
 
 }

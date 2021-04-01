@@ -26,7 +26,7 @@ export class GraphConstructorService {
 
   constructor() { }
 
-  async selectGraphType() {
+  async selectGraphType(): Promise<boolean> {
     const result = await Swal.fire({
       title: 'Type du graphes',
       input: 'select',
@@ -49,7 +49,7 @@ export class GraphConstructorService {
         default:
           break;
       }
-      this.save(result.value, args);
+      return this.save(result.value, args);
     }
   }
 
@@ -114,12 +114,16 @@ export class GraphConstructorService {
     }
   }
 
-  private save(type: string, args: number[]) {
-    const graphJson = this.convertGraphToJsonFile(type, args);
-    console.log('JSON GRAPH', graphJson);
-    const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' })
-    //console.log('JSON BLOB', blobGraphFromJson);
-    saveAs(blobGraphFromJson, 'graph.json');
+  private save(type: string, args: number[]): Promise<boolean> {
+    return new Promise((resolve) => {
+      const graphJson = this.convertGraphToJsonFile(type, args);
+      console.log('JSON GRAPH', graphJson);
+      const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' })
+      //console.log('JSON BLOB', blobGraphFromJson);
+      saveAs(blobGraphFromJson, 'graph.json');
+      resolve(true);
+    })
+
   }
 
   private convertGraphToJsonFile(type: string, args: number[]) {
@@ -178,12 +182,12 @@ export class GraphConstructorService {
     const nodeIndex = this.nodes.findIndex(node => node.x === movingCircle.x && node.y === movingCircle.y)
     this.nodes[nodeIndex].x = endPosition.x
     this.nodes[nodeIndex].y = endPosition.y
-    
+
     this.links.forEach(link => {
-      if(this.checkCirclePosition(link.source, movingCircle)) {
+      if (this.checkCirclePosition(link.source, movingCircle)) {
         link.source.x = endPosition.x;
         link.source.y = endPosition.y;
-      } else if(this.checkCirclePosition(link.target, movingCircle)) {
+      } else if (this.checkCirclePosition(link.target, movingCircle)) {
         link.target.x = endPosition.x;
         link.target.y = endPosition.y;
       }
@@ -199,5 +203,10 @@ export class GraphConstructorService {
    */
   private checkCirclePosition(c1, c2) {
     return c1.x === c2.x && c1.y === c2.y
+  }
+
+  reset() {
+    this.nodes = [];
+    this.links = [];
   }
 }
