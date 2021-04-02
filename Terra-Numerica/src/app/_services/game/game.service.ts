@@ -107,6 +107,7 @@ export class GameService {
           return new RunawayStrategy();
         };
         break;
+      case 'extreme':
       case 'hard':
         switch (this.graphService.getGraph().typology) {
           case 'grid':
