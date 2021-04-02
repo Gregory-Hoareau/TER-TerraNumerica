@@ -57,6 +57,7 @@ export abstract class Pawns {
      * @param thiefs 
      */
     place(graph, cops = [], thiefs = []) {
+        //console.log('PLACING')
         const pos = this.strategy.placement(graph, cops, thiefs);
         this.updatePosition(pos);
         d3.select('.'+this.role)

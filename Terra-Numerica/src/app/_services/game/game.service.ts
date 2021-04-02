@@ -199,9 +199,16 @@ export class GameService {
           }
         }
         //Check if AI is cops
+        //console.log('AI SIDE', this.ai_side)
+        //console.log('TURN TO PLACE COPS', this.placingCops)
         if (this.ai_side === 'cops' && this.placingCops) {
+          //console.log('HERE')
           for (const c of this.cops) {
-            if (c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+            //console.log('CHECK IF COPS ARE PLACED')
+            if (c.isWaitingPlacement()) {
+              //console.log('FOUND A COPS WAITING TO BE PLACED')
+              c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+            }
           }
         }
 
@@ -472,6 +479,7 @@ export class GameService {
     this.watchingPositionListStep2 = []
     this.alreadyEnconteredPos = false
     this.turnCount = 0;
+    this.placingCops = true;
     this.thiefTurn = true;
     this.placingPawns = true;
     this.gameTimer = 0;
