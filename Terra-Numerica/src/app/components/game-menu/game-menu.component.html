@@ -85,7 +85,7 @@
                         </label>
                     </div>
                     <div class="form-field-inputs">
-                        <input #copsNumberInput [(ngModel)]="cops" min="1" max="5" (blur)="onBlur($event)" id="copsNum" type="number" name="cops">
+                        <input #copsNumberInput [(ngModel)]="cops" min="1" [max]="getMaxCopsNumber()" (blur)="onBlur($event)" id="copsNum" type="number" name="cops">
                     </div>
                 </form> <!-- .form-field -->
             </div> <!-- .cops-number-selection -->

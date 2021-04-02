@@ -268,4 +268,19 @@ export class GameMenuComponent implements OnInit {
     return !paramValidity;
   }
 
+  getMaxCopsNumber() {
+    switch (this.selectedGraphType) {
+      case 'grid':
+      case 'tore':
+        return (this.graphParam1 * this.graphParam2) - 1
+      case 'cycle':
+      case 'tree':
+      case 'copsAlwaysWin':
+        return this.graphParam1 - 1;
+      case 'random':
+      default:
+        return 5;
+    }
+  }
+
 }
