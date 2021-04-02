@@ -90,15 +90,15 @@ export class GameService {
   }
 
   chooseAIStrat() {
-    switch(this.gameMode) {
+    switch (this.gameMode) {
       case 'medium':
-        switch(this.graphService.getGraph().typology) {
+        switch (this.graphService.getGraph().typology) {
           case 'grid':
             this.ai_cops_strat = () => {
               return new GridStrategy(this.graphService, this);
             };
-          break;
-          default: 
+            break;
+          default:
             this.ai_cops_strat = () => {
               return new TrackingStrategy();
             }
@@ -108,11 +108,11 @@ export class GameService {
         };
         break;
       case 'hard':
-        switch(this.graphService.getGraph().typology) {
+        switch (this.graphService.getGraph().typology) {
           case 'grid':
-              this.ai_cops_strat = () => {
-                return new WatchingStrategy();
-              }; 
+            this.ai_cops_strat = () => {
+              return new WatchingStrategy();
+            };
             break;
           case 'copsAlwaysWin':
             this.ai_cops_strat = () => {
@@ -149,14 +149,14 @@ export class GameService {
 
   private setThief(thiefs) {
     this.thiefs = thiefs;
-    for(const t of this.thiefs) {
+    for (const t of this.thiefs) {
       t.setStrategy(this.ai_thief_strat());
     }
   }
 
   private setCops(cops) {
     this.cops = cops;
-    for(const c of this.cops) {
+    for (const c of this.cops) {
       c.setStrategy(this.ai_cops_strat());
     }
   }
@@ -173,7 +173,7 @@ export class GameService {
 
   private allThiefsPlayed() {
     let allPlayed = true;
-    for(const t of this.thiefs) {
+    for (const t of this.thiefs) {
       allPlayed = allPlayed && t.hasPlayed();
     }
     return allPlayed;
@@ -181,38 +181,38 @@ export class GameService {
 
   private allCopsPlayed() {
     let allPlayed = true;
-    for(const c of this.cops) {
+    for (const c of this.cops) {
       allPlayed = allPlayed && c.hasPlayed();
     }
     return allPlayed;
   }
 
   update() {
-    if(this.placingPawns) {
+    if (this.placingPawns) {
       //Check if there is AI
-      if(this.ai_side) {
+      if (this.ai_side) {
         // Check if the AI is a thief
-        if(this.ai_side === 'thief' && !this.placingCops) {
-          for(const t of this.thiefs) {
-            if(t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+        if (this.ai_side === 'thief' && !this.placingCops) {
+          for (const t of this.thiefs) {
+            if (t.isWaitingPlacement()) t.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
         }
         //Check if AI is cops
-        if(this.ai_side === 'cops' && this.placingCops) {
-          for(const c of this.cops) {
-            if(c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+        if (this.ai_side === 'cops' && this.placingCops) {
+          for (const c of this.cops) {
+            if (c.isWaitingPlacement()) c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
         }
-      
+
       } //End check if there is AI
 
       this.checkPlacement();
-      if(!this.placingCops && this.placingPawns) {
+      if (!this.placingCops && this.placingPawns) {
         d3.select(this.HUD_TURN_DETAILS)
           .text(() => 'Le voleur doit se placer.');
-        if(this.ai_side === 'thief') this.update();
+        if (this.ai_side === 'thief') this.update();
       }
-      if(!this.placingPawns) {
+      if (!this.placingPawns) {
         d3.select(this.HUD_TURN_DETAILS)
           .style('color', 'blue')
           .text(() => 'C\'est au tour des policiers.');
@@ -220,17 +220,17 @@ export class GameService {
       }
     } else {
       // Check if there is an AI
-      if(this.ai_side) {
+      if (this.ai_side) {
         // Check if this is cops turn and if AI is cops
-        if(this.ai_side === 'cops' && !this.thiefTurn) {
-          for(const c of this.cops) {
+        if (this.ai_side === 'cops' && !this.thiefTurn) {
+          for (const c of this.cops) {
             c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
           this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
-        } 
+        }
         // check if this is thief turn and if AI is thief
-        else if(this.ai_side === 'thief' && this.thiefTurn) {
-          for(const t of this.thiefs) {
+        else if (this.ai_side === 'thief' && this.thiefTurn) {
+          for (const t of this.thiefs) {
             t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
           this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
@@ -238,18 +238,18 @@ export class GameService {
       } // End Check if there is an AI
 
       //Beta for extreme mode
-      if(this.gameMode === 'extreme') {
-        if(this.ai_side === 'undefined' || this.ai_side === undefined) { // if it's a Player VS Player game
-          if(this.thiefTurn) {
-            if(this.allThiefsPlayed()) this.validateTurnCallback()
-          } else if(!this.thiefTurn) {
-            if(this.allCopsPlayed()) this.validateTurnCallback()
+      if (this.gameMode === 'extreme') {
+        if (this.ai_side === 'undefined' || this.ai_side === undefined) { // if it's a Player VS Player game
+          if (this.thiefTurn) {
+            if (this.allThiefsPlayed()) this.validateTurnCallback()
+          } else if (!this.thiefTurn) {
+            if (this.allCopsPlayed()) this.validateTurnCallback()
           }
         } else { // if it's a Player VS AI game
-          if(this.ai_side === 'cops' && this.thiefTurn) {
-            if(this.allThiefsPlayed()) this.validateTurnCallback();
-          } else if(this.ai_side === 'thief' && !this.thiefTurn) {
-            if(this.allCopsPlayed()) this.validateTurnCallback();
+          if (this.ai_side === 'cops' && this.thiefTurn) {
+            if (this.allThiefsPlayed()) this.validateTurnCallback();
+          } else if (this.ai_side === 'thief' && !this.thiefTurn) {
+            if (this.allCopsPlayed()) this.validateTurnCallback();
           }
         }
       }
@@ -257,37 +257,37 @@ export class GameService {
     }
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
-    if(pile.length != this.cops.length){
+    if (pile.length != this.cops.length) {
       pile.forEach(e => {
-        if(e.length != 1)
-        this.notificate(e[0], e.length);
+        if (e.length != 1)
+          this.notificate(e[0], e.length);
       })
     }
-    if(this.turnChanged){
+    if (this.turnChanged) {
       this.watchingPositionList.push(JSON.stringify(this.recordPosition()));
     }
     this.checkTurn();
   }
 
-  private recordPosition(){
+  private recordPosition() {
     let tmpPositionList = []
-      this.turnChanged = false;
-      this.thiefs.forEach(e => {
-        tmpPositionList.push([e.x,e.y]);
-      })
-      this.cops.forEach(e => {
-        tmpPositionList.push([e.x,e.y]);      
-      })
-      return tmpPositionList
+    this.turnChanged = false;
+    this.thiefs.forEach(e => {
+      tmpPositionList.push([e.x, e.y]);
+    })
+    this.cops.forEach(e => {
+      tmpPositionList.push([e.x, e.y]);
+    })
+    return tmpPositionList
   }
 
   private checkPlacement() {
     let placing = false;
     let cops = false;
-    for(let i=0; i<this.thiefs.length; i++) {
+    for (let i = 0; i < this.thiefs.length; i++) {
       placing = placing || this.thiefs[i].isWaitingPlacement();
     }
-    for(let i=0; i<this.cops.length; i++) {
+    for (let i = 0; i < this.cops.length; i++) {
       placing = placing || this.cops[i].isWaitingPlacement();
       cops = cops || this.cops[i].isWaitingPlacement();
     }
@@ -295,46 +295,46 @@ export class GameService {
     this.placingCops = cops
   }
 
-  notificate(pos, number){
+  notificate(pos, number) {
     let notif = d3.select("svg")
-    .append("g")
-    .attr("id", "notificationBubble")
+      .append("g")
+      .attr("id", "notificationBubble")
     notif.append('circle')
-        .attr("cx", pos.x + 40)
-        .attr("cy", pos.y - 55)
-        .attr("r", 15)
-        .attr("fill", "white")
-        .attr("stroke", "black")
+      .attr("cx", pos.x + 40)
+      .attr("cy", pos.y - 55)
+      .attr("r", 15)
+      .attr("fill", "white")
+      .attr("stroke", "black")
     notif.append("text")
-        .text(number)
-        .style("font-weight", "bold")
-        .attr('x', pos.x + 35)
-        .attr('y', pos.y - 47.5)                
-        .attr("font-size", 20)
+      .text(number)
+      .style("font-weight", "bold")
+      .attr('x', pos.x + 35)
+      .attr('y', pos.y - 47.5)
+      .attr("font-size", 20)
   }
 
-  checkCops(){
+  checkCops() {
     let num: number = 0;
     let copsPile = [];
     let tmpCopsPile = []
     let alreadyWatchedCops = []
-    this.cops.forEach( c1 => {
-      if(!alreadyWatchedCops.includes(c1)){
+    this.cops.forEach(c1 => {
+      if (!alreadyWatchedCops.includes(c1)) {
         tmpCopsPile = []
         tmpCopsPile.push(c1);
-        alreadyWatchedCops.push(c1) 
-        this.cops.forEach( c2 => {
-          if(c1.role != c2.role){
-            if(c1.x == c2.x && c1.y == c2.y){
-                tmpCopsPile.push(c2);
-                alreadyWatchedCops.push(c2)
-         }
-       }
-       })
-      if(!copsPile.includes(tmpCopsPile)){
-        copsPile.push(tmpCopsPile);
+        alreadyWatchedCops.push(c1)
+        this.cops.forEach(c2 => {
+          if (c1.role != c2.role) {
+            if (c1.x == c2.x && c1.y == c2.y) {
+              tmpCopsPile.push(c2);
+              alreadyWatchedCops.push(c2)
+            }
+          }
+        })
+        if (!copsPile.includes(tmpCopsPile)) {
+          copsPile.push(tmpCopsPile);
+        }
       }
-    }
     })
     return copsPile;
   }
@@ -348,25 +348,25 @@ export class GameService {
   }
 
   private setPlayersState(players: Pawns[], state: PawnState) {
-    for(let i=0; i<players.length; i++) {
+    for (let i = 0; i < players.length; i++) {
       players[i].state = state;
     }
   }
 
   private checkEnd() {
     let allThiefCapture = false;
-    for(let i=0; i<this.thiefs.length; i++) {
+    for (let i = 0; i < this.thiefs.length; i++) {
       const t = this.thiefs[i];
-      for(let j=0; i<this.cops.length; i++) {
+      for (let j = 0; i < this.cops.length; i++) {
         allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
       }
     }
     let timerEnd = this.turnCount > 25
     let startWatchingThiefWin = this.turnCount > 10
-    if(allThiefCapture) this.winner = 'Les Policiers ont gagné';
-    else if(timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
-    else if(startWatchingThiefWin && this.checkSamePositionAsPreviously()){
-        this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
+    if (allThiefCapture) this.winner = 'Les Policiers ont gagné';
+    else if (timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
+    else if (startWatchingThiefWin && this.checkSamePositionAsPreviously()) {
+      this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
     }
     return allThiefCapture || timerEnd || startWatchingThiefWin && this.alreadyEnconteredPos;
   }
@@ -375,7 +375,7 @@ export class GameService {
     return this.turnCount;
   }
 
-  setGameMode(gameMode){
+  setGameMode(gameMode) {
     this.gameMode = gameMode
   }
 
@@ -383,7 +383,7 @@ export class GameService {
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
-    if(this.thiefTurn) {
+    if (this.thiefTurn) {
       this.turnChanged = true;
       this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
@@ -391,7 +391,7 @@ export class GameService {
       d3.select(this.HUD_TURN_DETAILS)
         .style('color', 'green')
         .text(() => 'C\'est au tour du voleur.');
-    } 
+    }
     else {
       this.setPlayersState(this.thiefs, environment.waitingTurnState);
       this.setPlayersState(this.cops, environment.onTurnState);
@@ -399,37 +399,39 @@ export class GameService {
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }
-    if(this.checkEnd()) {
-      let endTime:any = Date.now();
+    if (this.checkEnd()) {
+      let endTime: any = Date.now();
       this.gameTimer = endTime - this.gameTimer;
       const result = await Swal.fire({
         title: this.winner,
-        text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+        text: 'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
       })
-      return {result: result, gameTimer: this.gameTimer};
+      return { result: result, gameTimer: this.gameTimer };
     } else {
       this.update()
     }
   }
 
-  private getGameMode(mode: string){
-    switch(mode){
+  private getGameMode(mode: string) {
+    switch (mode) {
       case 'easy':
         return 'Facile';
       case 'medium':
         return 'Normal';
       case 'hard':
         return 'Difficile';
+      case 'extreme':
+        return 'Extrême';
       default:
         return 'Inconnu';
     }
   }
 
-  registerStats(){
+  registerStats() {
     this.stat.postStatistic({
       gameMode: this.gameMode,
       turnCount: this.turnCount,
@@ -439,12 +441,12 @@ export class GameService {
     })
   }
 
-  goBackToMenu(){
+  goBackToMenu() {
     this.reset();
     this.router.navigate(['/menu']);
   }
 
-  replay(){
+  replay() {
     this.watchingPositionList = []
     this.watchingPositionListStep2 = []
     this.alreadyEnconteredPos = false
@@ -455,7 +457,7 @@ export class GameService {
     this.placingCops = true;
     this.actionStack = new GameActionStack()
     //window.location.reload();
-    
+
     const extras: NavigationExtras = {
       queryParams: {
         gameMode: this.gameMode
@@ -464,7 +466,7 @@ export class GameService {
     this.router.navigate(['/board'], extras)
   }
 
-  reset(){
+  reset() {
     this.watchingPositionList = []
     this.watchingPositionListStep2 = []
     this.alreadyEnconteredPos = false
@@ -473,23 +475,23 @@ export class GameService {
     this.placingPawns = true;
     this.gameTimer = 0;
   }
-  
-  checkTurn(){
+
+  checkTurn() {
     this.thiefs.forEach(t => {
-      if(t.state === environment.onTurnState){
-        d3.select('.'+t.role)
+      if (t.state === environment.onTurnState) {
+        d3.select('.' + t.role)
           .style("opacity", 1)
-      }else if(t.state === environment.waitingTurnState){
-        d3.select('.'+t.role)
+      } else if (t.state === environment.waitingTurnState) {
+        d3.select('.' + t.role)
           .style("opacity", 0.60);
       }
     });
     this.cops.forEach(c => {
-      if(c.state === environment.onTurnState){
-        d3.select('.'+c.role)
-        .style("opacity", 1);
-      }else if(c.state === environment.waitingTurnState){
-        d3.select('.'+c.role)
+      if (c.state === environment.onTurnState) {
+        d3.select('.' + c.role)
+          .style("opacity", 1);
+      } else if (c.state === environment.waitingTurnState) {
+        d3.select('.' + c.role)
           .style("opacity", 0.60);
       }
     });
@@ -520,7 +522,7 @@ export class GameService {
 
   private checkSamePositionAsPreviously() {
     this.alreadyEnconteredPos = (this.thiefTurn && this.watchingPositionListStep2.includes(JSON.stringify(this.recordPosition())))
-    if(this.thiefTurn && this.watchingPositionList.includes(JSON.stringify(this.recordPosition()))){
+    if (this.thiefTurn && this.watchingPositionList.includes(JSON.stringify(this.recordPosition()))) {
       this.watchingPositionListStep2.push(JSON.stringify(this.recordPosition()));
     }
     return this.alreadyEnconteredPos;
