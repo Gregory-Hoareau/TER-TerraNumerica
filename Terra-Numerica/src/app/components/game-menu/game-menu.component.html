@@ -105,6 +105,10 @@
                         <label for="mode3">Difficile</label>
                         <input [(ngModel)]="gameModeSelected" type="radio" id="mode3" name="mode" value="hard">
                     </div>
+                    <div class="difficulty-selection-list-item" [class]="isSelectedExtreme()">
+                        <label for="mode4">Extrême</label>
+                        <input [(ngModel)]="gameModeSelected" type="radio" id="mode4" name="mode" value="extreme">
+                    </div>
                 </div> <!-- .difficulty-selection-list -->
             </div> <!-- .difficulty-selection -->
         </div> <!-- .col2 -->

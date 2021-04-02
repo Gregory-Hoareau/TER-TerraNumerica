@@ -139,6 +139,8 @@ export class GameMenuComponent implements OnInit {
           break;
         case "hard":
           break;
+        case "extreme":
+          break;
       }
       const extras: NavigationExtras = {
         queryParams: {
@@ -216,6 +218,10 @@ export class GameMenuComponent implements OnInit {
 
   isSelectedHard() {
     return this.gameModeSelected === 'hard' ? 'selected' : '';
+  }
+
+  isSelectedExtreme() {
+    return this.gameModeSelected === 'extreme' ? 'selected' : '';
   }
 
   isSelectedCopsAi() {

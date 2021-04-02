@@ -19,7 +19,7 @@ export class GameBoardComponent implements OnInit {
   private width;
   private height;
   private warningZone: boolean = false;
-  
+
 
   private svg;
   private thiefs: Thief[];
@@ -27,8 +27,8 @@ export class GameBoardComponent implements OnInit {
   public gameMode;
 
   constructor(private graphService: GraphService,
-              public gameManager: GameService,
-              private activatedRoute: ActivatedRoute) {
+    public gameManager: GameService,
+    private activatedRoute: ActivatedRoute) {
 
   }
 
@@ -45,9 +45,9 @@ export class GameBoardComponent implements OnInit {
     this.width = document.getElementById('visualizer').offsetWidth;
     this.height = document.getElementById('visualizer').offsetHeight;
     this.svg = d3.select("#visualizer")
-                .append("svg")
-                    .attr("width", this.width)
-                    .attr("height", this.height)
+      .append("svg")
+      .attr("width", this.width)
+      .attr("height", this.height)
 
     this.graphService.drawGraph(this.svg);
     this.init();
@@ -71,8 +71,8 @@ export class GameBoardComponent implements OnInit {
   }
 
   init() {
-
-    for(let i = 0; i < this.gameManager.getCopsNumber() ; i++){
+    this.gameManager.setValidateTurnCallback(this.validateTurn.bind(this))
+    for (let i = 0; i < this.gameManager.getCopsNumber(); i++) {
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
     this.thiefs.push(new Thief(this.gameManager, this.graphService, 50, 150));
@@ -81,37 +81,37 @@ export class GameBoardComponent implements OnInit {
     this.gameManager.setPawns(this.thiefs, this.cops)
 
     let patternPawn = this.svg.append("svg")
-                                .attr("id", "mySvg")
-                                .attr("width", 80)
-                                .attr("height", 80)
-                                .append("defs")
-                                  .attr("id", "mdef");
+      .attr("id", "mySvg")
+      .attr("width", 80)
+      .attr("height", 80)
+      .append("defs")
+      .attr("id", "mdef");
 
     patternPawn.append("pattern")
-                .attr("id", "pawnThiefImage")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr('height','1')
-                .attr('width','1')
-                .append("image")
-                  .attr("xlink:href", "assets/thief.svg")
-                  .attr("x", 0)
-                  .attr("y", 0)
-                  .attr("height", 80)
-                  .attr("width", 80);
+      .attr("id", "pawnThiefImage")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr('height', '1')
+      .attr('width', '1')
+      .append("image")
+      .attr("xlink:href", "assets/thief.svg")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("height", 80)
+      .attr("width", 80);
 
     patternPawn.append("pattern")
-                .attr("id", "pawnCopsImage")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr('height','1')
-                .attr('width','1')
-                .append("image")
-                  .attr("xlink:href", "assets/police.svg")
-                  .attr("x", 0)
-                  .attr("y", 0)
-                  .attr("height", 80)
-                  .attr("width", 80)
+      .attr("id", "pawnCopsImage")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr('height', '1')
+      .attr('width', '1')
+      .append("image")
+      .attr("xlink:href", "assets/police.svg")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("height", 80)
+      .attr("width", 80)
 
     /* d3.select("#hud").append("p")
       .attr("id", "main-message")
@@ -130,15 +130,24 @@ export class GameBoardComponent implements OnInit {
     return this.gameManager.isGameActionEmpty();
   }
 
-  validateTurn() {
-    this.gameManager.validateTurn();
+  async validateTurn() {
+    const res = await this.gameManager.validateTurn();
+    if (res.result !== undefined && res.gameTimer !== undefined) {
+      res.gameTimer = Math.trunc(res.gameTimer / 1000);
+      this.gameManager.registerStats();
+      if (res.result.isConfirmed) {
+        this.replay();
+      } else if (!res.result.isConfirmed) {
+        this.gameManager.goBackToMenu();
+      }
+    }
   }
 
   cancelAction() {
     this.gameManager.cancelAction();
   }
 
-  seeWarningZone(){
+  seeWarningZone() {
     this.warningZone = !this.warningZone;
     this.cops.forEach(c => {
       this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);

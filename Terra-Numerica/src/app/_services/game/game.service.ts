@@ -51,6 +51,7 @@ export class GameService {
   private ai_thief_strat: () => IStrategy;
   private ai_cops_strat: () => IStrategy;
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
+  private validateTurnCallback: () => void;
 
   constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
@@ -60,6 +61,10 @@ export class GameService {
     if (localStorage.getItem("ai") !== null) {
       this.ai_side = localStorage.getItem("ai");
     }
+  }
+
+  setValidateTurnCallback(callback) {
+    this.validateTurnCallback = callback;
   }
 
   copsArePlaced() {
@@ -166,6 +171,22 @@ export class GameService {
     this.cops_position[index] = pos;
   }
 
+  private allThiefsPlayed() {
+    let allPlayed = true;
+    for(const t of this.thiefs) {
+      allPlayed = allPlayed && t.hasPlayed();
+    }
+    return allPlayed;
+  }
+
+  private allCopsPlayed() {
+    let allPlayed = true;
+    for(const c of this.cops) {
+      allPlayed = allPlayed && c.hasPlayed();
+    }
+    return allPlayed;
+  }
+
   update() {
     if(this.placingPawns) {
       //Check if there is AI
@@ -215,6 +236,24 @@ export class GameService {
           this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
       } // End Check if there is an AI
+
+      //Beta for extreme mode
+      if(this.gameMode === 'extreme') {
+        if(this.ai_side === 'undefined' || this.ai_side === undefined) { // if it's a Player VS Player game
+          if(this.thiefTurn) {
+            if(this.allThiefsPlayed()) this.validateTurnCallback()
+          } else if(!this.thiefTurn) {
+            if(this.allCopsPlayed()) this.validateTurnCallback()
+          }
+        } else { // if it's a Player VS AI game
+          if(this.ai_side === 'cops' && this.thiefTurn) {
+            if(this.allThiefsPlayed()) this.validateTurnCallback();
+          } else if(this.ai_side === 'thief' && !this.thiefTurn) {
+            if(this.allCopsPlayed()) this.validateTurnCallback();
+          }
+        }
+      }
+
     }
     d3.selectAll("#notificationBubble").remove();
     let pile = this.checkCops();
@@ -340,7 +379,7 @@ export class GameService {
     this.gameMode = gameMode
   }
 
-  validateTurn() {
+  async validateTurn() {
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
@@ -363,22 +402,15 @@ export class GameService {
     if(this.checkEnd()) {
       let endTime:any = Date.now();
       this.gameTimer = endTime - this.gameTimer;
-      Swal.fire({
+      const result = await Swal.fire({
         title: this.winner,
         text:  'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
         icon: 'success',
         confirmButtonText: 'Rejouer',
         showCancelButton: true,
         cancelButtonText: 'Retour au Menu'
-      }).then((result) => {
-        this.gameTimer = Math.trunc(this.gameTimer / 1000);
-        this.registerStats();
-        if(result.isConfirmed){
-          this.replay();
-        }else if(!result.isConfirmed){
-          this.goBackToMenu();
-        }
       })
+      return {result: result, gameTimer: this.gameTimer};
     } else {
       this.update()
     }

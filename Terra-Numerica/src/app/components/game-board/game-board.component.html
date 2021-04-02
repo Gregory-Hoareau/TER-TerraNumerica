@@ -18,7 +18,7 @@
 <div id="bottom-hud" class="card">
     <div id="games-action">
         <button *ngIf="gameMode == 'easy'" (click)="seeWarningZone()">Zone de danger</button>
-        <button *ngIf='getTurnCount() !== 0' (click)="validateTurn()">Valider le tour</button>
-        <button *ngIf='!isGameActionEmpty() && getTurnCount() !== 0' (click)="cancelAction()">Annuler action</button>
+        <button *ngIf="getTurnCount() !== 0" (click)="validateTurn()">{{gameMode === 'extreme' ? 'Passer son tour' : 'Valider le tour'}}</button>
+        <button *ngIf="gameMode !== 'extreme' && !isGameActionEmpty() && getTurnCount() !== 0" (click)="cancelAction()">Annuler action</button>
     </div>
 </div>

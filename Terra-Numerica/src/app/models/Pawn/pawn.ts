@@ -121,6 +121,13 @@ export abstract class Pawns {
     }
 
     /**
+     * Function to check if the pawn state is on WaitingTurn
+     */
+    hasPlayed() {
+        return this.state === environment.waitingTurnState;
+    }
+
+    /**
      * Function to check if the pawn state is on his turn
      */
     onTurn() {
