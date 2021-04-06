@@ -67,6 +67,10 @@ export abstract class Graph {
                 edges.push(this._nodes.find(n => n.index === l.target.index))
             } else if (l.target.index === node.index) {
                 edges.push(this._nodes.find(n => n.index === l.source.index))
+            } else if (l.source === node.index) {
+                edges.push(this._nodes.find(n => n.index === l.target))
+            } else if (l.target === node.index) {
+                edges.push(this._nodes.find(n => n.index === l.source))
             }
         }
         return edges;

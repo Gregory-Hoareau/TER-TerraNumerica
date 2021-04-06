@@ -3,6 +3,7 @@ import { Graph } from '../graph';
 
 export class Common extends Graph {
 
+
     constructor(nodes, links, type: string = 'common') {
         super(nodes, links, type);
     }

@@ -6,6 +6,7 @@ import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
+import { Specific } from 'src/app/models/Graph/specific/specific';
 import { Tree } from 'src/app/models/Graph/Tree/tree';
 import { RandomGraphService } from '../random-graph/random-graph.service';
 
@@ -17,6 +18,8 @@ export class GraphService {
   private graph: Graph;
 
   private gameMode: string;
+
+  private inputFile: File;
 
   constructor(private randomGraph: RandomGraphService, private router: Router) {
     if (localStorage.getItem("method") !== null) {
@@ -252,6 +255,7 @@ export class GraphService {
   }
   
   async loadGraphFromFile(file: File) {
+    this.inputFile = file;
     const config = await this.readAsync(file);
     this.importGraph(config);
   }
@@ -272,6 +276,8 @@ export class GraphService {
         break;
       case 'random':
         this.graph = new Common(config.nodes, config.links);
+      case 'specific':
+        this.graph = new Specific(config.nodes, config.links);
     }
   }
 
