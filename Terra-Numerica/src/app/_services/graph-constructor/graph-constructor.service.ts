@@ -15,6 +15,7 @@ export class GraphConstructorService {
     cycle: 'Cycle',
     grid: 'Grille',
     tore: 'Grille Torique',
+    specific: 'Conserver position des noeuds',
     random: 'Autre',
   }
 
