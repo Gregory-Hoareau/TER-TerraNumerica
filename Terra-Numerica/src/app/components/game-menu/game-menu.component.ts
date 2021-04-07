@@ -60,7 +60,7 @@ export class GameMenuComponent implements OnInit {
   public graphParam1: number;
   public graphParam2: number;
   public cops: number = 1;
-  public thiefSpeed: number = 2;
+  public thiefSpeed: number = 1;
 
   constructor(private graphService: GraphService,
     private gameService: GameService,

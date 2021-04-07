@@ -35,6 +35,7 @@ export class GameBoardComponent implements OnInit {
   ngOnInit(): void {
     this.thiefs = []
     this.cops = []
+    console.log('HERE WE ARE', this.gameManager.getThiefSpeed())
     this.activatedRoute.queryParams.subscribe(params => {
       // this.graphType = params['graphType'];
       // this.copsNum = +params['copsNum'];
@@ -132,7 +133,7 @@ export class GameBoardComponent implements OnInit {
 
   async validateTurn() {
     const res = await this.gameManager.validateTurn();
-    if (res.result !== undefined && res.gameTimer !== undefined) {
+    if (res && res.result !== undefined && res.gameTimer !== undefined) {
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
       if (res.result.isConfirmed) {

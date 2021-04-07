@@ -21,6 +21,7 @@ export class GameAction {
             .attr("cy", this.pawn.y = this.startPosition.y)
         this.pawn.state = environment.onTurnState;
         this.pawn.lastSlot = this.prevSlot;
-        this.pawn.possiblePoints = this.pawn.graphService.showPossibleMove(this.prevSlot);
+        const speed = this.pawn.role.includes('thief') ? this.pawn.gameManager.getThiefSpeed() : 1
+        this.pawn.possiblePoints = this.pawn.graphService.showPossibleMove(this.prevSlot, speed);
     }
 }

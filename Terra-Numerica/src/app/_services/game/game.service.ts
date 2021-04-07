@@ -66,6 +66,7 @@ export class GameService {
 
   setThiefSpeed(speed) {
     this.thieftSpeed = speed;
+    this.graphService.setThiefSpeed(speed)
   }
 
   getThiefSpeed() {

@@ -30,7 +30,7 @@ export abstract class Pawns {
      * @param {number} x - X position of the pawn when drawed for the first time on a canvas
      * @param {number} y - Y position of the pawn when drawed for the first time on a canvas
      */
-    constructor(private gameManager: GameService, public graphService: GraphService, x: number, y: number){
+    constructor(public gameManager: GameService, public graphService: GraphService, x: number, y: number){
         this.x = x;
         this.y = y;
         this.firstMove = true;

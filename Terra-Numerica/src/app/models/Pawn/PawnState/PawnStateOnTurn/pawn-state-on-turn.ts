@@ -7,13 +7,15 @@ import { PawnState } from '../pawn-state';
 export class PawnStateOnTurn implements PawnState {
     edges: any = null;
     dragstarted(event: any, d: any) {
+        const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d.lastPosX = event.x
         d.lastPosY = event.y
         d.settedPosition = false;
-        this.edges = d.graphService.showPossibleMove(d.lastSlot)
+        this.edges = d.graphService.showPossibleMove(d.lastSlot, speed)
         d3.select(event.sourceEvent.target).raise().attr("stroke", "black");
     }
     dragged(event: any, d: any) {
+        const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
         if(d.graphService.gameMode == "easy"){
             let edges = this.edges
@@ -31,6 +33,7 @@ export class PawnStateOnTurn implements PawnState {
         }
     }
     dragended(event: any, d: any, gameManager: GameService): PawnState {
+        const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d3.select(event.sourceEvent.target).attr("stroke", null);
         let position = {
             x: d.lastPosX,

@@ -21,6 +21,8 @@ export class GraphService {
 
   private inputFile: File;
 
+  private thiefSpeed: number = 1;
+
   constructor(private randomGraph: RandomGraphService, private router: Router) {
     if (localStorage.getItem("method") !== null) {
       switch(localStorage.getItem("method")) {
@@ -43,6 +45,10 @@ export class GraphService {
     } else {
       this.graph = null;
     }
+  }
+
+  setThiefSpeed(speed: number) {
+    this.thiefSpeed = speed;
   }
 
   drawGraph(svg) {
@@ -301,8 +307,8 @@ export class GraphService {
     this.gameMode = gameMode
   }
 
-  showPossibleMove(vertex) {
-    const edges = this.graph.edges(vertex.__data__)
+  showPossibleMove(vertex, speed) {
+    const edges = this.graph.edges(vertex.__data__, speed);
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
     if(this.gameMode === "easy" || this.gameMode === "medium") {
@@ -315,8 +321,8 @@ export class GraphService {
     return edges;
   }
 
-  showPossibleMoveDragging(vertex, lastPos) {
-    const edges = this.graph.edges(vertex.__data__)
+  showPossibleMoveDragging(vertex, lastPos, speed) {
+    const edges = this.graph.edges(vertex.__data__, speed)
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
     if(this.gameMode === "easy" || this.gameMode === "medium") {
