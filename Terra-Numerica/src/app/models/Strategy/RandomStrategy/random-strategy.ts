@@ -9,8 +9,8 @@ export class RandomStrategy implements IStrategy {
         return this.actual_place;
     }
 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
-        this.actual_place = graph.getRandomAccessibleEdges(this.actual_place);
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed = 1) {
+        this.actual_place = graph.getRandomAccessibleEdges(this.actual_place, speed);
         return this.actual_place;
     }
 }

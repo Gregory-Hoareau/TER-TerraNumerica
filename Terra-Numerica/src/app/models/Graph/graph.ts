@@ -104,8 +104,8 @@ export abstract class Graph {
      * @param n node from where you need to get a random edge
      * @returns a random edge of the input node
      */
-    getRandomAccessibleEdges(n) {
-        const edges = this.edges(n);
+    getRandomAccessibleEdges(n, speed) {
+        const edges = this.edges(n, speed);
         return edges[this.getRandomInt(edges.length)];
     }
 
