@@ -89,6 +89,18 @@
                     </div>
                 </form> <!-- .form-field -->
             </div> <!-- .cops-number-selection -->
+
+            <div class="thief-speed-selection card">
+                <h2 class="subtitle">Choisissez la vitesse du voleur</h2>
+                <form class="form-field">
+                    <div class="form-filed-labels">
+                        <label for="thiefSpeed">Vitesse du voleur :</label>
+                    </div>
+                    <div class="form-field-inputs">
+                        <input disabled type="number" [(ngModel)]="thiefSpeed" (blur)="onBlur($event)" min="1" max="2" id="thiefSpeed" name="thiefSpeed">
+                    </div>
+                </form> <!-- .form-field -->
+            </div> <!-- .thief-speed-selection -->
     
             <div class="difficulty-selection card">
                 <h2 class="subtitle">Choisissez une difficulté</h2>

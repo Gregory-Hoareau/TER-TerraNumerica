@@ -228,14 +228,14 @@ label{
     
             } // .oponent-selection
     
-            .cops-number-selection {
+            .cops-number-selection, .thief-speed-selection {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 padding: 0.5em;
 
-            } // .cops-number-selection
+            } // .cops-number-selection, thief-speed-selection
     
             .difficulty-selection {
                 display: flex;
