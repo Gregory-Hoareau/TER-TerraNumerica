@@ -26,7 +26,7 @@ export class WatchingStrategy implements IStrategy {
         return this.actual_place;
     }
 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
         const edges = graph.edges(this.actual_place);
         edges.push(this.actual_place);
         let vertex;

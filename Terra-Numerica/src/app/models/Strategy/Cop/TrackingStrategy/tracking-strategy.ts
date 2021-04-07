@@ -12,7 +12,7 @@ export class TrackingStrategy implements IStrategy {
         return this.actual_place;
     }
 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
         let closest;
         let distance = graph.nodes.length;
         const edges = graph.edges(this.actual_place);

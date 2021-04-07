@@ -57,7 +57,7 @@ export class GridStrategy implements IStrategy {
         return this.actual_place;
     }
 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
         let nodes = this.graphService.getNodes();
         let closest;
         let grid;

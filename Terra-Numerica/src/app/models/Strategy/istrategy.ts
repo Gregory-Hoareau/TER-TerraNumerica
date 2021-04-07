@@ -8,5 +8,5 @@ export interface IStrategy {
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]): any;
     
     //Return an edge from the graph pass in arguments 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]): any;
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed: number): any;
 }

@@ -41,6 +41,7 @@ export class GameService {
 
   private copsNumber = 0;
   private opponentType = null;
+  private thieftSpeed = 1;
 
   private HUD_TURN_DETAILS: string = '#top-hud-turn-information-details';
 
@@ -61,6 +62,14 @@ export class GameService {
     if (localStorage.getItem("ai") !== null) {
       this.ai_side = localStorage.getItem("ai");
     }
+  }
+
+  setThiefSpeed(speed) {
+    this.thieftSpeed = speed;
+  }
+
+  getThiefSpeed() {
+    return this.thieftSpeed;
   }
 
   setValidateTurnCallback(callback) {

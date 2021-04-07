@@ -154,6 +154,7 @@ export class GameMenuComponent implements OnInit {
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
       this.gameService.setCopsNumber(this.cops);
+      this.gameService.setThiefSpeed(this.thiefSpeed);
       if (this.selectedOpponentType === 'ai') {
         this.gameService.setAiSide(this.selectedAi);
       } else {

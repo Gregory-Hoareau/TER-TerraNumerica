@@ -75,7 +75,7 @@ export abstract class Pawns {
      * @param thiefs 
      */
     move(graph, cops = [], thiefs = []) {
-        const pos = this.strategy.move(graph, cops, thiefs);
+        const pos = this.strategy.move(graph, cops, thiefs, this.gameManager.getThiefSpeed());
         this.updatePosition(pos);
         d3.select('.'+this.role)
             .attr("cx", this.x = pos.x)
