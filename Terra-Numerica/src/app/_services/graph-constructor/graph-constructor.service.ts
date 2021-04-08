@@ -27,6 +27,28 @@ export class GraphConstructorService {
 
   constructor() { }
 
+  enterFilename(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      Swal.fire({
+        title: 'Enregistrer sous...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showCancelButton: true,
+        input: 'text',
+        inputLabel: 'Nom du  fichier',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          resolve(result.value)
+        }
+      })
+    })
+  }
+
   async selectGraphType(): Promise<boolean> {
     const result = await Swal.fire({
       title: 'Type du graphes',
@@ -115,19 +137,23 @@ export class GraphConstructorService {
     }
   }
 
-  private save(type: string, args: number[]): Promise<boolean> {
+  save(type: string = '', args: number[] = []): Promise<boolean> { // Penser à retirer les paramètres inutiles (type et args)
     return new Promise((resolve) => {
-      const graphJson = this.convertGraphToJsonFile(type, args);
-      console.log('JSON GRAPH', graphJson);
-      const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' })
-      //console.log('JSON BLOB', blobGraphFromJson);
-      saveAs(blobGraphFromJson, 'graph.json');
-      resolve(true);
+      this.enterFilename().then((filename) => {
+        if (filename) {
+          const graphJson = this.convertGraphToJsonFile(type, args);
+          //console.log('JSON GRAPH', graphJson);
+          const blobGraphFromJson = new Blob([graphJson], { type: 'application/json' });
+          //console.log('JSON BLOB', blobGraphFromJson);
+          saveAs(blobGraphFromJson, `${filename}.json`);
+          resolve(true);
+        }
+      })
     })
 
   }
 
-  private convertGraphToJsonFile(type: string, args: number[]) {
+  private convertGraphToJsonFile(type: string = '', args: number[] = []) {
     this.nodes.forEach((node, i) => { node['index'] = i });
     const jsonLinks = [];
     this.links.forEach((link) => {
@@ -137,11 +163,11 @@ export class GraphConstructorService {
       })
     })
     let graphJson = {
-      typology: type,
+      typology: 'specific',
       nodes: this.nodes,
       links: jsonLinks,
     }
-    switch (type) {
+    /* switch (type) {
       case 'grid':
       case 'tore':
         graphJson['width'] = args[0];
@@ -151,7 +177,7 @@ export class GraphConstructorService {
         graphJson['arity'] = args[0];
       default:
         break;
-    }
+    } */
     return JSON.stringify(graphJson, null, 2)
   }
 

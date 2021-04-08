@@ -157,20 +157,6 @@ export class GraphConstructorComponent implements OnInit {
     }
   }
 
-  /* zoom(event: WheelEvent) {
-    if (event.deltaY < 0) {
-      if (this.zoom_level < 5) {
-        this.zoom_level++;
-      }
-    } else {
-      if (this.zoom_level > -5) {
-        this.zoom_level--;
-      }
-    }
-    const scale = 1 + (this.zoom_level / 10);
-    this.canvas.nativeElement.children[0].style.transform = `scale(${scale})`;
-  } */
-
   isSelectedTool(tool: string) {
     return this.selected_tool === tool ? `${tool} selected` : `${tool}`;
   }
@@ -188,10 +174,12 @@ export class GraphConstructorComponent implements OnInit {
   }
 
   saveGraph() {
-    this.graphConstructorService.selectGraphType().then(success => {
+    /* this.graphConstructorService.selectGraphType().then(success => {
+      if(success === true) this.resetGraphEdition();
+    }) */
+    this.graphConstructorService.save().then(success => {
       if(success === true) this.resetGraphEdition();
     })
-    
   }
 
   // Drag & Drop Functions
