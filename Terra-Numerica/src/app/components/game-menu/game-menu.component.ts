@@ -5,6 +5,7 @@ import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
 import { StatisticService } from 'src/app/_services/statistic/statistic.service';
 import { TranslateService } from 'src/app/_services/translate/translate.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-game-menu',
@@ -283,6 +284,17 @@ export class GameMenuComponent implements OnInit {
       default:
         return 5;
     }
+  }
+
+  displayRules() {
+    /* Swal.fire('Règles',
+      this.gameService.rules(),
+      'info') */
+      Swal.fire({
+        title: 'Règles',
+        icon: 'info',
+        html: this.gameService.rulesHtml()
+      })
   }
 
 }

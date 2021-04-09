@@ -295,7 +295,18 @@ label{
     }
 }
 
-// TEST
+//Test fixed position
+.fab-bottom-right {
+    position: fixed;
+    bottom: 3em;
+    right: 3em;
+
+    img {
+        width: 4em;
+    }
+}
+
+// TEST Tooltip
 .tooltip {
     position: relative;
     display: inline-block;

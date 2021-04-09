@@ -37,7 +37,8 @@ export class GameService {
   private placingCops = true;
   private winner: string;
   private actionStack: GameActionStack;
-  private alreadyEnconteredPos: boolean = false
+  private alreadyEnconteredPos: boolean = false;
+  private maxTurnCount: number = 25;
 
   private copsNumber = 0;
   private opponentType = null;
@@ -379,7 +380,7 @@ export class GameService {
         allThiefCapture = allThiefCapture || t.isAtSamePostionAs(this.cops[i]);
       }
     }
-    let timerEnd = this.turnCount > 25
+    let timerEnd = this.turnCount > this.maxTurnCount;
     let startWatchingThiefWin = this.turnCount > 10
     if (allThiefCapture) this.winner = 'Les Policiers ont gagné';
     else if (timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
@@ -545,6 +546,18 @@ export class GameService {
       this.watchingPositionListStep2.push(JSON.stringify(this.recordPosition()));
     }
     return this.alreadyEnconteredPos;
+  }
+
+  rules() {
+    return 'Dans ce jeu, deux camps s’affrontent : les gendarmes dont le but est d’attraper le voleur le plus rapidement possible, et le voleur qui doit quant à lui fuir le plus longtemps possible et si possible ne jamais se faire attraper pour gagner.\n'
+      + 'Les gendarmes sont placés en premier sur des sommets du graphe. Une fois tous les pions placés, les gendarmes se déplacent en premier. Les pions ne peuvent se déplacer que sur les sommets adjacents au sommet sur lequel ils se trouvent mais ils peuvent aussi choisir de rester sur le sommet sur lequel ils se trouvent actuellement.\n'
+      + `Les gendarmes gagnent si le voleur est attrapé, c’est-à-dire si un des gendarmes se trouve sur le même sommet que le voleur. Le voleur est considéré comme vainqueur, soit s\'il est parvenu à ne pas se faire attraper par un gendarme pendant ${this.maxTurnCount} tours ou soit si l’intégralité des pions sur le plateau sont amenés à repasser 3 fois dans une position où ils étaient déjà, afin de détecter les cas où le voleur peut échapper aux gendarmes indéfiniment.`
+  }
+
+  rulesHtml() {
+    return '<p>Dans ce jeu, deux camps s’affrontent : les gendarmes dont le but est d’attraper le voleur le plus rapidement possible, et le voleur qui doit quant à lui fuir le plus longtemps possible et si possible ne jamais se faire attraper pour gagner.</p>'
+      + '<p>Les gendarmes sont placés en premier sur des sommets du graphe. Une fois tous les pions placés, les gendarmes se déplacent en premier. Les pions ne peuvent se déplacer que sur les sommets adjacents au sommet sur lequel ils se trouvent mais ils peuvent aussi choisir de rester sur le sommet sur lequel ils se trouvent actuellement.</p>'
+      + `<p>Les gendarmes gagnent si le voleur est attrapé, c’est-à-dire si un des gendarmes se trouve sur le même sommet que le voleur. Le voleur est considéré comme vainqueur, soit s\'il est parvenu à ne pas se faire attraper par un gendarme pendant ${this.maxTurnCount} tours ou soit si l’intégralité des pions sur le plateau sont amenés à repasser 3 fois dans une position où ils étaient déjà, afin de détecter les cas où le voleur peut échapper aux gendarmes indéfiniment.</p>`
   }
 
 }

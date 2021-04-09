@@ -1,7 +1,7 @@
 <div class="game-menu">
 
     <div class="card header">
-        <button routerLink="/admin">Administration</button>
+        <!-- <button routerLink="/admin">Administration</button> -->
         <h1 class="title">Voici le menu de paramétrage du jeu</h1>
         <button routerLink="/graph-constructor">Éditeur de graphe</button>
     </div>
@@ -131,6 +131,11 @@
             </div> <!-- .difficulty-selection -->
         </div> <!-- .col2 -->
     </div> <!-- .game-param -->
+
+    <button class="fab-bottom-right" (click)="displayRules()">
+        <img src="assets/rules.svg" alt="">
+        <p>Règles</p>
+    </button>
 
     <div class="submit-buttons card">
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
