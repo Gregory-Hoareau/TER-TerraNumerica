@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as d3 from 'd3';
+import { Observable } from 'rxjs';
 import { Common } from 'src/app/models/Graph/Common/common';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
@@ -23,7 +25,7 @@ export class GraphService {
 
   private thiefSpeed: number = 1;
 
-  constructor(private randomGraph: RandomGraphService, private router: Router) {
+  constructor(private randomGraph: RandomGraphService, private router: Router, private http: HttpClient) {
     if (localStorage.getItem("method") !== null) {
       switch(localStorage.getItem("method")) {
         case "generate":
@@ -55,7 +57,7 @@ export class GraphService {
     this.graph.draw(svg);
   }
 
-  generateGraph(type: string, args?: any[]) {
+  async generateGraph(type: string, args?: any[]) {
     localStorage.setItem("method", "generate");
     localStorage.setItem("type", type);
     localStorage.setItem("args", JSON.stringify(args));
@@ -79,6 +81,12 @@ export class GraphService {
         break;
       case 'copsAlwaysWin':
         this.graph = this.oneCopsGraph(args[0]);
+        break;
+      case 'petersen':
+        await this.generatePetersen()
+        break;
+      case 'dodecahedron':
+        await this.generateDodecahedron()
         break;
     }
   
@@ -246,6 +254,31 @@ export class GraphService {
     return new Common(nodes, links, 'copsAlwaysWin');
   }
 
+  private async generatePetersen() {
+    const blob = await this.downloadAssets('petersen');
+    const file = new File([blob], 'petersen.json');
+    console.log('FILE',file);
+    await this.loadGraphFromFile(file);
+    console.log('HERE');
+  }
+
+  private async generateDodecahedron() {
+    const blob = await this.downloadAssets('dodecahedron');
+    const file = new File([blob], 'dodecahedron.json');
+    console.log('FILE',file);
+    await this.loadGraphFromFile(file);
+    console.log('HERE');
+  }
+
+  private downloadAssets(name: string): Promise<Blob> {
+    return new Promise((resolve) => {
+      this.http.get(`/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
+        resolve(data)
+      })
+    })
+    
+  }
+
   readAsync(file: File): Promise<Graph> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -264,6 +297,7 @@ export class GraphService {
     this.inputFile = file;
     const config = await this.readAsync(file);
     this.importGraph(config);
+    console.log('THERE');
   }
 
   importGraph(config) {
@@ -282,8 +316,10 @@ export class GraphService {
         break;
       case 'random':
         this.graph = new Common(config.nodes, config.links);
+        break;
       case 'specific':
         this.graph = new Specific(config.nodes, config.links);
+        break;
     }
   }
 

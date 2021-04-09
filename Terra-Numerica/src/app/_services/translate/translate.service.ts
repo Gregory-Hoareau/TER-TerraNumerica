@@ -21,6 +21,10 @@ export class TranslateService {
         return 'Aléatoire';
       case 'tore':
         return 'Grille torique';
+      case 'petersen':
+        return 'Petersen';
+      case 'dodecahedron':
+        return 'Dodécahédron'
       default:
         return '';
     }

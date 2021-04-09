@@ -35,7 +35,7 @@ export class GameBoardComponent implements OnInit {
   ngOnInit(): void {
     this.thiefs = []
     this.cops = []
-    console.log('HERE WE ARE', this.gameManager.getThiefSpeed())
+    console.log('NG ON INIT')
     this.activatedRoute.queryParams.subscribe(params => {
       // this.graphType = params['graphType'];
       // this.copsNum = +params['copsNum'];

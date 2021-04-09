@@ -20,7 +20,7 @@ export class GameMenuComponent implements OnInit {
 
   public selectedGraphType = 'grid';
   public selectedOpponentType = 'player';
-  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin'] //, 'random'];
+  public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'petersen', 'dodecahedron'] //, 'random'];
   public availableOpponentType = ['ai', 'player'];
   public paramsBoundaries = {
     grid: {
@@ -44,6 +44,14 @@ export class GameMenuComponent implements OnInit {
       param2: -1
     },
     random: {
+      param1: -1,
+      param2: -1
+    },
+    petersen: {
+      param1: -1,
+      param2: -1
+    },
+    dodecahedron: {
       param1: -1,
       param2: -1
     }
@@ -118,6 +126,7 @@ export class GameMenuComponent implements OnInit {
         this.paramsNames = []
         break;
       default:
+        this.paramsNames = []
         break;
     }
   }
@@ -126,14 +135,16 @@ export class GameMenuComponent implements OnInit {
     this.selectedOpponentType = opponent;
   }
 
-  validateParams() {
+  async validateParams() {
     if (this.paramSafetyCheck()) {
+
       if (this.graphGeneration) {
-        this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
+        await this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
       }
       // else if (this.graphImportation) {
       //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
       // }
+      
       switch (this.gameModeSelected) {
         case "easy":
           break;
@@ -290,11 +301,11 @@ export class GameMenuComponent implements OnInit {
     /* Swal.fire('Règles',
       this.gameService.rules(),
       'info') */
-      Swal.fire({
-        title: 'Règles',
-        icon: 'info',
-        html: this.gameService.rulesHtml()
-      })
+    Swal.fire({
+      title: 'Règles',
+      icon: 'info',
+      html: this.gameService.rulesHtml()
+    })
   }
 
 }
