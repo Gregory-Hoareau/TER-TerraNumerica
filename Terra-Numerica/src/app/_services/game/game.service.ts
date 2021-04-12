@@ -560,4 +560,11 @@ export class GameService {
       + `<p>Les gendarmes gagnent si le voleur est attrapé, c’est-à-dire si un des gendarmes se trouve sur le même sommet que le voleur. Le voleur est considéré comme vainqueur, soit s\'il est parvenu à ne pas se faire attraper par un gendarme pendant ${this.maxTurnCount} tours ou soit si l’intégralité des pions sur le plateau sont amenés à repasser 3 fois dans une position où ils étaient déjà, afin de détecter les cas où le voleur peut échapper aux gendarmes indéfiniment.</p>`
   }
 
+  colorInfo() {
+    return '<p><i class="fas fa-circle" style="color:red;"></i> Représente les sommets contrôler par les policiers. Visible en appuyant sur le bouton "zone de danger".</p>'
+      + '<p><i class="fas fa-circle" style="color:blue;"></i> Représente le sommet de départ de pions lors de son mouvement.</p>'
+      + '<p><i class="fas fa-circle" style="color:orange;"></i> Représente les sommets qui seront contrôle par un pions après sont mouvement.</p>'
+      + '<p><i class="fas fa-circle" style="color:#05B800;"></i> Représente les sommets accessible par les pions pour ce tour.</p>'
+  }
+
 }

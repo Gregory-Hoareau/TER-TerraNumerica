@@ -1,13 +1,13 @@
-import { IfStmt, templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as d3 from 'd3';
-import { thresholdFreedmanDiaconis } from 'd3';
+//import { thresholdFreedmanDiaconis } from 'd3';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-game-board',
@@ -162,6 +162,14 @@ export class GameBoardComponent implements OnInit {
       .text(() => 'Chargement du plateau de jeu ...');
     this.svg.remove();
     this.ngOnInit();
+  }
+
+  displayInfo() {
+    Swal.fire({
+      title: 'Infos',
+      icon: 'info',
+      html: this.gameManager.colorInfo()
+    })
   }
 
 }

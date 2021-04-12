@@ -350,7 +350,7 @@ export class GraphService {
     if(this.gameMode === "easy" || this.gameMode === "medium") {
       d3.selectAll(".circle").filter(function(d: any) {
         return edges.includes(d);
-      }).style("fill", "red");
+      }).style("fill", "#05B800");
       vertex.style.fill = "blue"
     }
 
@@ -365,7 +365,7 @@ export class GraphService {
       d3.selectAll(".circle").filter(function(d: any) {
         return edges.includes(d);
       }).style("fill", "orange");
-      vertex.style.fill = "red"
+      vertex.style.fill = "#05B800"
       lastPos.style.fill = "blue"
 
     }
