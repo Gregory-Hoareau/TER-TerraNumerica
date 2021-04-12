@@ -15,7 +15,7 @@
                     <div class="graph-generation-topology-selection">
                         <div class="graph-topology-preview-list">
                             <div class="graph-topology-preview-list-item card" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)">
-                                <img id="{{type}}" class="graph-topology-preview-list-item-img" src="assets/{{type}}.svg">
+                                <img id="{{type}}" class="graph-topology-preview-list-item-img" src="assets/menu/graph-img/{{type}}.svg">
                                 <label for="{{type}}">{{translator.graphTypeName(type)}}</label>
                             </div>
                         </div> <!-- .graph-topology-preview-list -->
@@ -52,7 +52,7 @@
                 <h2 class="subtitle">Choisissez votre adversaire</h2>
                 <div class="player-option">
                     <div class="player-option-item card" *ngFor="let type of availableOpponentType" [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
-                        <img id="{{type}}" class="vs" src="assets/vs_{{type}}.svg"/>
+                        <img id="{{type}}" class="vs" src="assets/menu/opponent-type/vs_{{type}}.svg"/>
                         <label for="{{type}}">{{translator.opponentTypeName(type)}}</label>
                     </div>
                 </div> <!-- .player-option -->
@@ -62,12 +62,12 @@
                     <div class="side-selection">
                         <div class="side-selection-list">
                             <div class="side-selection-list-item" for="cops" (click)="setSelectedAi('cops')" [class]="isSelectedCopsAi()">
-                                <img class="side-selection-list-item-img-preview" for="cops" src="assets/thief.svg"/>
+                                <img class="side-selection-list-item-img-preview" for="cops" src="assets/menu/opponent-type/thief.svg"/>
                                 <label for="cops">Voleur</label>
                                 <input [(ngModel)]="selectedAi" type="radio" id="cops" name="ai-side" value="cops">
                             </div>
                             <div class="side-selection-list-item" for="thief" (click)="setSelectedAi('thief')" [class]="isSelectedThiefAi()">
-                                <img class="side-selection-list-item-img-preview" for="thief" src="assets/police.svg"/>
+                                <img class="side-selection-list-item-img-preview" for="thief" src="assets/menu/opponent-type/police.svg"/>
                                 <label for="thief">Policier</label>
                                 <input [(ngModel)]="selectedAi" type="radio" id="thief" name="ai-side" value="thief">
                             </div>
@@ -133,7 +133,7 @@
     </div> <!-- .game-param -->
 
     <button class="fab-bottom-right" (click)="displayRules()">
-        <img src="assets/rules.svg" alt="">
+        <img src="assets/menu/rules.svg" alt="">
         <p>Règles</p>
     </button>
 

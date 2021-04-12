@@ -55,7 +55,7 @@ export class GameDashboardComponent implements OnInit {
             card.remove()
           })
             .append("img")
-            .attr("src", "assets/close.svg")
+            .attr("src", "assets/dashboard/close.svg")
             .style("width", "100%")
 
     const chart = card.append("div")
