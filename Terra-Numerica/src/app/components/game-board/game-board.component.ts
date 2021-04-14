@@ -26,6 +26,8 @@ export class GameBoardComponent implements OnInit {
   private cops: Cops[];
   public gameMode;
 
+  private isAdventure;
+
   constructor(private graphService: GraphService,
     public gameManager: GameService,
     private activatedRoute: ActivatedRoute) {
@@ -35,12 +37,15 @@ export class GameBoardComponent implements OnInit {
   ngOnInit(): void {
     this.thiefs = []
     this.cops = []
-    console.log('NG ON INIT')
     this.activatedRoute.queryParams.subscribe(params => {
       // this.graphType = params['graphType'];
       // this.copsNum = +params['copsNum'];
       this.gameMode = params['gameMode'];
       // this.graphParams = this.convertAsNumberArr(params['graphParams']);
+      if(params['adventure']) {
+        // console.log('HELLO', params['adventure']);
+        this.isAdventure = params['adventure']
+      }
     })
 
     this.width = document.getElementById('visualizer').offsetWidth;
