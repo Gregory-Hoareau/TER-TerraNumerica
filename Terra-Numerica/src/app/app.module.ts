@@ -20,6 +20,8 @@ import { AdminGraphComponent } from './components/admin/admin-graph/admin-graph.
 import { GraphFileValidatorService } from './_services/graph-file-validator/graph-file-validator.service';
 import { GraphConstructorComponent } from './components/graph-constructor/graph-constructor.component';
 import { TooltipComponent } from './components/tooltip/tooltip.component';
+import { CopsAndRobberGameModeSelectionComponent } from './components/cops-and-robber-game-mode-selection/cops-and-robber-game-mode-selection.component';
+import { AdventureMenuComponent } from './components/adventure-menu/adventure-menu.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { TooltipComponent } from './components/tooltip/tooltip.component';
     AdminBoardComponent,
     AdminGraphComponent,
     GraphConstructorComponent,
-    TooltipComponent
+    TooltipComponent,
+    CopsAndRobberGameModeSelectionComponent,
+    AdventureMenuComponent
   ],
   imports: [
     BrowserModule,
