@@ -181,6 +181,7 @@ export class GameService {
   updateCopsPosition(cop, pos) {
     let index = this.cops.findIndex(c => c == cop);
     this.cops_position[index] = pos;
+    this.graphService.updateCopsPositions(this.cops_position)
   }
 
   private allThiefsPlayed() {

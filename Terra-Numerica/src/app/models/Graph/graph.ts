@@ -60,7 +60,7 @@ export abstract class Graph {
      * @param {any} node - from where you need to computes edges
      * @returns {SimulationNodeDatum[]} list of edges of the node param
      */
-    edges(node, speed = 1): SimulationNodeDatum[] {
+    edges(node, speed = 1, exclude= []): SimulationNodeDatum[] {
         const edges = [];
         for(const l of this.links) {
             if(l.source.index === node.index) {
@@ -74,24 +74,29 @@ export abstract class Graph {
             }
         }
         if(speed > 1) {
-            return this.globalEdges(edges, --speed)
+            return this.globalEdges(edges, --speed, exclude)
         }
         return edges;
     }
 
-    private globalEdges(edges, speed) {
+    private globalEdges(edges, speed, exclude = []) {
         let result: any[] = edges;
         let new_edges = [...edges];
         while(speed !== 0) {
+            console.log('EXCLUDING EDGES', exclude)
             console.log('NEW EDGES', new_edges)
             const tmp = [];
             for(const e of new_edges) {
-                this.edges(e).forEach(n => { 
-                    if(!result.find(el => el.index === n.index)) {
-                        result.push(n);
-                        tmp.push(n)
-                    } 
-                })
+                //console.log('THERE', exclude.includes(e))
+                if(!exclude.includes(e)) {
+                    this.edges(e).forEach(n => {
+                        /* console.log('FIND', exclude.some(el => el.index === n.index)) */
+                        if(!result.find(el => el.index === n.index) && !exclude.some(el => el.index === n.index)) {
+                            result.push(n);
+                            tmp.push(n)
+                        } 
+                    })
+                }
             }
             new_edges = tmp;
             speed--;

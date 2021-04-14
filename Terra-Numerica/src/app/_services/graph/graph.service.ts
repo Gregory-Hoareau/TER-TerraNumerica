@@ -25,6 +25,8 @@ export class GraphService {
 
   private thiefSpeed: number = 1;
 
+  private cops_position_slot = [];
+
   constructor(private randomGraph: RandomGraphService, private router: Router, private http: HttpClient) {
     if (localStorage.getItem("method") !== null) {
       switch(localStorage.getItem("method")) {
@@ -47,6 +49,10 @@ export class GraphService {
     } else {
       this.graph = null;
     }
+  }
+
+  updateCopsPositions(positions) {
+    this.cops_position_slot = positions;
   }
 
   setThiefSpeed(speed: number) {
@@ -344,7 +350,7 @@ export class GraphService {
   }
 
   showPossibleMove(vertex, speed) {
-    const edges = this.graph.edges(vertex.__data__, speed);
+    const edges = this.graph.edges(vertex.__data__, speed, this.cops_position_slot);
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
     if(this.gameMode === "easy" || this.gameMode === "medium") {
@@ -358,7 +364,7 @@ export class GraphService {
   }
 
   showPossibleMoveDragging(vertex, lastPos, speed) {
-    const edges = this.graph.edges(vertex.__data__, speed)
+    const edges = this.graph.edges(vertex.__data__, speed, this.cops_position_slot)
     edges.push(vertex.__data__)
     d3.selectAll(".circle").style("fill", '#69b3a2');
     if(this.gameMode === "easy" || this.gameMode === "medium") {
