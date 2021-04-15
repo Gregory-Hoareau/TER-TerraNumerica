@@ -33,11 +33,10 @@ export class AdventureService {
 
   private async configureAdventureNextLevel(adventure: Adventure): Promise<NavigationExtras> {
     const level = this.currentAdventure.getCurrentLevel();
-    console.log('LEVEL',level)
+    /* console.log('LEVEL',level) */
     await this.graphService.generateGraph(level.getGraphType(), level.getGraphParams())
     this.gameService.setOpponentType('ai');
     this.gameService.setCopsNumber(level.getCopsNumber());
-    console.log('HERE WE ARE', this.gameService.getCopsNumber())
     this.gameService.setThiefSpeed(level.getThiefSpeed());
     this.gameService.setAiSide(level.getAiSide());
     this.currentAdventure.goToNextLevel();

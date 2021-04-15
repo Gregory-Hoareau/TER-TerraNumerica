@@ -35,7 +35,6 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('BOARD ON INIT')
     this.thiefs = []
     this.cops = []
     this.activatedRoute.queryParams.subscribe(params => {
@@ -124,10 +123,6 @@ export class GameBoardComponent implements OnInit {
       .attr("id", "main-message")
       .text(() => "Veuillez placer vos pions") */
   }
-
-  // showPossibleMoves(event){
-  //   return this.graphService.showPossibleMove(event);
-  // }
 
   getTurnCount() {
     return this.gameManager.getTurnCount();
