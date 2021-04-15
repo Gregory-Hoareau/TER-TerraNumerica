@@ -35,6 +35,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('BOARD ON INIT')
     this.thiefs = []
     this.cops = []
     this.activatedRoute.queryParams.subscribe(params => {
@@ -43,8 +44,8 @@ export class GameBoardComponent implements OnInit {
       this.gameMode = params['gameMode'];
       // this.graphParams = this.convertAsNumberArr(params['graphParams']);
       if(params['adventure']) {
-        // console.log('HELLO', params['adventure']);
-        this.isAdventure = params['adventure']
+        this.isAdventure = params['adventure'];
+        this.gameManager.setIsAdventure(params['adventure']);
       }
     })
 
@@ -161,12 +162,13 @@ export class GameBoardComponent implements OnInit {
   }
 
   replay() {
-    this.gameManager.replay();
-    d3.select('#top-hud-turn-information-details')
-      .style('color', 'black')
-      .text(() => 'Chargement du plateau de jeu ...');
-    this.svg.remove();
-    this.ngOnInit();
+    this.gameManager.replay().then(success => {
+      d3.select('#top-hud-turn-information-details')
+        .style('color', 'black')
+        .text(() => 'Chargement du plateau de jeu ...');
+      this.svg.remove();
+      this.ngOnInit();
+    });
   }
 
   displayInfo() {

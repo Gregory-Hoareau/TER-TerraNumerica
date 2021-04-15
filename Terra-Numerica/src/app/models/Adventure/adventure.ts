@@ -13,6 +13,7 @@ export class Adventure {
     getCurrentLevel(): AdventureLevel { return this.levels[this.level_index]; }
 
     goToNextLevel(): void {
+        console.log('INDEX LEVEL', this.level_index)
         if(this.level_index + 1 < this.levels.length) this.level_index++;
         else {
             this.level_index = 0;

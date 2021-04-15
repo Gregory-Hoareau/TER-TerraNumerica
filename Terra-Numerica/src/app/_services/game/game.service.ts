@@ -18,6 +18,7 @@ import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/w
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 import { StatisticService } from '../statistic/statistic.service';
+import { AdventureService } from '../Adventure/adventure.service';
 
 
 @Injectable({
@@ -40,6 +41,8 @@ export class GameService {
   private alreadyEnconteredPos: boolean = false;
   private maxTurnCount: number = 25;
 
+  private isAdventure: boolean = false;
+
   private copsNumber = 0;
   private opponentType = null;
   private thieftSpeed = 1;
@@ -54,6 +57,7 @@ export class GameService {
   private ai_cops_strat: () => IStrategy;
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
   private validateTurnCallback: () => void;
+  private endLevelCallback: () => void;
 
   constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
@@ -63,6 +67,14 @@ export class GameService {
     if (localStorage.getItem("ai") !== null) {
       this.ai_side = localStorage.getItem("ai");
     }
+  }
+
+  setEndLevelCallback(callback) {
+    this.endLevelCallback = callback;
+  }
+
+  setIsAdventure(adventure) {
+    this.isAdventure = adventure;
   }
 
   setThiefSpeed(speed) {
@@ -420,17 +432,31 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     if (this.checkEnd()) {
-      let endTime: any = Date.now();
-      this.gameTimer = endTime - this.gameTimer;
-      const result = await Swal.fire({
-        title: this.winner,
-        text: 'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
-        icon: 'success',
-        confirmButtonText: 'Rejouer',
-        showCancelButton: true,
-        cancelButtonText: 'Retour au Menu'
-      })
-      return { result: result, gameTimer: this.gameTimer };
+      if(!this.isAdventure) { // if it's a free game
+        let endTime: any = Date.now();
+        this.gameTimer = endTime - this.gameTimer;
+        const result = await Swal.fire({
+          title: this.winner,
+          text: 'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
+          icon: 'success',
+          confirmButtonText: 'Rejouer',
+          showCancelButton: true,
+          cancelButtonText: 'Retour au Menu'
+        })
+        return { result: result, gameTimer: this.gameTimer };
+      } else { // if it's an adventure
+        console.log('It is the end of a level of the adventure');
+        //this.adventureService.launchNextLevel();
+        //this.endLevelCallback();
+        const result = await Swal.fire({
+          title: 'Fin du niveau',
+          icon: 'success',
+          text: 'TEXTE DE FIN DE NIVEAU',
+          confirmButtonText: 'Passer au niveau suivant',
+        })
+        console.log(result);
+        return { result: result, gameTimer: this.gameTimer };
+      }
     } else {
       this.update()
     }
@@ -466,7 +492,7 @@ export class GameService {
     this.router.navigate(['/menu']);
   }
 
-  replay() {
+  async replay() {
     this.watchingPositionList = []
     this.watchingPositionListStep2 = []
     this.alreadyEnconteredPos = false
@@ -477,13 +503,19 @@ export class GameService {
     this.placingCops = true;
     this.actionStack = new GameActionStack()
     //window.location.reload();
-
-    const extras: NavigationExtras = {
-      queryParams: {
-        gameMode: this.gameMode
+    
+    if(this.isAdventure) {
+      this.endLevelCallback();
+      return true
+    } else {
+      const extras: NavigationExtras = {
+        queryParams: {
+          gameMode: this.gameMode
+        }
       }
+      this.router.navigate(['/board'], extras)
+      return true;
     }
-    this.router.navigate(['/board'], extras)
   }
 
   reset() {
