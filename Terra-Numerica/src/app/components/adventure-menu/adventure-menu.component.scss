@@ -4,9 +4,29 @@
     flex-direction: column;
 
     .title {
+        padding: 0.5em;
         width: 100%;
         font-weight: bold;
         font-size: xx-large;
+    }
+
+    .adventure-selector {
+        padding: 1em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+
+        .adventure {
+            width: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    }
+
+    .buttons {
+        padding: 1em;
     }
 
 }

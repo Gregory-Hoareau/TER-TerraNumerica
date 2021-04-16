@@ -13,13 +13,22 @@ import { GraphService } from 'src/app/_services/graph/graph.service';
 })
 export class AdventureMenuComponent implements OnInit {
 
-  private adventures = this.adventureService.getAvailableAdventures();
-  private selected_adventure: Adventure = this.adventures[0];
+  public adventures = this.adventureService.getAvailableAdventures();
+  private selected_adventure: Adventure = null;
 
   constructor(private router: Router,
     private adventureService: AdventureService) { }
 
   ngOnInit(): void {
+    this.selected_adventure = this.adventures[0]
+  }
+
+  selectAdventure(adventure) {
+    this.selected_adventure = adventure;
+  }
+
+  isSelected(adventure) {
+    return this.selected_adventure === adventure ? 'selected' : ''
   }
 
   launchAdventure() {

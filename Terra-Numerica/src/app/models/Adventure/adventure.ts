@@ -14,14 +14,14 @@ export class Adventure {
 
     goToNextLevel(): void {
         console.log('INDEX LEVEL', this.level_index)
-        if(this.level_index + 1 < this.levels.length) this.level_index++;
+        if(this.level_index < this.levels.length) this.level_index++;
         else {
-            this.level_index = 0;
             this.displayEndMessage()
         }
     }
 
     private displayEndMessage() {
-        console.log('THIS IS THE END OF THE ADVENTURE');
+        alert('THIS IS THE END OF THE ADVENTURE');
+        this.level_index = 0;
     }
 }

@@ -258,14 +258,14 @@ export class GameService {
           for (const c of this.cops) {
             c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
-          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
+          this.validateTurnCallback(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
         // check if this is thief turn and if AI is thief
         else if (this.ai_side === 'thief' && this.thiefTurn) {
           for (const t of this.thiefs) {
             t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
-          this.validateTurn(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
+          this.validateTurnCallback(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
       } // End Check if there is an AI
 
@@ -412,6 +412,7 @@ export class GameService {
   }
 
   async validateTurn() {
+    console.log('IS CALLED GameManager#validateTurn')
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();

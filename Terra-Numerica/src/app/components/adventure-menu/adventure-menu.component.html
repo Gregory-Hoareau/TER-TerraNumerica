@@ -3,8 +3,13 @@
     <div class="title card">
         Menu d'aventure
     </div>
-    <div class="card">
-        Explications d'aventure
-        <button (click)="launchAdventure()">LAUNCH ADVENTURE</button>
+    <div class="adventure-selector card">
+        <!-- Explications d'aventure -->
+        <div *ngFor="let adventure of adventures; let i = index" class="adventure card" [class]="isSelected(adventure)" (click)="selectAdventure(adventure)">
+            Aventure {{i+1}}
+        </div>
+    </div>
+    <div class="buttons card">
+        <button (click)="launchAdventure()">Démarrer l'aventure</button>
     </div>
 </div>
