@@ -57,7 +57,7 @@ export class GameService {
   private ai_cops_strat: () => IStrategy;
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
   private validateTurnCallback: () => void;
-  private endLevelCallback: () => void;
+  private endLevelCallback: () => Promise<void>;
 
   constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
@@ -505,7 +505,7 @@ export class GameService {
     //window.location.reload();
     
     if(this.isAdventure) {
-      this.endLevelCallback();
+      await this.endLevelCallback();
       return true
     } else {
       const extras: NavigationExtras = {

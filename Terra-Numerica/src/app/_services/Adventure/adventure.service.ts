@@ -25,16 +25,17 @@ export class AdventureService {
     this.launchNextLevel();
   }
 
-  launchNextLevel() {
-    this.configureAdventureNextLevel(this.currentAdventure).then(extras => {
-      this.router.navigate(['/board'], extras);
-    })
+  async launchNextLevel() {
+    const extras = await this.configureAdventureNextLevel(this.currentAdventure)
+    this.router.navigate(['/board'], extras);
+    return;
   }
 
   private async configureAdventureNextLevel(adventure: Adventure): Promise<NavigationExtras> {
     const level = this.currentAdventure.getCurrentLevel();
-    /* console.log('LEVEL',level) */
+    console.log('LEVEL',level)
     await this.graphService.generateGraph(level.getGraphType(), level.getGraphParams())
+    console.log('HEY HO')
     this.gameService.setOpponentType('ai');
     this.gameService.setCopsNumber(level.getCopsNumber());
     this.gameService.setThiefSpeed(level.getThiefSpeed());
