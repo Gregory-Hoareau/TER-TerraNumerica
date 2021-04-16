@@ -34,8 +34,9 @@ export class RunawayStrategy implements IStrategy {
                 })
             }
         }
-        const res = distant_edges[Math.floor(Math.random() * Math.floor(distant_edges.length))]
-        return res;
+        const res = distant_edges[Math.floor(Math.random() * Math.floor(distant_edges.length))];
+        this.actual_place = res;
+        return this.actual_place;
     }
 
     move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
