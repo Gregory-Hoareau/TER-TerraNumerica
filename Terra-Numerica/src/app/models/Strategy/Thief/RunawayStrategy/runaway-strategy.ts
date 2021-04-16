@@ -34,8 +34,7 @@ export class RunawayStrategy implements IStrategy {
                 })
             }
         }
-        const res = distant_edges[Math.floor(Math.random() * Math.floor(distant_edges.length))];
-        this.actual_place = res;
+        this.actual_place = distant_edges[Math.floor(Math.random() * Math.floor(distant_edges.length))];
         return this.actual_place;
     }
 
