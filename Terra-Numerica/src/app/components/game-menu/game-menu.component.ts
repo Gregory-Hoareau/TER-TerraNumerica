@@ -19,7 +19,7 @@ export class GameMenuComponent implements OnInit {
   @ViewChild('copsNumberInput', { static: true }) copsNumberInputRef: ElementRef;
 
   public selectedGraphType = 'grid';
-  public selectedOpponentType = 'player';
+  public selectedOpponentType = 'ai';
   public availableGraphType = ['grid', 'tore', 'cycle', 'tree', 'copsAlwaysWin', 'petersen', 'dodecahedron'] //, 'random'];
   public availableOpponentType = ['ai', 'player'];
   public paramsBoundaries = {

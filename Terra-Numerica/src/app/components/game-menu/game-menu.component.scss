@@ -164,24 +164,30 @@ label{
                 .player-option {
                     display: flex;
                     justify-content: center;
+                    flex-direction: column;
 
-                    .player-option-item {
+                    .player-option-list {
                         display: flex;
-                        flex: 1;
-                        flex-direction: column;
-                        align-items: center;
+                        justify-content: center;
 
-                        label{
-                            padding: 0 1em 1em 1em;
-                        }
-    
-                        img {
-                            min-width: 100px;
-                            min-height: 100px;
-                            width: 15%;
-                            height: auto;
-                            margin: 1em 1em 0 1em;
-                            padding: 0.5em;
+                        .player-option-item {
+                            display: flex;
+                            flex: 1;
+                            flex-direction: column;
+                            align-items: center;
+
+                            label{
+                                padding: 0 1em 1em 1em;
+                            }
+        
+                            img {
+                                min-width: 100px;
+                                min-height: 100px;
+                                width: 15%;
+                                height: auto;
+                                margin: 1em 1em 0 1em;
+                                padding: 0.5em;
+                            }
                         }
                     }
     
@@ -290,8 +296,18 @@ label{
 } // .game-menu
 
 @media (max-width: 480px) { // Règle d'affichage pour les écran de téléphone
-    .graph-importation {
+    .graph-importation, .player-option, .editor-graph-btn {
         display: none !important;
+    }
+
+    .fab-bottom-right {
+        top: 5em;
+        bottom: unset !important;
+        padding: 0.5em;
+
+        img {
+            display: none !important;
+        }
     }
 }
 

@@ -2,8 +2,8 @@
 
     <div class="card header">
         <!-- <button routerLink="/admin">Administration</button> -->
-        <h1 class="title">Voici le menu de paramétrage du jeu</h1>
-        <button routerLink="/graph-constructor">Éditeur de graphe</button>
+        <h1 class="title">Les gendarmes et le voleur</h1>
+        <button class="editor-graph-btn" routerLink="/graph-constructor">Éditeur de graphe</button>
     </div>
     
     <div class="game-param">
@@ -49,11 +49,13 @@
 
         <div class="col2">
             <div class="oponent-selection card">
-                <h2 class="subtitle">Choisissez votre adversaire</h2>
                 <div class="player-option">
-                    <div class="player-option-item card" *ngFor="let type of availableOpponentType" [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
-                        <img id="{{type}}" class="vs" src="assets/menu/opponent-type/vs_{{type}}.svg"/>
-                        <label for="{{type}}">{{translator.opponentTypeName(type)}}</label>
+                    <h2 class="subtitle">Choisissez votre adversaire</h2>
+                    <div class="player-option-list">
+                        <div class="player-option-item card" *ngFor="let type of availableOpponentType" [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
+                            <img id="{{type}}" class="vs" src="assets/menu/opponent-type/vs_{{type}}.svg"/>
+                            <label for="{{type}}">{{translator.opponentTypeName(type)}}</label>
+                        </div>
                     </div>
                 </div> <!-- .player-option -->
 
