@@ -222,11 +222,58 @@ export class GraphService {
     return new Common(randomGraph.nodes, randomGraph.links)
   }
 
+  private neighbors(index, links = []) {
+    const result = [];
+    for(let i = 0; i < links.length; i++) {
+      if(links[i].source === index) {
+        result.push(links[i].target);
+      } else if (links[i].target === index) {
+        result.push(links[i].source);
+      }
+    }
+    return result;
+  }
+
+  private subset(set = []) {
+    const tmp_set = [...set]
+    const subset = [];
+    const size = this.randomInRange(1, tmp_set.length);
+    for(let i = 0; i < size; i++) {
+      const index = this.randomInRange(0, tmp_set.length);
+      const element = tmp_set.splice(index, 1)[0];
+      subset.push(element);
+    }
+    return subset;
+  }
+
+  // Generate a random number between "start" (include) and "end" (exclude)
+  private randomInRange(start, end) {
+    return Math.floor(Math.random() * (end - start) + start);
+  }
+
   private oneCopsGraph(n): Common {
     let nodes = this.generatesNodes(n)
     let links = [];
 
-    let idNode1 = Math.floor(Math.random() * Math.floor(n))
+    for(let i=n-2; i>=0; i--) {
+      let index = this.randomInRange(i, n);
+      while(index === i) { // Check if random selected node is not the current node
+        index = this.randomInRange(i, n);
+      }
+      const neighbors = this.neighbors(index, links);
+      const neighbors_subset = this.subset(neighbors);
+      console.log('SUBSET', neighbors_subset)
+      for(const neighbor of neighbors_subset) {
+        console.log('---NEIGHBOR', neighbor)
+        if(neighbor !== i) {
+          links.push({source: i, target: neighbor})
+        }
+      }
+      links.push({source: i, target: index});
+    }
+    console.log('LINKS', links)
+
+    /* let idNode1 = Math.floor(Math.random() * Math.floor(n))
     let node1 = nodes[idNode1];
 
     //Construct a line graph
@@ -256,7 +303,7 @@ export class GraphService {
         idNode1 = Math.floor(Math.random() * Math.floor(n))
         node1 = nodes[idNode1];
       }
-    }
+    } */
     return new Common(nodes, links, 'copsAlwaysWin');
   }
 
@@ -278,7 +325,8 @@ export class GraphService {
 
   private downloadAssets(name: string): Promise<Blob> {
     return new Promise((resolve) => {
-      this.http.get(`/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
+      this.http.get(`http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
+        console.log(data)
         resolve(data)
       })
     })
