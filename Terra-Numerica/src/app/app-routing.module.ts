@@ -8,7 +8,7 @@ import { GameMenuComponent } from './components/game-menu/game-menu.component';
 import { GraphConstructorComponent } from './components/graph-constructor/graph-constructor.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: '/menu'},
+  {path: '', pathMatch: 'full', redirectTo: '/game-mode-selection'},
   {path: 'game-mode-selection', component: CopsAndRobberGameModeSelectionComponent},
   {path: 'board', component: GameBoardComponent},
   {path: 'menu', component: GameMenuComponent},

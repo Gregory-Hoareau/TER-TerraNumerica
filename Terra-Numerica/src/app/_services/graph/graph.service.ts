@@ -428,7 +428,7 @@ export class GraphService {
   }
 
   showCopsPossibleMoves(cops, show) {
-    console.log('COPS', cops)
+    /* console.log('COPS', cops) */
     const edges = this.graph.edges(cops)
     edges.push(cops)
     if(this.gameMode === "easy" || this.gameMode === "medium") {

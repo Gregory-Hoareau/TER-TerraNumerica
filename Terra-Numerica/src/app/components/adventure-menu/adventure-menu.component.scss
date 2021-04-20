@@ -3,11 +3,23 @@
     display: flex;
     flex-direction: column;
 
-    .title {
+    .header {
         padding: 0.5em;
-        width: 100%;
-        font-weight: bold;
-        font-size: xx-large;
+        
+        .title {
+            font-weight: bold;
+            font-size: xx-large;
+            position: relative;
+            margin-left: 35%;
+        }
+
+        button {
+            padding: 1em;
+
+            img {
+                width: 2em;
+            }
+        }
     }
 
     .adventure-selector {
