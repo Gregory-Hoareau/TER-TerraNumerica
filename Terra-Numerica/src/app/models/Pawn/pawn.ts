@@ -63,6 +63,7 @@ export abstract class Pawns {
         d3.select('.'+this.role)
             .attr("cx", this.x = pos.x)
             .attr("cy", this.y = pos.y);
+        this.lastSlot = pos;
         this.settedPosition = true;
         this.firstMove = false;
         this.state = environment.waitingTurnState;

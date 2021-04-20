@@ -310,23 +310,23 @@ export class GraphService {
   private async generatePetersen() {
     const blob = await this.downloadAssets('petersen');
     const file = new File([blob], 'petersen.json');
-    console.log('FILE',file);
+    /* console.log('FILE',file); */
     await this.loadGraphFromFile(file);
-    console.log('HERE');
+    /* console.log('HERE'); */
   }
 
   private async generateDodecahedron() {
     const blob = await this.downloadAssets('dodecahedron');
     const file = new File([blob], 'dodecahedron.json');
-    console.log('FILE',file);
+    /* console.log('FILE',file); */
     await this.loadGraphFromFile(file);
-    console.log('HERE');
+    /* console.log('HERE'); */
   }
 
   private downloadAssets(name: string): Promise<Blob> {
     return new Promise((resolve) => {
       this.http.get(`http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
-        console.log(data)
+        /* console.log(data) */
         resolve(data)
       })
     })
@@ -341,7 +341,7 @@ export class GraphService {
         resolve(config);
       };
       reader.onerror = () => {
-          reject (new Error ('Unable to read..'));
+        reject (new Error ('Unable to read..'));
       };
       reader.readAsText(file);
     });
@@ -351,7 +351,7 @@ export class GraphService {
     this.inputFile = file;
     const config = await this.readAsync(file);
     this.importGraph(config);
-    console.log('THERE');
+    /* console.log('THERE'); */
   }
 
   importGraph(config) {
@@ -428,8 +428,9 @@ export class GraphService {
   }
 
   showCopsPossibleMoves(cops, show) {
-    const edges = this.graph.edges(cops.__data__)
-    edges.push(cops.__data__)
+    console.log('COPS', cops)
+    const edges = this.graph.edges(cops)
+    edges.push(cops)
     if(this.gameMode === "easy" || this.gameMode === "medium") {
       if(show){
         d3.selectAll(".circle").filter(function(d: any) {

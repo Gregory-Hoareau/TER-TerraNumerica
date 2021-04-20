@@ -133,10 +133,11 @@ export class GameBoardComponent implements OnInit {
   }
 
   async validateTurn() {
+    this.warningZone = false;
     const res = await this.gameManager.validateTurn();
-    console.log('RES IS HERE', res)
+    /* console.log('RES IS HERE', res) */
     if (res && res.result !== undefined && res.gameTimer !== undefined) {
-      console.log('HERE WE ARE')
+      /* console.log('HERE WE ARE') */
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
       if (res.result.isConfirmed) {

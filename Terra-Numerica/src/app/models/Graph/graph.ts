@@ -83,8 +83,8 @@ export abstract class Graph {
         let result: any[] = edges;
         let new_edges = [...edges];
         while(speed !== 0) {
-            console.log('EXCLUDING EDGES', exclude)
-            console.log('NEW EDGES', new_edges)
+            /* console.log('EXCLUDING EDGES', exclude)
+            console.log('NEW EDGES', new_edges) */
             const tmp = [];
             for(const e of new_edges) {
                 //console.log('THERE', exclude.includes(e))
