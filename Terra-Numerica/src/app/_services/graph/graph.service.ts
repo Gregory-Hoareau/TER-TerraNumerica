@@ -325,7 +325,7 @@ export class GraphService {
 
   private downloadAssets(name: string): Promise<Blob> {
     return new Promise((resolve) => {
-      this.http.get(`http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
+      this.http.get(`/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
         /* console.log(data) */
         resolve(data)
       })

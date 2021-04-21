@@ -160,12 +160,14 @@ export class GameBoardComponent implements OnInit {
   }
 
   replay() {
-    this.gameManager.replay().then(success => {
+    this.gameManager.replay().then(finished => {
       d3.select('#top-hud-turn-information-details')
         .style('color', 'black')
         .text(() => 'Chargement du plateau de jeu ...');
       this.svg.remove();
-      this.ngOnInit();
+      if(!finished) {
+        this.ngOnInit();
+      }
     });
   }
 

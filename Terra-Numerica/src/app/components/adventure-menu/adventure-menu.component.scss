@@ -39,6 +39,13 @@
 
     .buttons {
         padding: 1em;
+        display: flex;
+        justify-content: center;
+
+        .start-btn {
+            padding: 1em;
+            width:100%
+        }
     }
 
 }

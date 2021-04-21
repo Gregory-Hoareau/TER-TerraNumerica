@@ -14,7 +14,7 @@ import { GraphService } from 'src/app/_services/graph/graph.service';
 export class AdventureMenuComponent implements OnInit {
 
   public adventures = this.adventureService.getAvailableAdventures();
-  private selected_adventure: Adventure = null;
+  public selected_adventure: Adventure = null;
 
   constructor(private router: Router,
     private adventureService: AdventureService) { }

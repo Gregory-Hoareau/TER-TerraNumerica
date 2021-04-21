@@ -412,7 +412,7 @@ export class GameService {
   }
 
   async validateTurn() {
-    console.log('IS CALLED GameManager#validateTurn')
+    /* console.log('IS CALLED GameManager#validateTurn') */
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
@@ -446,16 +446,14 @@ export class GameService {
         })
         return { result: result, gameTimer: this.gameTimer };
       } else { // if it's an adventure
-        console.log('It is the end of a level of the adventure');
-        //this.adventureService.launchNextLevel();
-        //this.endLevelCallback();
+        /* console.log('It is the end of a level of the adventure'); */
         const result = await Swal.fire({
           title: 'Fin du niveau',
           icon: 'success',
           text: 'TEXTE DE FIN DE NIVEAU',
           confirmButtonText: 'Passer au niveau suivant',
         })
-        console.log(result);
+        /* console.log(result); */
         return { result: result, gameTimer: this.gameTimer };
       }
     } else {
@@ -506,8 +504,7 @@ export class GameService {
     //window.location.reload();
     
     if(this.isAdventure) {
-      await this.endLevelCallback();
-      return true
+      return await this.endLevelCallback();
     } else {
       const extras: NavigationExtras = {
         queryParams: {
@@ -515,7 +512,7 @@ export class GameService {
         }
       }
       this.router.navigate(['/board'], extras)
-      return true;
+      return false;
     }
   }
 

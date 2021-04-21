@@ -27,25 +27,32 @@ export class AdventureService {
 
   async launchNextLevel() {
     const extras = await this.configureAdventureNextLevel(this.currentAdventure)
-    this.router.navigate(['/board'], extras);
-    return;
+    this.currentAdventure.goToNextLevel();
+    if(extras) {
+      this.router.navigate(['/board'], extras);
+      return false;
+    } else {
+      this.router.navigate(['/adventure-menu']);
+      return true;
+    }
   }
 
   private async configureAdventureNextLevel(adventure: Adventure): Promise<NavigationExtras> {
     const level = this.currentAdventure.getCurrentLevel();
-    /* console.log('LEVEL',level); */
-    await this.graphService.generateGraph(level.getGraphType(), level.getGraphParams());
-    this.gameService.setOpponentType('ai');
-    this.gameService.setCopsNumber(level.getCopsNumber());
-    this.gameService.setThiefSpeed(level.getThiefSpeed());
-    this.gameService.setAiSide(level.getAiSide());
-    this.currentAdventure.goToNextLevel();
-    const extras: NavigationExtras = {
-      queryParams: {
-        gameMode: level.getDifficulty(),
-        adventure: true
+    let extras: NavigationExtras = undefined;
+    if(level !== undefined) {
+      await this.graphService.generateGraph(level.getGraphType(), level.getGraphParams());
+      this.gameService.setOpponentType('ai');
+      this.gameService.setCopsNumber(level.getCopsNumber());
+      this.gameService.setThiefSpeed(level.getThiefSpeed());
+      this.gameService.setAiSide(level.getAiSide());
+      extras = {
+        queryParams: {
+          gameMode: level.getDifficulty(),
+          adventure: true
+        }
       }
+      return extras;
     }
-    return extras;
   }
 }
