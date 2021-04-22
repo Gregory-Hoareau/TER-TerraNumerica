@@ -488,7 +488,11 @@ export class GameService {
 
   goBackToMenu() {
     this.reset();
-    this.router.navigate(['/menu']);
+    if(this.isAdventure) {
+      this.router.navigate(['/adventure-menu'])
+    } else {
+      this.router.navigate(['/menu']);
+    }
   }
 
   async replay() {
