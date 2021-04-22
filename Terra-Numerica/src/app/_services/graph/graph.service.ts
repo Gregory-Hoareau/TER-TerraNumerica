@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as d3 from 'd3';
-import { Observable } from 'rxjs';
 import { Common } from 'src/app/models/Graph/Common/common';
 import { Cycle } from 'src/app/models/Graph/Cycle/cycle';
 import { Graph } from 'src/app/models/Graph/graph';
@@ -262,16 +261,13 @@ export class GraphService {
       }
       const neighbors = this.neighbors(index, links);
       const neighbors_subset = this.subset(neighbors);
-      console.log('SUBSET', neighbors_subset)
       for(const neighbor of neighbors_subset) {
-        console.log('---NEIGHBOR', neighbor)
         if(neighbor !== i) {
           links.push({source: i, target: neighbor})
         }
       }
       links.push({source: i, target: index});
     }
-    console.log('LINKS', links)
 
     /* let idNode1 = Math.floor(Math.random() * Math.floor(n))
     let node1 = nodes[idNode1];
@@ -325,7 +321,7 @@ export class GraphService {
 
   private downloadAssets(name: string): Promise<Blob> {
     return new Promise((resolve) => {
-      this.http.get(`/assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
+      this.http.get(`assets/${name}.json`, {responseType: 'blob'}).subscribe(data => {
         /* console.log(data) */
         resolve(data)
       })
