@@ -7,6 +7,11 @@
     </div>
 
     <div class="tools card">
+        <button >
+            <img src="assets/board/home.svg" alt="Retour au menu">
+            <p>Retour au menu</p>
+        </button>
+
         <!-- Tools space -->
         <div *ngFor="let tool of tools" class="card" [class]="isSelectedTool(tool)" (click)="selectTool(tool)">
             <img src="assets/graphConstructor/{{tool}}.svg" alt="">
