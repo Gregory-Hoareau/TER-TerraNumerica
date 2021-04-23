@@ -183,4 +183,8 @@ export class GameBoardComponent implements OnInit {
     })
   }
 
+  gameHasStarted() {
+    return this.gameManager.gameHasStarted();
+  }
+
 }

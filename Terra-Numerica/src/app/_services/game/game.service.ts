@@ -69,6 +69,10 @@ export class GameService {
     }
   }
 
+  gameHasStarted() {
+    return !this.placingPawns;
+  }
+
   setEndLevelCallback(callback) {
     this.endLevelCallback = callback;
   }
@@ -223,14 +227,9 @@ export class GameService {
           }
         }
         //Check if AI is cops
-        //console.log('AI SIDE', this.ai_side)
-        //console.log('TURN TO PLACE COPS', this.placingCops)
         if (this.ai_side === 'cops' && this.placingCops) {
-          //console.log('HERE')
           for (const c of this.cops) {
-            //console.log('CHECK IF COPS ARE PLACED')
             if (c.isWaitingPlacement()) {
-              //console.log('FOUND A COPS WAITING TO BE PLACED')
               c.place(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
             }
           }
@@ -372,10 +371,11 @@ export class GameService {
   }
 
   private startGame() {
+    console.log('IS CALLED GameManager#startGame')
     this.thiefTurn = false;
     this.gameTimer = Date.now();
     this.setPlayersState(this.cops, environment.onTurnState);
-    this.turnCount++;
+    //this.turnCount++;
     this.update();
   }
 
@@ -416,11 +416,12 @@ export class GameService {
   }
 
   async validateTurn() {
-    /* console.log('IS CALLED GameManager#validateTurn') */
+    console.log('IS CALLED GameManager#validateTurn')
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
     if (this.thiefTurn) {
+      console.log('Here')
       this.turnChanged = true;
       this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
