@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameService } from 'src/app/_services/game/game.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cops-and-robber-game-mode-selection',
@@ -8,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class CopsAndRobberGameModeSelectionComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private gameService: GameService) { }
 
   ngOnInit(): void {
   }
@@ -19,5 +21,13 @@ export class CopsAndRobberGameModeSelectionComponent implements OnInit {
 
   configureAdventure() {
     this.router.navigate(['/adventure-menu'])
+  }
+
+  displayRules() {
+    Swal.fire({
+      title: 'Règles',
+      icon: 'info',
+      html: this.gameService.rulesHtml()
+    })
   }
 }
