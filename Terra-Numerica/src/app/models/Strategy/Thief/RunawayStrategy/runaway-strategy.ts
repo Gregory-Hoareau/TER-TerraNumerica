@@ -19,14 +19,21 @@ export class RunawayStrategy implements IStrategy {
             toCheck = []
             for(const edge of tmp) {
                 let distance = 0;
+                let tooClose = false;
                 for(const position of cops_position_slot) {
-                    distance += graph.distance(edge, position)
+                    const d = graph.distance(edge, position);
+                    distance += d;
+                    if(d <= 1) {
+                        tooClose = true;
+                    }
                 }
-                if(distance > max_dist) {
-                    max_dist = distance;
-                    distant_edges = [edge]
-                } else if(distance === max_dist) {
-                    distant_edges.push(edge)
+                if(!tooClose) { 
+                    if(distance > max_dist) {
+                        max_dist = distance;
+                        distant_edges = [edge]
+                    } else if(distance === max_dist) {
+                        distant_edges.push(edge)
+                    }
                 }
                 marked.push(edge)
                 graph.edges(edge).forEach(e => {
@@ -45,12 +52,16 @@ export class RunawayStrategy implements IStrategy {
         edges.push(this.actual_place);
         for(const e of edges) {
             let globalDist = 0;
+            let tooClose = false;
             for(const c of cops_position_slot) {
                 const d = graph.distance(e, c);
-                globalDist += d !== -1 ? d : 0;
+                globalDist += d;
+                if (d <= 1) {
+                    tooClose = true;
+                }
             }
 
-            if(!farthest || globalDist > dist) {
+            if(!tooClose && (!farthest || globalDist > dist)) {
                 farthest = e;
                 dist = globalDist;
             }
