@@ -39,7 +39,7 @@ export class GameService {
   private winner: string;
   private actionStack: GameActionStack;
   private alreadyEnconteredPos: boolean = false;
-  private maxTurnCount: number = 25;
+  private maxTurnCount: number = 16;
 
   private isAdventure: boolean = false;
 
@@ -405,6 +405,10 @@ export class GameService {
 
   getTurnCount() {
     return this.turnCount;
+  }
+
+  getRemainingTurnCount() {
+    return this.maxTurnCount - this.turnCount;
   }
 
   setGameMode(gameMode) {

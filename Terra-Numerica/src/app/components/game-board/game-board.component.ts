@@ -128,6 +128,10 @@ export class GameBoardComponent implements OnInit {
     return this.gameManager.getTurnCount();
   }
 
+  getRemainingTurnCount() {
+    return this.gameManager.getRemainingTurnCount();
+  }
+
   isGameActionEmpty() {
     return this.gameManager.isGameActionEmpty();
   }
