@@ -6,6 +6,7 @@
             <img src="assets/arrow.svg" alt="">
         </button>
         <h1 class="title">Les gendarmes et le voleur</h1>
+        <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
     </div>
     
     <div class="game-param">
@@ -141,8 +142,8 @@
         <p>Règles</p>
     </button>
 
-    <div class="submit-buttons card">
+    <!-- <div class="submit-buttons card">
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
-    </div>
+    </div> -->
     
 </div>
