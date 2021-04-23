@@ -39,4 +39,8 @@ export class Adventure {
     getName() {
         return this.name;
     }
+
+    reset() {
+        this.level_index = 0;
+    }
 }

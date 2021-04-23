@@ -21,7 +21,8 @@ export class AdventureService {
 
   launchAdventure(adventure: Adventure) {
     this.currentAdventure = adventure;
-    this.gameService.setEndLevelCallback(this.launchNextLevel.bind(this))
+    this.currentAdventure.reset();
+    this.gameService.setEndLevelCallback(this.launchNextLevel.bind(this));
     this.launchNextLevel();
   }
 
