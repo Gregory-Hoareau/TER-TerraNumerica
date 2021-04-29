@@ -1,18 +1,25 @@
-<div class="game-mode-selection">
-    <div class="game-mode card" (click)="configureFreeGame()">
-        <img src="assets/mode-selection/free-game.svg">
-        Mode libre
+<div class="selection">
+    <div class="card header">
+        <img src="assets/logo-TN.png" alt="Logo Terra Numerica" height="5em">
+        <h1>Les gendarmes et le voleur</h1>
     </div>
-    <div class="game-mode card" (click)="configureAdventure()">
-        <img src="assets/mode-selection/adventure.svg">
-        Aventure (Bêta)
-    </div>
-    <div class="game-mode card" routerLink="/graph-constructor">
-        <img src="assets/mode-selection/editor.svg">
-        Éditeur de graphe
-    </div>
-    <div class="game-mode card" (click)="displayRules()">
-        <img src="assets/menu/rules.svg">
-        Voir les règles
+
+    <div class="game-mode-selection">
+        <div class="game-mode card" (click)="configureFreeGame()">
+            <img src="assets/mode-selection/free-game.svg">
+            Mode libre
+        </div>
+        <div class="game-mode card" (click)="configureAdventure()">
+            <img src="assets/mode-selection/adventure.svg">
+            Aventure (Bêta)
+        </div>
+        <div class="game-mode card" routerLink="/graph-constructor">
+            <img src="assets/mode-selection/editor.svg">
+            Éditeur de graphe
+        </div>
+        <div class="game-mode card" (click)="displayRules()">
+            <img src="assets/menu/rules.svg">
+            Voir les règles
+        </div>
     </div>
 </div>
