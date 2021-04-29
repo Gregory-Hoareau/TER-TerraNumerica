@@ -19,6 +19,8 @@ import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-stra
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 import { StatisticService } from '../statistic/statistic.service';
 import { AdventureService } from '../Adventure/adventure.service';
+import { Grid } from 'src/app/models/Graph/Grid/grid';
+import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
 
 
 @Injectable({
@@ -438,7 +440,7 @@ export class GameService {
         .text(() => 'C\'est au tour des policiers.');
     }
     if (this.checkEnd()) {
-      if(!this.isAdventure) { // if it's a free game
+      if (!this.isAdventure) { // if it's a free game
         let endTime: any = Date.now();
         this.gameTimer = endTime - this.gameTimer;
         const result = await Swal.fire({
@@ -493,7 +495,7 @@ export class GameService {
 
   goBackToMenu() {
     this.reset();
-    if(this.isAdventure) {
+    if (this.isAdventure) {
       this.router.navigate(['/adventure-menu'])
     } else {
       this.router.navigate(['/menu']);
@@ -511,8 +513,8 @@ export class GameService {
     this.placingCops = true;
     this.actionStack = new GameActionStack()
     //window.location.reload();
-    
-    if(this.isAdventure) {
+
+    if (this.isAdventure) {
       return await this.endLevelCallback();
     } else {
       const extras: NavigationExtras = {
@@ -586,6 +588,26 @@ export class GameService {
       this.watchingPositionListStep2.push(JSON.stringify(this.recordPosition()));
     }
     return this.alreadyEnconteredPos;
+  }
+
+  getMaxTurnCount() {
+    let graph = this.graphService.getGraph();
+    switch (graph.typology) {
+      case 'grid':
+        const grid: Grid = graph as Grid;
+        return 2 * Math.max(grid.width, grid.height);
+      case 'tore':
+        const tore = graph as Tore;
+        return 2 * Math.max(tore.width, tore.height);
+      case 'cycle':
+        return this.cops.length > 1 ? graph.nodes.length : 6;
+      default:
+        return graph.nodes.length;
+    }
+  }
+
+  calculateMaxTurnCount() {
+    this.maxTurnCount = this.getMaxTurnCount();
   }
 
   rules() {
