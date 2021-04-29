@@ -37,11 +37,15 @@ export class Specific extends Graph {
     }
 
     simulate(svg) {
-        d3.forceSimulation(this.nodes)
+        this.simulation = d3.forceSimulation(this.nodes)
             /* .force("link", d3.forceLink()
                 .links(this.links)
             ) */
             .on("end", this.ticked.bind(this));
+    }
+
+    stop() {
+        
     }
 
     ticked() {

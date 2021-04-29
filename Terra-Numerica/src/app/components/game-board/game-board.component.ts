@@ -27,6 +27,7 @@ export class GameBoardComponent implements OnInit {
   public gameMode;
 
   private isAdventure;
+  private movingNodes = false;
 
   constructor(private graphService: GraphService,
     public gameManager: GameService,
@@ -59,12 +60,20 @@ export class GameBoardComponent implements OnInit {
     this.init();
     const board = document.getElementById('visualizer')
     board.style.visibility = 'hidden'
+    
     setTimeout(() => {
       d3.select('#top-hud-turn-information-details')
         .text(() => 'Les policiers doivent se placer.')
       board.style.visibility = 'visible'
+      this.graphService.stop();
       this.gameManager.update();
     }, 2000)
+  }
+
+  moveNodeMode() {
+    this.movingNodes = !this.movingNodes;
+    this.graphService.movingPermission(this.movingNodes)
+    console.log('HERE', this.movingNodes)
   }
 
   drawGraph() {
@@ -185,6 +194,10 @@ export class GameBoardComponent implements OnInit {
 
   gameHasStarted() {
     return this.gameManager.gameHasStarted();
+  }
+
+  getMovingNodeClass() {
+    return this.movingNodes ? 'moving' : ''
   }
 
 }

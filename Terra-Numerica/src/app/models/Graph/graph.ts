@@ -1,4 +1,5 @@
 import { SimulationNodeDatum } from 'd3';
+import * as d3 from 'd3';
 
 export abstract class Graph {
     private _typology: string;
@@ -6,11 +7,18 @@ export abstract class Graph {
     private _links;
     private _svgNodes;
     private _svgLinks;
+    protected simulation;
+    protected movingCircleOriginalPosition;
+    protected allowedToMove = false;
 
     constructor(nodes, links, typology: string) {
         this._nodes = [...nodes];
         this._links = [...links];   
         this._typology = typology;
+    }
+
+    setAllowedToMove(allowedToMove: boolean) {
+        this.allowedToMove = allowedToMove
     }
 
     /* ---------- GRAPH DRAWING ---------- */
@@ -33,9 +41,87 @@ export abstract class Graph {
                 .attr("r", 20)
                 .attr("class", "circle")
                 .style("fill", "#69b3a2")
+                .call(
+                    d3.drag()
+                    .on('start', (event: DragEvent) => {
+                        console.log('OTHER')
+                        this.dragstarted(event)
+                    })
+                    .on('drag', (event: DragEvent) => {
+                        this.dragged(event)
+                    })
+                    .on('end', (event: DragEvent) => {
+                        this.dragended(event)
+                    })
+                )
         
         this.simulate(svg);
 
+    }
+
+    // Drag & Drop Functions
+    dragstarted(event) {
+      if(this.allowedToMove) {
+        /* console.log('EVENT', event) */
+        this.movingCircleOriginalPosition = {
+          x: event.sourceEvent.target.cx.baseVal.value,
+          y: event.sourceEvent.target.cy.baseVal.value
+        }
+        /* console.log('HERE WE ARE', this.movingCircleOriginalPosition) */
+        d3.select(event.sourceEvent.target).attr('stroke', 'black');
+      }
+    }
+
+    dragged(event) {
+      if(this.allowedToMove) {
+        const circle = event.sourceEvent.target
+        d3.select(circle).raise().attr("cx", event.x).attr("cy", event.y);
+      }
+    }
+
+    dragended(event) {
+        if(this.allowedToMove) {
+            const circle = d3.select(event.sourceEvent.target)
+            circle.attr('stroke', null);
+            /* const endPositon = {
+                x: +circle.attr('cx'),
+                y: +circle.attr('cy')
+            } */
+            this.moveNode(this.movingCircleOriginalPosition, {x: +circle.attr('cx'), y: +circle.attr('cy')})
+        }
+    }
+
+    moveNode(movingCircle, endPosition) {
+        const nodeIndex = this.nodes.findIndex(node => this.checkApproximativeCirclePosition(node, movingCircle))
+    
+        this.links.forEach((link) => {
+            if (link.source.index === nodeIndex) {
+                const lines = d3.selectAll('line').nodes();
+                for(const l of lines) {
+                    const tmp = d3.select(l);
+                    if(tmp.attr('x1') == link.source.x && tmp.attr('y1') == link.source.y) {
+                        tmp.attr('x1', endPosition.x).attr('y1', endPosition.y)
+                        break;
+                    }
+                }
+            } else if (link.target.index === nodeIndex) {
+                const lines = d3.selectAll('line').nodes();
+                for(const l of lines) {
+                    const tmp = d3.select(l);
+                    if(tmp.attr('x2') == link.target.x && tmp.attr('y2') == link.target.y) {
+                        tmp.attr('x2', endPosition.x).attr('y2', endPosition.y)
+                        break;
+                    }
+                }
+            }
+        })
+        this.nodes[nodeIndex].x = endPosition.x
+        this.nodes[nodeIndex].y = endPosition.y
+    }
+
+    private checkApproximativeCirclePosition(originalPosition, newPosition) {
+        return (originalPosition.x -1 < newPosition.x && newPosition.x < originalPosition.x + 1) 
+                && (originalPosition.y -1 < newPosition.y && newPosition.y < originalPosition.y + 1)
     }
 
     /**
@@ -43,6 +129,8 @@ export abstract class Graph {
      * @param svg d3 selection of an html svg
      */
     abstract simulate(svg: any): void;
+
+    abstract stop();
 
     /**
      * Function needed by the force simulation of D3.js library

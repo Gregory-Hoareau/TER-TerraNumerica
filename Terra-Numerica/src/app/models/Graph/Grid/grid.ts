@@ -123,11 +123,15 @@ export class Grid extends Graph {
      * @param svg d3 selection of an html svg
      */
     simulate(svg: any) {
-        d3.forceSimulation(this.nodes)
+        this.simulation = d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink()
                 .links(this.links)
             )
             .on("tick", this.ticked.bind(this));
+    }
+
+    stop() {
+
     }
     
     /**

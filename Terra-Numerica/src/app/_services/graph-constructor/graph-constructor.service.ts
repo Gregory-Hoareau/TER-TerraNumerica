@@ -204,8 +204,8 @@ export class GraphConstructorService {
   }
 
   private moveNode(movingCircle, endPosition) {
-    console.log('MOVING CIRCLE', movingCircle);
-    console.log('TO', endPosition);
+    /* console.log('MOVING CIRCLE', movingCircle);
+    console.log('TO', endPosition); */
     const nodeIndex = this.nodes.findIndex(node => node.x === movingCircle.x && node.y === movingCircle.y)
     this.nodes[nodeIndex].x = endPosition.x
     this.nodes[nodeIndex].y = endPosition.y

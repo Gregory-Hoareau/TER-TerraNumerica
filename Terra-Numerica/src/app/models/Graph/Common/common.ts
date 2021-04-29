@@ -15,7 +15,7 @@ export class Common extends Graph {
     simulate(svg: any) {
         const width = parseInt(svg.style("width"), 10);
         const height = parseInt(svg.style("height"), 10);
-        d3.forceSimulation(this.nodes)
+        this.simulation = d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink()
                 .links(this.links)
                 .distance(() => 30 / this.links.length)
@@ -23,6 +23,10 @@ export class Common extends Graph {
             .force("center", d3.forceCenter(width / 2, height / 2))
             .force("charge", d3.forceManyBody().strength(-500))
             .on("tick", this.ticked.bind(this));
+    }
+
+    stop() {
+        this.simulation.stop();
     }
 
     /**

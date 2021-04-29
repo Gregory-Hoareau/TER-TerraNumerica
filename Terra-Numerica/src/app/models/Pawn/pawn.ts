@@ -62,7 +62,8 @@ export abstract class Pawns {
         this.updatePosition(pos);
         d3.select('.'+this.role)
             .attr("cx", this.x = pos.x)
-            .attr("cy", this.y = pos.y);
+            .attr("cy", this.y = pos.y)
+            .raise();
         this.lastSlot = pos;
         this.settedPosition = true;
         this.firstMove = false;
@@ -81,7 +82,8 @@ export abstract class Pawns {
         this.updatePosition(pos);
         d3.select('.'+this.role)
             .attr("cx", this.x = pos.x)
-            .attr("cy", this.y = pos.y);
+            .attr("cy", this.y = pos.y)
+            .raise();
         this.lastSlot = pos;
         this.settedPosition = true;
         this.firstMove = false;

@@ -83,6 +83,10 @@
 
 } // #bottom-hud
 
+.moving {
+    color: rgb(40, 165, 40);
+}
+
 @media (max-width: 480px) { // Règle d'affichage pour les écran de téléphone
     #top-hud-menu-button {
         display: none !important;
