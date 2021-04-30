@@ -77,6 +77,15 @@ export abstract class Pawns {
      * @param thiefs 
      */
     move(graph, cops = [], thiefs = []) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                this.moveCallback(graph, cops, thiefs)
+                resolve(true);
+            }, 2000)
+        })
+    }
+
+    protected moveCallback(graph, cops, thiefs) {
         const speed = this.role.includes('thief') ? this.gameManager.getThiefSpeed() : 1;
         const pos = this.strategy.move(graph, cops, thiefs, speed);
         this.updatePosition(pos);

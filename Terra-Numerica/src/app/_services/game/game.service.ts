@@ -223,7 +223,7 @@ export class GameService {
     return allPlayed;
   }
 
-  update() {
+  async update() {
     if (this.placingPawns) {
       //Check if there is AI
       if (this.ai_side) {
@@ -261,15 +261,21 @@ export class GameService {
       if (this.ai_side) {
         // Check if this is cops turn and if AI is cops
         if (this.ai_side === 'cops' && !this.thiefTurn) {
+          d3.selectAll(this.HUD_TURN_DETAILS)
+            .style('color', 'black')
+            .text(() => this.cops.length > 1 ? 'Les policiers réfléchissent à leurs déplacements...' : 'Le policier réfléchit à sont déplacement...')
           for (const c of this.cops) {
-            c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+            await c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
           this.validateTurnCallback(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
         // check if this is thief turn and if AI is thief
         else if (this.ai_side === 'thief' && this.thiefTurn) {
+          d3.selectAll(this.HUD_TURN_DETAILS)
+            .style('color', 'black')
+            .text(() => 'Le voleur réfléchit à son déplacement...')
           for (const t of this.thiefs) {
-            t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+            await t.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
           }
           this.validateTurnCallback(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }

@@ -393,7 +393,7 @@ export class GraphService {
     d3.selectAll(".circle").style("fill", '#69b3a2');
     if(this.gameMode === "easy" || this.gameMode === "medium") {
       d3.selectAll(".circle").filter(function(d: any) {
-        return edges.includes(d);
+        return edges.some(n => n.index === d.index);
       }).style("fill", "orange");
       vertex.style.fill = "#05B800"
       lastPos.style.fill = "blue"
@@ -411,12 +411,12 @@ export class GraphService {
       if(show){
         d3.selectAll(".circle").filter(function(d: any) {
           return edges.some(n => n.index === d.index);
-        }).style("fill", "red").raise();
+        }).style("fill", "red");
       }else{
         d3.selectAll(".circle").filter(function(d: any) {
           return edges.some(n => n.index === d.index);
         }).style("fill", '#69b3a2');
-        this.pawnsToForeground();
+        /* this.pawnsToForeground(); */
       }
     }
 
