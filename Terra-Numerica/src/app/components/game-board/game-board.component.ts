@@ -86,7 +86,8 @@ export class GameBoardComponent implements OnInit {
   }
 
   init() {
-    this.gameManager.setValidateTurnCallback(this.validateTurn.bind(this))
+    this.gameManager.setValidateTurnCallback(this.validateTurn.bind(this));
+    this.gameManager.setDisplayWarningZone(this.seeWarningZone.bind(this));
     for (let i = 0; i < this.gameManager.getCopsNumber(); i++) {
       this.cops.push(new Cops(this.gameManager, this.graphService, 50, 300, i));
     }
@@ -170,6 +171,7 @@ export class GameBoardComponent implements OnInit {
   seeWarningZone() {
     this.warningZone = !this.warningZone;
     this.cops.forEach(c => {
+      console.log(c.lastSlot)
       this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
     });
   }
@@ -200,6 +202,10 @@ export class GameBoardComponent implements OnInit {
 
   getMovingNodeClass() {
     return this.movingNodes ? 'moving' : ''
+  }
+
+  setWarningZone(boolean: boolean) {
+    this.warningZone = boolean;
   }
 
 }

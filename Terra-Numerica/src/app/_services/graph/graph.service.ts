@@ -410,15 +410,21 @@ export class GraphService {
     if(this.gameMode === "easy" || this.gameMode === "medium") {
       if(show){
         d3.selectAll(".circle").filter(function(d: any) {
-          return edges.includes(d);
-        }).style("fill", "red");
+          return edges.some(n => n.index === d.index);
+        }).style("fill", "red").raise();
       }else{
         d3.selectAll(".circle").filter(function(d: any) {
-          return edges.includes(d);
+          return edges.some(n => n.index === d.index);
         }).style("fill", '#69b3a2');
+        this.pawnsToForeground();
       }
     }
 
     return edges;
   }
+
+  pawnsToForeground() {
+    d3.selectAll('.pawns').raise();
+  }
+
 }

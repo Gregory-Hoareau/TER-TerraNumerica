@@ -7,6 +7,7 @@ import { PawnState } from '../pawn-state';
 export class PawnStateOnTurn implements PawnState {
     edges: any = null;
     dragstarted(event: any, d: any) {
+        d.gameManager.displayWarningZone(false);
         const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d.lastPosX = event.x
         d.lastPosY = event.y

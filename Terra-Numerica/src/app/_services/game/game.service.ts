@@ -60,6 +60,7 @@ export class GameService {
   private ai_side = 'cops'; // undefined if no ai, 'cops' if cops are play by ai, 'thief' if thief is play by ai
   private validateTurnCallback: () => void;
   private endLevelCallback: () => Promise<void>;
+  displayWarningZone: (value: boolean) => void;
 
   constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
     this.actionStack = new GameActionStack();
@@ -77,6 +78,10 @@ export class GameService {
 
   setEndLevelCallback(callback) {
     this.endLevelCallback = callback;
+  }
+
+  setDisplayWarningZone(callback) {
+    this.displayWarningZone = callback;
   }
 
   setIsAdventure(adventure) {
@@ -373,7 +378,6 @@ export class GameService {
   }
 
   private startGame() {
-    console.log('IS CALLED GameManager#startGame')
     this.thiefTurn = false;
     this.gameTimer = Date.now();
     this.setPlayersState(this.cops, environment.onTurnState);
@@ -418,12 +422,10 @@ export class GameService {
   }
 
   async validateTurn() {
-    console.log('IS CALLED GameManager#validateTurn')
     d3.selectAll(".circle").style("fill", '#69b3a2');
     this.thiefTurn = !this.thiefTurn;
     this.clearActions();
     if (this.thiefTurn) {
-      console.log('Here')
       this.turnChanged = true;
       this.turnCount++;
       this.setPlayersState(this.cops, environment.waitingTurnState);
