@@ -96,7 +96,7 @@ label{
                     display: flex;
                     flex-direction: column;
                     padding: 0.5em;
-                    opacity: 0.5;
+                    /* opacity: 0.5; */
     
                     .graph-generation-topology-selection {
     
@@ -104,6 +104,15 @@ label{
                             display: flex;
                             flex-wrap: wrap;
                             justify-content: center;
+
+                            .item-import {
+                                /* margin-top: 1em; */
+                                /* align-self: center; */
+                            }
+                            
+                            .item-import-label {
+                                margin-top: 2em;
+                            }
 
                             .graph-topology-preview-list-item {
                                 display: flex;
@@ -147,7 +156,7 @@ label{
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    opacity: 0.5;
+                    /* opacity: 0.5; */
                     padding: 1em 0;
                 }
     

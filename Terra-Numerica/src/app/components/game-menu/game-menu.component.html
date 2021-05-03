@@ -8,45 +8,68 @@
         <h1 class="title">Configuration du Jeu libre</h1>
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
     </div>
-    
+
     <div class="game-param">
 
         <div class="col1">
             <div class="graph-selection">
-                <div class="graph-generation card" (click)="selectGraphGeneration()" [class]="isSeletectedGraphGeneration()">
+                <div class="graph-generation card" (click)="selectGraphGeneration()"
+                    >
                     <h2 class="subtitle">Générer un plateau de jeu</h2>
                     <div class="graph-generation-topology-selection">
                         <div class="graph-topology-preview-list">
-                            <div class="graph-topology-preview-list-item card" *ngFor='let type of availableGraphType' (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)">
-                                <img id="{{type}}" class="graph-topology-preview-list-item-img" src="assets/menu/graph-img/{{type}}.svg">
+                            <div class="graph-topology-preview-list-item card" *ngFor='let type of availableGraphType'
+                                (click)="selectGraphType(type)" [class]="isSelectedGraphType(type)">
+                                <img id="{{type}}" class="graph-topology-preview-list-item-img"
+                                    src="assets/menu/graph-img/{{type}}.svg">
                                 <label for="{{type}}">{{translator.graphTypeName(type)}}</label>
                             </div>
+
+                            <div class="graph-typology-preview-list-item graph-importation card" [class]="isSelectedGraphType('import')">
+                                <div class="item-import">
+                                    <input (click)="selectGraphType('import')" id="graph-file-input" name="graph-file-input" class="input-file" type="file"
+                                        accept="application/json" (change)="onFileChange($event.target.files[0])">
+                                    <label id="label-import-file" for="graph-file-input" class="file-label">
+                                        <span *ngIf="!selectedFileName">Choissisez un fichier...</span>
+                                        <span *ngIf="selectedFileName"> {{selectedFileName}} </span>
+                                    </label>
+                                </div>
+                                <label class="item-import-label">Importer un graphe</label>
+                            </div>
+
                         </div> <!-- .graph-topology-preview-list -->
                     </div> <!-- .graph-generation-topology-selection -->
-                    
+
                     <div *ngIf="paramsNames.length > 0" class="graph-generation-parameters">
                         <h2 class="subtitle">Paramètres supplémentaires</h2>
                         <form class="form-field">
                             <label *ngIf="paramsNames.length > 0" for="param1" class="form-field-labels">
                                 {{paramsNames[0]}}
                             </label>
-                            <input #param1Input *ngIf="paramsNames.length > 0" [(ngModel)]="graphParam1" [min]="paramsBoundaries[selectedGraphType].param1" (blur)="onBlur($event)" (input)="print($event)" id="param1" class="form-field-inputs" type="number" name="param1">
+                            <input #param1Input *ngIf="paramsNames.length > 0" [(ngModel)]="graphParam1"
+                                [min]="paramsBoundaries[selectedGraphType].param1" (blur)="onBlur($event)"
+                                (input)="print($event)" id="param1" class="form-field-inputs" type="number"
+                                name="param1">
                             <label *ngIf="paramsNames.length > 1" for="param2" class="form-field-labels">
                                 {{paramsNames[1]}}
                             </label>
-                            <input #param2Input *ngIf="paramsNames.length > 1" [(ngModel)]="graphParam2" [min]="paramsBoundaries[selectedGraphType].param2" (blur)="onBlur($event)" id="param2" class="form-field-inputs" type="number" name="param2">
+                            <input #param2Input *ngIf="paramsNames.length > 1" [(ngModel)]="graphParam2"
+                                [min]="paramsBoundaries[selectedGraphType].param2" (blur)="onBlur($event)" id="param2"
+                                class="form-field-inputs" type="number" name="param2">
                         </form>
                     </div> <!-- .graph-generation-parameters -->
                 </div> <!-- .graph-generation -->
-    
-                <div class="graph-importation card" (click)="selectGraphImportation()" [class]="isSeletectedGraphImportation()">
+
+                <!-- <div class="graph-importation card" (click)="selectGraphImportation()"
+                    [class]="isSeletectedGraphImportation()">
                     <h2 class="subtitle">Importer un plateau de jeu</h2>
-                    <input id="graph-file-input" name="graph-file-input" class="input-file" type="file" accept="application/json" (change)="onFileChange($event.target.files[0])">
-                    <label id="label-import-file" for="graph-file-input" class="file-label"> 
+                    <input id="graph-file-input" name="graph-file-input" class="input-file" type="file"
+                        accept="application/json" (change)="onFileChange($event.target.files[0])">
+                    <label id="label-import-file" for="graph-file-input" class="file-label">
                         <span *ngIf="!selectedFileName">Choissisez un fichier...</span>
                         <span *ngIf="selectedFileName"> {{selectedFileName}} </span>
                     </label>
-                </div> <!-- .graph-importation -->
+                </div -->> <!-- .graph-importation -->
             </div> <!-- .graph-selection -->
         </div> <!-- .col1 -->
 
@@ -55,8 +78,9 @@
                 <div class="player-option">
                     <h2 class="subtitle">Choisissez votre adversaire</h2>
                     <div class="player-option-list">
-                        <div class="player-option-item card" *ngFor="let type of availableOpponentType" [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
-                            <img id="{{type}}" class="vs" src="assets/menu/opponent-type/vs_{{type}}.svg"/>
+                        <div class="player-option-item card" *ngFor="let type of availableOpponentType"
+                            [class]='isSelectedOponent(type)' (click)="selectPlayer(type)">
+                            <img id="{{type}}" class="vs" src="assets/menu/opponent-type/vs_{{type}}.svg" />
                             <label for="{{type}}">{{translator.opponentTypeName(type)}}</label>
                         </div>
                     </div>
@@ -66,13 +90,17 @@
                     <h2 class="subtitle">Choisissez votre camp</h2>
                     <div class="side-selection">
                         <div class="side-selection-list">
-                            <div class="side-selection-list-item" for="cops" (click)="setSelectedAi('cops')" [class]="isSelectedCopsAi()">
-                                <img class="side-selection-list-item-img-preview" for="cops" src="assets/menu/opponent-type/thief.svg"/>
+                            <div class="side-selection-list-item" for="cops" (click)="setSelectedAi('cops')"
+                                [class]="isSelectedCopsAi()">
+                                <img class="side-selection-list-item-img-preview" for="cops"
+                                    src="assets/menu/opponent-type/thief.svg" />
                                 <label for="cops">Voleur</label>
                                 <input [(ngModel)]="selectedAi" type="radio" id="cops" name="ai-side" value="cops">
                             </div>
-                            <div class="side-selection-list-item" for="thief" (click)="setSelectedAi('thief')" [class]="isSelectedThiefAi()">
-                                <img class="side-selection-list-item-img-preview" for="thief" src="assets/menu/opponent-type/police.svg"/>
+                            <div class="side-selection-list-item" for="thief" (click)="setSelectedAi('thief')"
+                                [class]="isSelectedThiefAi()">
+                                <img class="side-selection-list-item-img-preview" for="thief"
+                                    src="assets/menu/opponent-type/police.svg" />
                                 <label for="thief">Policier</label>
                                 <input [(ngModel)]="selectedAi" type="radio" id="thief" name="ai-side" value="thief">
                             </div>
@@ -80,24 +108,25 @@
                     </div> <!-- .side-selection -->
                 </div> <!-- .ai-side -->
             </div> <!-- .oponent-selection -->
-    
+
             <div class="cops-number-selection card">
                 <h2 class="subtitle">Choisissez un nombre de policiers</h2>
                 <form class="form-field">
                     <div class="form-field-labels">
                         <label for="copsNum">
-                            Nombre de policier : 
+                            Nombre de policier :
                         </label>
                     </div>
                     <div class="form-field-inputs">
-                        <input #copsNumberInput [(ngModel)]="cops" min="1" [max]="getMaxCopsNumber()" (blur)="onBlur($event)" id="copsNum" type="number" name="cops">
+                        <input #copsNumberInput [(ngModel)]="cops" min="1" [max]="getMaxCopsNumber()"
+                            (blur)="onBlur($event)" id="copsNum" type="number" name="cops">
                     </div>
                 </form> <!-- .form-field -->
             </div> <!-- .cops-number-selection -->
 
             <div class="thief-speed-selection card">
                 <h2 class="subtitle">
-                    Choisissez la 
+                    Choisissez la
                     <app-tooltip main_text="vitesse"
                         tooltip_text="Nombre de sommets que peux parcourir le voleur en 1 tour">
                     </app-tooltip>
@@ -108,11 +137,12 @@
                         <label for="thiefSpeed">Vitesse du voleur :</label>
                     </div>
                     <div class="form-field-inputs">
-                        <input type="number" [(ngModel)]="thiefSpeed" (blur)="onBlur($event)" min="1" id="thiefSpeed" name="thiefSpeed">
+                        <input type="number" [(ngModel)]="thiefSpeed" (blur)="onBlur($event)" min="1" id="thiefSpeed"
+                            name="thiefSpeed">
                     </div>
                 </form> <!-- .form-field -->
             </div> <!-- .thief-speed-selection -->
-    
+
             <div class="difficulty-selection card">
                 <h2 class="subtitle">Choisissez une difficulté</h2>
                 <div class="difficulty-selection-list">
@@ -145,5 +175,5 @@
     <!-- <div class="submit-buttons card">
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
     </div> -->
-    
+
 </div>

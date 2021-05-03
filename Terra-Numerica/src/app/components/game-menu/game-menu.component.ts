@@ -54,6 +54,10 @@ export class GameMenuComponent implements OnInit {
     dodecahedron: {
       param1: -1,
       param2: -1
+    },
+    import: {
+      param1: -1,
+      param2: -1
     }
   }
 
@@ -95,6 +99,11 @@ export class GameMenuComponent implements OnInit {
 
   selectGraphType(type: string) {
     this.selectedGraphType = type;
+    console.log('HERE WE ARE')
+    if(type !== 'import') {
+      this.graphImportation = false;
+      this.graphGeneration = true;
+    }
     this.updateParamsName();
     this.updateGraphParams();
     this.paramSafetyCheck();
@@ -182,9 +191,11 @@ export class GameMenuComponent implements OnInit {
 
   private paramSafetyCheck() {
     if (this.inputGraphJSONFile && this.graphImportation) {
+      console.log('GRAPHE IMPORTATION')
       return true;
     }
     if (this.graphGeneration) {
+      console.log('GRAPHE GENERATION')
       if (!this.graphParam1) this.graphParam1 = 0;
       if (!this.graphParam2) this.graphParam2 = 0;
       return true
@@ -251,6 +262,8 @@ export class GameMenuComponent implements OnInit {
       this.inputGraphJSONFile = file;
       this.selectedFileName = this.inputGraphJSONFile.name;
       this.graphService.loadGraphFromFile(file);
+      this.graphGeneration = false;
+      this.graphImportation = true;
     } else {
       this.selectedFileName = undefined
     }
