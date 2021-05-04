@@ -56,6 +56,7 @@ export class WatchingStrategy implements IStrategy {
         // End new add
 
         for(const e of edges) {
+            if(cops_position_slot.includes(e)) continue;
             // Compte les sommets non surveillé par les policiers
             const temp = graph.edges(e).filter(v => thief_possible_move.includes(v) && !watchedByOther.includes(v))
             if(temp.length > watchVertex.length) {
@@ -74,14 +75,12 @@ export class WatchingStrategy implements IStrategy {
 
             // Réduire la distance avec le voleur
             let globalDist = 0;
-            if(!watchedByOther.includes(e)) {
-                for(const t of thiefs_position_slot) {
-                    const d = graph.distance(e, t);
-                    if(d === 1) {
-                        vertex = e;
-                    }
-                    globalDist += d !== -1 ? d : 0;
+            for(const t of thiefs_position_slot) {
+                const d = graph.distance(e, t);
+                if(d === 1) {
+                    vertex = e;
                 }
+                globalDist += d !== -1 ? d : 0;
             }
 
             if(!closest_vertex || globalDist <= distance) {
@@ -91,11 +90,14 @@ export class WatchingStrategy implements IStrategy {
         }
 
         if(this.actual_place == vertex) this.stay_on_spot++;
-        
-        if(watchVertex.length === 0 || this.stay_on_spot > 1) {
+    
+        console.log('closest_vertex', closest_vertex)
+        if(watchVertex.length === 0 || this.stay_on_spot > 2) {
             vertex = closest_vertex
             this.stay_on_spot = 0;
         }
+
+        
 
         this.actual_place = vertex;
         return this.actual_place;
