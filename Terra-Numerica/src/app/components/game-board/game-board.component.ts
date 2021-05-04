@@ -171,7 +171,6 @@ export class GameBoardComponent implements OnInit {
   seeWarningZone() {
     this.warningZone = !this.warningZone;
     this.cops.forEach(c => {
-      console.log(c.lastSlot)
       this.graphService.showCopsPossibleMoves(c.lastSlot, this.warningZone);
     });
   }
@@ -206,6 +205,10 @@ export class GameBoardComponent implements OnInit {
 
   setWarningZone(boolean: boolean) {
     this.warningZone = boolean;
+  }
+
+  isPlayerTurn() {
+    return this.gameManager.isPlayerTurn();
   }
 
 }

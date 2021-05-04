@@ -637,4 +637,10 @@ export class GameService {
       + '<p><i class="fas fa-circle" style="color:#05B800;"></i> : Représente les sommets accessible par les pions pour ce tour.</p><br>'
   }
 
+  isPlayerTurn() {
+    return (this.ai_side === undefined || this.ai_side === 'undefined') 
+            || (this.ai_side === 'thief' && !this.thiefTurn)
+            || (this.ai_side === 'cops' && this.thiefTurn)
+  }
+
 }

@@ -22,7 +22,7 @@
     <div id="games-action">
         <button [class]="getMovingNodeClass()" (click)="moveNodeMode()">Déplacer les sommets</button>
         <button *ngIf="gameMode == 'easy'" (click)="seeWarningZone()">Zone de danger</button>
-        <button [disabled]="!gameHasStarted()" (click)="validateTurn()">Finir son tour</button>
+        <button [disabled]="!gameHasStarted() || !isPlayerTurn()" (click)="validateTurn()">Finir son tour</button>
         <button *ngIf="gameMode !== 'extreme'" [disabled]="isGameActionEmpty() || getTurnCount() === 0" (click)="cancelAction()">Annuler action</button>
     </div>
 </div>
