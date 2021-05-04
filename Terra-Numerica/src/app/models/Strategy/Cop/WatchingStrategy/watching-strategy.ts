@@ -39,32 +39,34 @@ export class WatchingStrategy implements IStrategy {
             graph.edges(p).forEach(v => {
                 thief_possible_move.push(v)
             })
+            thief_possible_move.push(p)
         }
         let distance = graph.nodes.length;
         
         // New add
         let watchedByOther = [];
         for(const c of cops_position_slot) {
-            if(c != this.actual_place)
+            if(c != this.actual_place) {
                 graph.edges(c).forEach(v => {
                     if(thief_possible_move.includes(v)) watchedByOther.push(v);
                 })
+                watchedByOther.push(c)
+            }
         }
         // End new add
 
         for(const e of edges) {
-            // Compte les sommets surveillé par les policiers
+            // Compte les sommets non surveillé par les policiers
             const temp = graph.edges(e).filter(v => thief_possible_move.includes(v) && !watchedByOther.includes(v))
             if(temp.length > watchVertex.length) {
                 watchVertex = temp;
                 vertex = e;
-            }
-            else if(temp.length === watchVertex.length) {
+            } else if(temp.length === watchVertex.length) {
                 let count_on_spot = 0;
                 for(const c of cops_position_slot) {
                     count_on_spot += c.index===this.actual_place.index? 1:0;
                 }
-                if(count_on_spot > 1) {
+                if(count_on_spot < 1) {
                     watchVertex = temp;
                     vertex = e;
                 } 
@@ -72,9 +74,14 @@ export class WatchingStrategy implements IStrategy {
 
             // Réduire la distance avec le voleur
             let globalDist = 0;
-            for(const t of thiefs_position_slot) {
-                const d = graph.distance(e, t);
-                globalDist += d !== -1 ? d : 0;
+            if(!watchedByOther.includes(e)) {
+                for(const t of thiefs_position_slot) {
+                    const d = graph.distance(e, t);
+                    if(d === 1) {
+                        vertex = e;
+                    }
+                    globalDist += d !== -1 ? d : 0;
+                }
             }
 
             if(!closest_vertex || globalDist <= distance) {
