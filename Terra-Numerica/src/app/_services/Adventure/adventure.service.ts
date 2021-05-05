@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Adventure } from 'src/app/models/Adventure/adventure';
 import { ADVENTURES } from 'src/app/models/Adventure/adventures.mock';
+import Swal from 'sweetalert2';
 import { GameService } from '../game/game.service';
 import { GraphService } from '../graph/graph.service';
 
@@ -30,6 +31,9 @@ export class AdventureService {
     const extras = await this.configureAdventureNextLevel(this.currentAdventure)
     this.currentAdventure.goToNextLevel();
     if(extras) {
+      Swal.fire({
+        text: `Dans ce niveau vous jouerez le role du camp  ${this.getLevelPlayerRole()}`
+      })
       this.router.navigate(['/board'], extras);
       return false;
     } else {
@@ -55,5 +59,9 @@ export class AdventureService {
       }
       return extras;
     }
+  }
+
+  getLevelPlayerRole() {
+    return this.currentAdventure.getCurrentLevel().getPlayerRoleName()
   }
 }

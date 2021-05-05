@@ -30,4 +30,12 @@ export class AdventureLevel {
 
     getDifficulty() { return this.difficulty;}
 
+    getPlayerRoleName() {
+        if(this.aiSide === 'thief') {
+            return 'des Gendarmes';
+        } else {
+            return 'du Voleur';
+        }
+    }
+
 }

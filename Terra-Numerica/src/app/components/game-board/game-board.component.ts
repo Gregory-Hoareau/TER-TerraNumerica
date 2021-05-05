@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import { Graph } from 'src/app/models/Graph/graph';
 import { Cops } from 'src/app/models/Pawn/Cops/cops';
 import { Thief } from 'src/app/models/Pawn/Thief/thief';
+import { AdventureService } from 'src/app/_services/Adventure/adventure.service';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import Swal from 'sweetalert2';
@@ -31,7 +32,8 @@ export class GameBoardComponent implements OnInit {
 
   constructor(private graphService: GraphService,
     public gameManager: GameService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private adventureService: AdventureService) {
 
   }
 
@@ -67,6 +69,9 @@ export class GameBoardComponent implements OnInit {
       board.style.visibility = 'visible'
       this.graphService.stop();
       this.gameManager.update();
+      /* if(this.isAdventure) {
+        console.log(this.adventureService.getLevelPlayerRole())
+      } */
     }, 2000)
   }
 

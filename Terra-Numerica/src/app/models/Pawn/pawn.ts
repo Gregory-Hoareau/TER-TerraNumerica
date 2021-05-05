@@ -89,6 +89,8 @@ export abstract class Pawns {
         const speed = this.role.includes('thief') ? this.gameManager.getThiefSpeed() : 1;
         const pos = this.strategy.move(graph, cops, thiefs, speed);
         this.updatePosition(pos);
+        console.log('THIS', this);
+        console.log('POS', pos)
         d3.select('.'+this.role)
             .attr("cx", this.x = pos.x)
             .attr("cy", this.y = pos.y)

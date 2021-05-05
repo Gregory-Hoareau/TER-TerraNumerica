@@ -66,7 +66,10 @@ export class RunawayStrategy implements IStrategy {
                 dist = globalDist;
             }
         }
-        this.actual_place = farthest;
+        
+        if(farthest) {
+            this.actual_place = farthest;
+        }
         return this.actual_place;
     }
 }

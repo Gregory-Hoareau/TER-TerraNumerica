@@ -177,6 +177,10 @@ export class GameService {
     }
   }
 
+  getAdventurePlayerRole() {
+    return this
+  }
+
   setPawns(thiefs, cops) {
     this.chooseAIStrat();
     this.setThief(thiefs);
