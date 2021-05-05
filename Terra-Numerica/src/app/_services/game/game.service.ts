@@ -21,6 +21,7 @@ import { StatisticService } from '../statistic/statistic.service';
 import { AdventureService } from '../Adventure/adventure.service';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
+import { RandomCopsStrategy } from 'src/app/models/Strategy/Cop/RandomCopsStrategy/random-cops-strategy';
 
 
 @Injectable({
@@ -167,7 +168,7 @@ export class GameService {
       case 'easy':
       default:
         this.ai_cops_strat = () => {
-          return new RandomStrategy();
+          return new RandomCopsStrategy();
         };
         this.ai_thief_strat = () => {
           return new RandomStrategy();
