@@ -4,14 +4,19 @@ import * as d3 from 'd3';
 export class Specific extends Graph {
 
     private config;
+    private isParsed;
 
     constructor(nodes, links) {
         super(nodes, links, 'specific');
         this.config = localStorage.getItem('config');
+        this.isParsed = false;
     }
 
     draw(svg) {
-        this.config = JSON.parse(this.config)
+        if(this.isParsed === false) {
+            this.config = JSON.parse(this.config)
+            this.isParsed = true;
+        }
         const save_node = this.config.nodes;
         const save_link = this.config.links;
 

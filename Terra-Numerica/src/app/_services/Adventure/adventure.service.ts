@@ -32,7 +32,7 @@ export class AdventureService {
     this.currentAdventure.goToNextLevel();
     if(extras) {
       Swal.fire({
-        text: `Dans ce niveau vous jouerez le role du camp  ${this.getLevelPlayerRole()}`
+        text: `Dans ce niveau vous jouerez le role du camp ${this.getLevelPlayerRole()}`
       })
       this.router.navigate(['/board'], extras);
       return false;
