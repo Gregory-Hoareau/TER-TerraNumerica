@@ -84,22 +84,62 @@ export class GameMenuComponent implements OnInit {
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.selectGraphType('grid')
+    this.getDataFromLocalStorage();
+    this.selectGraphType(this.selectedGraphType);
     this.updateParamsName();
     this.randomGraph.loadGraphs();
+    console.log('GameMenuComponent#ngOnInit')
+  }
+
+  private getDataFromLocalStorage() {
+    if(localStorage.getItem('graphType')) {
+      this.selectedGraphType = localStorage.getItem('graphType');
+    }
+    if(localStorage.getItem('graphParam1')) {
+      this.graphParam1 = +localStorage.getItem('graphParam1')
+    }
+    if(localStorage.getItem('graphParam2')) {
+      this.graphParam2 = +localStorage.getItem('graphParam2')
+    }
+    if(localStorage.getItem('opponentType')) {
+      this.selectedOpponentType = localStorage.getItem('opponentType')
+    }
+    if(localStorage.getItem('selectedAi')) {
+      this.selectedAi = localStorage.getItem('selectedAi')
+    }
+    if(localStorage.getItem('gameMode')) {
+      this.gameModeSelected = localStorage.getItem('gameMode')
+    }
+    if(localStorage.getItem('speed')) {
+      this.thiefSpeed = +localStorage.getItem('speed')
+    }
+    if(localStorage.getItem('copsNum')) {
+      this.cops = +localStorage.getItem('copsNum')
+    }
+  }
+
+  private setDataToLocalStorage() {
+    localStorage.setItem('graphType', this.selectedGraphType)
+    localStorage.setItem('graphParam1', `${this.graphParam1}`)
+    localStorage.setItem('graphParam2', `${this.graphParam2}`)
+    localStorage.setItem('opponentType', this.selectedOpponentType)
+    localStorage.setItem('selectedAi', this.selectedAi)
+    localStorage.setItem('gameMode', this.gameModeSelected)
+    localStorage.setItem('speed', `${this.thiefSpeed}`)
+    localStorage.setItem('copsNum', `${this.cops}`)
   }
 
   ngAfterContentChecked() {
     this.cdr.detectChanges()
   }
 
-  print(mes) {
+  /* print(mes) {
     console.log(this.param1InputRef)
-  }
+  } */
 
   selectGraphType(type: string) {
     this.selectedGraphType = type;
-    console.log('HERE WE ARE')
+    /* console.log('HERE WE ARE') */
     if(type !== 'import') {
       this.graphImportation = false;
       this.graphGeneration = true;
@@ -181,6 +221,7 @@ export class GameMenuComponent implements OnInit {
       } else {
         this.gameService.setAiSide(undefined);
       }
+      this.setDataToLocalStorage();
       this.router.navigate(['/board'], extras);
     }
   }
@@ -223,6 +264,7 @@ export class GameMenuComponent implements OnInit {
   selectGraphImportation() {
     this.graphGeneration = false;
     this.graphImportation = true;
+    /* this.selectedGraphType = 'grid' */
   }
 
   isSeletectedGraphGeneration() {
