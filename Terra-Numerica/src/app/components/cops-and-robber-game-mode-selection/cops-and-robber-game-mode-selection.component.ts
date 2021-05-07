@@ -25,7 +25,7 @@ export class CopsAndRobberGameModeSelectionComponent implements OnInit {
 
   displayRules() {
     Swal.fire({
-      title: 'Règles',
+      /* title: 'Règles', */
       icon: 'info',
       html: this.gameService.rulesHtml()
     })

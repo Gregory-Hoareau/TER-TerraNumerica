@@ -353,11 +353,8 @@ export class GameMenuComponent implements OnInit {
   }
 
   displayRules() {
-    /* Swal.fire('Règles',
-      this.gameService.rules(),
-      'info') */
     Swal.fire({
-      title: 'Règles',
+      /* title: 'Règles', */
       icon: 'info',
       html: this.gameService.rulesHtml()
     })
