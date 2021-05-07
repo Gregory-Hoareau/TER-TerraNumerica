@@ -45,12 +45,10 @@ export class GameBoardComponent implements OnInit {
       // this.copsNum = +params['copsNum'];
       this.gameMode = params['gameMode'];
       // this.graphParams = this.convertAsNumberArr(params['graphParams']);
-      console.log('WE ARE HERE', params['adventure'])
       if(params['adventure'] !== undefined) {
         this.isAdventure = params['adventure'];
         this.gameManager.setIsAdventure(params['adventure']);
       } else {
-        console.log('THIS IS NOT AN ADVENTURE');
         this.isAdventure = false
         this.gameManager.setIsAdventure(false);
       }
