@@ -9,39 +9,14 @@ export class RunawayStrategy implements IStrategy {
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
         this.actual_place = graph.getRandomEdge();
-        let max_dist = -1;
-        let distant_edges = [];
-        let toCheck = [];
-        toCheck.push(this.actual_place)
-        const marked = [];
-        while (!toCheck.every((edge) => marked.includes(edge))) {
-            const tmp = toCheck;
-            toCheck = []
-            for(const edge of tmp) {
-                let distance = 0;
-                let tooClose = false;
-                for(const position of cops_position_slot) {
-                    const d = graph.distance(edge, position);
-                    distance += d;
-                    if(d <= 1) {
-                        tooClose = true;
-                    }
-                }
-                if(!tooClose) { 
-                    if(distance > max_dist) {
-                        max_dist = distance;
-                        distant_edges = [edge]
-                    } else if(distance === max_dist) {
-                        distant_edges.push(edge)
-                    }
-                }
-                marked.push(edge)
-                graph.edges(edge).forEach(e => {
-                    toCheck.push(e);
-                })
+        let marked = []
+        while(cops_position_slot.some(c => graph.distance(this.actual_place, c) <= 1)) {
+            marked.push(this.actual_place);
+            if(marked.length >= graph.nodes.length) break;
+            while(marked.includes(this.actual_place)) {
+                this.actual_place = graph.getRandomEdge();
             }
         }
-        this.actual_place = distant_edges[Math.floor(Math.random() * Math.floor(distant_edges.length))];
         return this.actual_place;
     }
 
