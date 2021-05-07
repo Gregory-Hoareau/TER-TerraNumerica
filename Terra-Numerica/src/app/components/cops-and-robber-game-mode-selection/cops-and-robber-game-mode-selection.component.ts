@@ -27,7 +27,10 @@ export class CopsAndRobberGameModeSelectionComponent implements OnInit {
     Swal.fire({
       /* title: 'Règles', */
       icon: 'info',
-      html: this.gameService.rulesHtml()
+      html: this.gameService.rulesHtml(),
+      customClass: {
+        popup: 'custom-dialog-container',
+      }
     })
   }
 }
