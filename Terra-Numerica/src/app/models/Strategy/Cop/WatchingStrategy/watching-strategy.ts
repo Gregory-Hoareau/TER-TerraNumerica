@@ -1,4 +1,6 @@
 import { Graph } from 'src/app/models/Graph/graph';
+import { Grid } from 'src/app/models/Graph/Grid/grid';
+import { Pawns } from 'src/app/models/Pawn/pawn';
 import { IStrategy } from '../../istrategy';
 
 /**
@@ -26,80 +28,79 @@ export class WatchingStrategy implements IStrategy {
         return this.actual_place;
     }
 
-    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
+    move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed, cop: Pawns) {
         const edges = graph.edges(this.actual_place);
         edges.push(this.actual_place);
-        let vertex;
 
-        let closest_vertex;
-        //Calculer le nombre de sommet maximal qui peuvent être gardé par le policier
-        let watchVertex = [];
-        let thief_possible_move = [];
-        for(const p of thiefs_position_slot) {
-            graph.edges(p).forEach(v => {
-                thief_possible_move.push(v)
-            })
-            thief_possible_move.push(p)
-        }
-        let distance = graph.nodes.length;
-        
-        // New add
-        let watchedByOther = [];
-        for(const c of cops_position_slot) {
-            if(c != this.actual_place) {
-                graph.edges(c).forEach(v => {
-                    if(thief_possible_move.includes(v)) watchedByOther.push(v);
-                })
-                watchedByOther.push(c)
+        const width = (graph as Grid).width;
+        const height = (graph as Grid).height;
+
+        const thief_pos = thiefs_position_slot[0];
+        let thief_line = this.getLine(thief_pos.index, width);
+        let thief_col = this.getColumn(thief_pos.index, width);
+
+        let cop_line = this.getLine(this.actual_place.index, width);
+        let cop_col = this.getColumn(this.actual_place.index, width);
+
+        let vertex_index;
+        if(cop.role.includes('0')) {
+            if (cop_col === thief_col) {
+                if (cop_line > thief_line) { vertex_index = this.moveUp(cop_line, cop_col, width, height); }
+                else { vertex_index = this.moveDown(cop_line, cop_col, width, height); }
+            } else if (cop_col > thief_col) {
+                vertex_index = this.moveRight(cop_line, cop_col, width, height);
+            } else {
+                vertex_index = this.moveLeft(cop_line, cop_col, width, height);
             }
-        }
-        // End new add
-
-        for(const e of edges) {
-            if(cops_position_slot.includes(e)) continue;
-            // Compte les sommets non surveillé par les policiers
-            const temp = graph.edges(e).filter(v => thief_possible_move.includes(v) && !watchedByOther.includes(v))
-            if(temp.length > watchVertex.length) {
-                watchVertex = temp;
-                vertex = e;
-            } else if(temp.length === watchVertex.length) {
-                let count_on_spot = 0;
-                for(const c of cops_position_slot) {
-                    count_on_spot += c.index===this.actual_place.index? 1:0;
-                }
-                if(count_on_spot < 1) {
-                    watchVertex = temp;
-                    vertex = e;
-                } 
-            }
-
-            // Réduire la distance avec le voleur
-            let globalDist = 0;
-            for(const t of thiefs_position_slot) {
-                const d = graph.distance(e, t);
-                if(d === 1) {
-                    vertex = e;
-                }
-                globalDist += d !== -1 ? d : 0;
-            }
-
-            if(!closest_vertex || globalDist <= distance) {
-                closest_vertex = e;
-                distance = globalDist;
+        } else {
+            if (cop_line === thief_line) {
+                if (cop_col > thief_col) { vertex_index = this.moveRight(cop_line, cop_col, width, height); }
+                else { vertex_index = this.moveLeft(cop_line, cop_col, width, height); }
+            } else if (cop_line > thief_line) {
+                vertex_index = this.moveUp(cop_line, cop_col, width, height);
+            } else {
+                vertex_index = this.moveDown(cop_line, cop_col, width, height);
             }
         }
 
-        if(this.actual_place == vertex) this.stay_on_spot++;
-    
-        console.log('closest_vertex', closest_vertex)
-        if(watchVertex.length === 0 || this.stay_on_spot > 2) {
-            vertex = closest_vertex
-            this.stay_on_spot = 0;
-        }
-
-        
-
-        this.actual_place = vertex;
+        const v = edges.find(e => e.index === vertex_index);
+        this.actual_place = v;
         return this.actual_place;
+    }
+
+    private moveRight(line, col, width, height) {
+        const l = line;
+        const c = (col - 1 >= 0) ? col - 1 : col;
+        
+        return (l * width) + c
+    }
+
+    private moveLeft(line, col, width, height) {
+        const l = line;
+        const c = (col + 1 < width) ? col + 1 : col;
+        
+        return (l * width) + c
+    }
+
+    private moveUp(line, col, width, height) {
+        const l = (line - 1 >= 0)? line - 1 : line;
+        const c = col;
+        
+        return (l * width) + c
+    }
+
+    private moveDown(line, col, width, height) {
+        const l = (line + 1 < height) ? line + 1 : line;
+        const c = col;
+        
+        return (l * width) + c
+    }
+
+    private getLine(node_index, width) {
+        return Math.floor(node_index/width);
+    }
+
+    private getColumn(node_index, width) {
+        return node_index % width;
     }
 }

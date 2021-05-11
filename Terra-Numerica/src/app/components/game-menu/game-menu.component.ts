@@ -88,7 +88,6 @@ export class GameMenuComponent implements OnInit {
     this.selectGraphType(this.selectedGraphType);
     this.updateParamsName();
     this.randomGraph.loadGraphs();
-    console.log('GameMenuComponent#ngOnInit')
   }
 
   private getDataFromLocalStorage() {
@@ -133,13 +132,8 @@ export class GameMenuComponent implements OnInit {
     this.cdr.detectChanges()
   }
 
-  /* print(mes) {
-    console.log(this.param1InputRef)
-  } */
-
   selectGraphType(type: string) {
     this.selectedGraphType = type;
-    /* console.log('HERE WE ARE') */
     if(type !== 'import') {
       this.graphImportation = false;
       this.graphGeneration = true;
@@ -232,11 +226,9 @@ export class GameMenuComponent implements OnInit {
 
   private paramSafetyCheck() {
     if (this.inputGraphJSONFile && this.graphImportation) {
-      console.log('GRAPHE IMPORTATION')
       return true;
     }
     if (this.graphGeneration) {
-      console.log('GRAPHE GENERATION')
       if (!this.graphParam1) this.graphParam1 = 0;
       if (!this.graphParam2) this.graphParam2 = 0;
       return true
@@ -354,7 +346,6 @@ export class GameMenuComponent implements OnInit {
 
   displayRules() {
     Swal.fire({
-      /* title: 'Règles', */
       icon: 'info',
       html: this.gameService.rulesHtml()
     })

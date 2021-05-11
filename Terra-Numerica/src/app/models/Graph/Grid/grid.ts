@@ -112,6 +112,7 @@ export class Grid extends Graph {
                 .attr("r", 20)
                 .attr("class", "circle")
                 .style("fill", "#69b3a2")
+                /* .attr("index", d => d.index) */
         
         // This function will positionnate all the nodes to the good place on the canvas
         this.simulate(svg);

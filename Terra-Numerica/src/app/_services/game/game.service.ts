@@ -270,7 +270,7 @@ export class GameService {
             .style('color', 'black')
             .text(() => this.cops.length > 1 ? 'Les policiers réfléchissent à leurs déplacements...' : 'Le policier réfléchit à sont déplacement...')
           for (const c of this.cops) {
-            await c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position);
+            await c.move(this.graphService.getGraph(), this.cops_position, this.thiefs_position, c);
           }
           this.validateTurnCallback(); // DO NOT REFACTOR THESE LINES OUTSIDE OF THEIR RESPECTIVES IF
         }
