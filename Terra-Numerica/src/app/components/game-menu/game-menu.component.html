@@ -14,7 +14,7 @@
         <div class="col1">
             <div class="graph-selection">
                 <div class="graph-generation card" (click)="selectGraphGeneration()">
-                    <h2 class="subtitle">Générer un plateau de jeu</h2>
+                    <h2 class="subtitle">Choisissez un plateau de jeu</h2>
                     <div class="graph-generation-topology-selection">
                         <div class="graph-topology-preview-list">
                             <div class="graph-topology-preview-list-item card" *ngFor='let type of availableGraphType'
@@ -102,7 +102,7 @@
                                 [class]="isSelectedThiefAi()">
                                 <img class="side-selection-list-item-img-preview" for="thief"
                                     src="assets/menu/opponent-type/police.svg" />
-                                <label for="thief">Policier</label>
+                                <label for="thief">Gendarme</label>
                                 <input [(ngModel)]="selectedAi" type="radio" id="thief" name="ai-side" value="thief">
                             </div>
                         </div> <!-- .side-selection-list -->
