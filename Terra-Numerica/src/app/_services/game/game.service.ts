@@ -22,6 +22,7 @@ import { AdventureService } from '../Adventure/adventure.service';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
 import { RandomCopsStrategy } from 'src/app/models/Strategy/Cop/RandomCopsStrategy/random-cops-strategy';
+import { WatchingStrategyV2 } from 'src/app/models/Strategy/Cop/WatchingStrategyV2/watching-strategy-v2';
 
 
 @Injectable({
@@ -157,7 +158,7 @@ export class GameService {
             break;
           default:
             this.ai_cops_strat = () => {
-              return new WatchingStrategy();
+              return new WatchingStrategyV2();
             };
             break;
         }
