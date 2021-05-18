@@ -1,4 +1,4 @@
-import { SimulationNodeDatum } from 'd3';
+import { index, SimulationNodeDatum } from 'd3';
 import * as d3 from 'd3';
 
 export abstract class Graph {
@@ -40,6 +40,7 @@ export abstract class Graph {
             .join("circle")
                 .attr("r", 20)
                 .attr("class", "circle")
+                .attr("index", d => d.index)
                 .style("fill", "#69b3a2")
                 .call(
                     d3.drag()
@@ -115,6 +116,15 @@ export abstract class Graph {
                 }
             }
         })
+
+        const circles = d3.selectAll('circle')
+        for(const circle of circles) {
+            const tmp = d3.select(circle)
+            if(tmp.attr('index') == nodeIndex) {
+                tmp.attr('cx', endPosition.x).attr('cy', endPosition.y)
+            }
+        }
+
         this.nodes[nodeIndex].x = endPosition.x
         this.nodes[nodeIndex].y = endPosition.y
     }

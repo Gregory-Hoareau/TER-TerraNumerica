@@ -34,6 +34,7 @@ export class Specific extends Graph {
             .join("circle")
                 .attr("r", 20)
                 .attr("class", "circle")
+                .attr("index", d => d.index)
                 .style("fill", "#69b3a2")
                 .attr('cx', (d) => d.x)
                 .attr('cy', (d) => d.y)

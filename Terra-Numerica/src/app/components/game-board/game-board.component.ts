@@ -87,7 +87,6 @@ export class GameBoardComponent implements OnInit {
   drawGraph() {
     if (localStorage.getItem("graph") !== null) {
       const savedGraph = JSON.parse(localStorage.getItem("graph")) as Graph
-      console.log(savedGraph)
     } else {
       this.graphService.drawGraph(this.svg);
     }
