@@ -6,6 +6,10 @@
             <img src="assets/arrow.svg" alt="">
         </button>
         <h1 class="title">Configuration du Jeu libre</h1>
+        <button (click)="displayRules()">
+            <!-- <img src="assets/menu/rules.svg" alt=""> -->
+            <p>Afficher les règles</p>
+        </button>
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
     </div>
 
@@ -168,10 +172,7 @@
         </div> <!-- .col2 -->
     </div> <!-- .game-param -->
 
-    <button class="fab-bottom-right" (click)="displayRules()">
-        <img src="assets/menu/rules.svg" alt="">
-        <p>Règles</p>
-    </button>
+    
 
     <!-- <div class="submit-buttons card">
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
