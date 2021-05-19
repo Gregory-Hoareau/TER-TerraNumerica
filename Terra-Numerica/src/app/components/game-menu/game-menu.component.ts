@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { platform } from 'process';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
@@ -85,6 +86,10 @@ export class GameMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDataFromLocalStorage();
+    if(navigator.userAgent.includes('Android') 
+        || navigator.userAgent.includes('iPad') || navigator.userAgent.includes('iPhone')) {
+      this.selectedOpponentType = 'ai'
+    }
     this.selectGraphType(this.selectedGraphType);
     this.updateParamsName();
     this.randomGraph.loadGraphs();

@@ -5,10 +5,10 @@
         <button routerLink="/game-mode-selection">
             <img src="assets/arrow.svg" alt="">
         </button>
-        <h1 class="title">Configuration du Jeu libre</h1>
+        <h1 class="title">Jeu libre</h1>
         <button (click)="displayRules()">
             <!-- <img src="assets/menu/rules.svg" alt=""> -->
-            <p>Afficher les règles</p>
+            <p>Règles</p>
         </button>
         <button [disabled]="checkGraphParamIssues()" (click)="validateParams()">Commencer la partie</button>
     </div>
@@ -74,7 +74,7 @@
                         <span *ngIf="!selectedFileName">Choissisez un fichier...</span>
                         <span *ngIf="selectedFileName"> {{selectedFileName}} </span>
                     </label>
-                </div -->> <!-- .graph-importation -->
+                </div --> <!-- .graph-importation -->
             </div> <!-- .graph-selection -->
         </div> <!-- .col1 -->
 
