@@ -160,6 +160,9 @@ export abstract class Graph {
      */
     edges(node, speed = 1, exclude= []): SimulationNodeDatum[] {
         const edges = [];
+        if(node.index === undefined) {
+            node = node.__data__
+        }
         for(const l of this.links) {
             if(l.source.index === node.index) {
                 edges.push(this._nodes.find(n => n.index === l.target.index))

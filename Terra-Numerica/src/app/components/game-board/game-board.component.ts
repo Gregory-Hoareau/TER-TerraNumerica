@@ -159,11 +159,12 @@ export class GameBoardComponent implements OnInit {
     this.warningZone = false;
     const res = await this.gameManager.validateTurn();
     /* console.log('RES IS HERE', res) */
-    if (res && res.result !== undefined && res.gameTimer !== undefined) {
+    if (res && res.result !== undefined && res.gameTimer !== undefined && res.isAdventure !== undefined) {
       /* console.log('HERE WE ARE') */
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
       if (res.result.isConfirmed) {
+        if(res.isAdventure) { this.adventureService.goToNextLevel(); }
         this.replay();
       } else if (!res.result.isConfirmed) {
         this.gameManager.goBackToMenu();

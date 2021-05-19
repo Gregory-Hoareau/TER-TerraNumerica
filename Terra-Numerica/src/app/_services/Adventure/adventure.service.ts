@@ -16,7 +16,7 @@ export class AdventureService {
 
   constructor(private router: Router,
     private gameService: GameService,
-    private graphService: GraphService) { }
+    private graphService: GraphService) {}
 
   getAvailableAdventures() { return this.adventures; }
 
@@ -29,7 +29,7 @@ export class AdventureService {
 
   async launchNextLevel() {
     const extras = await this.configureAdventureNextLevel(this.currentAdventure)
-    this.currentAdventure.goToNextLevel();
+    /* this.currentAdventure.goToNextLevel(); */
     if(extras) {
       Swal.fire({
         text: `Dans ce niveau vous jouerez le role du camp ${this.getLevelPlayerRole()}`
@@ -63,5 +63,9 @@ export class AdventureService {
 
   getLevelPlayerRole() {
     return this.currentAdventure.getCurrentLevel().getPlayerRoleName()
+  }
+
+  goToNextLevel() {
+    this.currentAdventure.goToNextLevel();
   }
 }

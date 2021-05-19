@@ -153,7 +153,7 @@ export class GameService {
             break;
           case 'copsAlwaysWin':
             this.ai_cops_strat = () => {
-              return new OneCopsWinStrategy();
+              return new WatchingStrategyV2();
             };
             break;
           default:
@@ -465,7 +465,7 @@ export class GameService {
           showCancelButton: true,
           cancelButtonText: 'Retour au Menu'
         })
-        return { result: result, gameTimer: this.gameTimer };
+        return { result: result, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
       } else { // if it's an adventure
         /* console.log('It is the end of a level of the adventure'); */
         const result = await Swal.fire({
@@ -475,7 +475,7 @@ export class GameService {
           confirmButtonText: 'Passer au niveau suivant',
         })
         /* console.log(result); */
-        return { result: result, gameTimer: this.gameTimer };
+        return { result: result, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
       }
     } else {
       this.update()
