@@ -22,6 +22,7 @@ import { GraphConstructorComponent } from './components/graph-constructor/graph-
 import { TooltipComponent } from './components/tooltip/tooltip.component';
 import { CopsAndRobberGameModeSelectionComponent } from './components/cops-and-robber-game-mode-selection/cops-and-robber-game-mode-selection.component';
 import { AdventureMenuComponent } from './components/adventure-menu/adventure-menu.component';
+import { CreditComponent } from './components/credit/credit.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AdventureMenuComponent } from './components/adventure-menu/adventure-me
     GraphConstructorComponent,
     TooltipComponent,
     CopsAndRobberGameModeSelectionComponent,
-    AdventureMenuComponent
+    AdventureMenuComponent,
+    CreditComponent
   ],
   imports: [
     BrowserModule,
