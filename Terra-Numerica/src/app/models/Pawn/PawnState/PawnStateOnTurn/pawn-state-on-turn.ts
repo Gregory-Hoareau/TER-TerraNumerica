@@ -6,6 +6,7 @@ import { PawnState } from '../pawn-state';
 
 export class PawnStateOnTurn implements PawnState {
     edges: any = null;
+
     dragstarted(event: any, d: any) {
         d.gameManager.displayWarningZone(false);
         const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
@@ -15,6 +16,7 @@ export class PawnStateOnTurn implements PawnState {
         this.edges = d.graphService.showPossibleMove(d.lastSlot, speed)
         d3.select(event.sourceEvent.target).raise().attr("stroke", "black");
     }
+
     dragged(event: any, d: any) {
         const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
@@ -33,6 +35,7 @@ export class PawnStateOnTurn implements PawnState {
                 })
         }
     }
+    
     dragended(event: any, d: any, gameManager: GameService): PawnState {
         const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d3.select(event.sourceEvent.target).attr("stroke", null);
@@ -52,6 +55,7 @@ export class PawnStateOnTurn implements PawnState {
         let node;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
+                console.log(nodeData)
                 return edges.includes(nodeData);
             })
             .each((nodeData:any, id:any, elements:any) => {

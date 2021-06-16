@@ -637,10 +637,10 @@ export class GameService {
   }
 
   colorInfo() {
-    return '<p><i class="fas fa-circle" style="color:red;"></i> : Représente les sommets contrôler par les policiers. Visible en appuyant sur le bouton "zone de danger".</p><br>'
-      + '<p><i class="fas fa-circle" style="color:blue;"></i> : Représente le sommet de départ de pions lors de son mouvement.</p><br>'
-      + '<p><i class="fas fa-circle" style="color:orange;"></i> : Représente les sommets qui seront contrôle par un pions après sont mouvement.</p><br>'
-      + '<p><i class="fas fa-circle" style="color:#05B800;"></i> : Représente les sommets accessible par les pions pour ce tour.</p><br>'
+    return '<p><i class="fas fa-circle" style="color:red;"></i> : Sommet contrôlé par les policiers. Visible en appuyant sur le bouton "zone de danger".</p><br>'
+      + '<p><i class="fas fa-circle" style="color:blue;"></i> : Sommet de départ de pions lors de son mouvement.</p><br>'
+      + '<p><i class="fas fa-circle" style="color:orange;"></i> : Sommets qui seront contrôlés par un pion après son mouvement.</p><br>'
+      + '<p><i class="fas fa-circle" style="color:#05B800;"></i> : Sommets accessible par le pion pour ce tour.</p><br>'
   }
 
   isPlayerTurn() {

@@ -1,11 +1,27 @@
 
 <IfModule mod_rewrite.c>
+    #RewriteEngine on
+    #RewriteCond %{REQUEST_FILENAME} -s [OR]
+    #RewriteCond %{REQUEST_FILENAME} !-l [OR]
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteRule ^.*$ - [NC,L]
+    #RewriteRule ^(.*) /index.html [NC,L]
+
     RewriteEngine on
-    RewriteCond %{REQUEST_FILENAME} -s [OR]
-    RewriteCond %{REQUEST_FILENAME} !-l [OR]
+
+    # If an existing asset or directory is requested go to it as it is
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]  
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d  
+    RewriteRule ^ - [L]
+
+    # If the requested resource doesn't exist, use index.html
+
+    Options +FollowSymLinks
+
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^.*$ - [NC,L]
-    RewriteRule ^(.*) /index.html [NC,L]
+    RewriteCond %{REQUEST_URI} !index
+    RewriteRule (.*) index.html [L]
 </IfModule>
 
 AddType image/svg+xml .svg .svgz

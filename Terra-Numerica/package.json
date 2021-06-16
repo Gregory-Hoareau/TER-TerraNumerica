@@ -12,8 +12,8 @@
     "e2e": "ng e2e",
     "generate": "node ./parser.js",
     "g": "node ./parser.js",
-    "build-wamp": "ng build --prod --base-href http://localhost/Terra-Numerica/",
-    "build-prod": "ng build --prod --base-href http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/",
+    "build:wamp": "ng build --prod --base-href http://localhost/Terra-Numerica/",
+    "build:prod": "ng build --prod --base-href http://www-sop.inria.fr/members/Gregory.Hoareau/Terra-Numerica/",
     "start:electron": "ng build --base-href ./ && electron .",
     "build:electron": "ng build --base-href ./ && electron-builder"
   },
