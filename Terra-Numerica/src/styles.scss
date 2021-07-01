@@ -74,6 +74,17 @@ button:disabled {
 }
 
 //Test fixed position
+.fab-bottom-center {
+    position: fixed;
+    bottom: 3em;
+    left: 45%;
+    padding: .5em;
+
+    img {
+        width: 4em;
+    }
+}
+
 .fab-bottom-right {
     position: fixed;
     bottom: 3em;

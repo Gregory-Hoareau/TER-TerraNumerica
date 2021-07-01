@@ -27,6 +27,8 @@ export class Specific extends Graph {
                 .attr('y1', d => save_node[d.source].y)
                 .attr('x2', d => save_node[d.target].x)
                 .attr('y2', d => save_node[d.target].y)
+                .attr('source-index', d => save_node[d.source].index)
+                .attr('target-index', d => save_node[d.target].index)
                 .style('stroke', 'rgb(170, 170, 170)')
 
         this.svgNodes = svg.selectAll("nodes")
@@ -38,6 +40,19 @@ export class Specific extends Graph {
                 .style("fill", "#69b3a2")
                 .attr('cx', (d) => d.x)
                 .attr('cy', (d) => d.y)
+                .call(
+                    d3.drag()
+                    .on('start', (event: DragEvent) => {
+                        console.log('OTHER')
+                        this.dragstarted(event)
+                    })
+                    .on('drag', (event: DragEvent) => {
+                        this.dragged(event)
+                    })
+                    .on('end', (event: DragEvent) => {
+                        this.dragended(event)
+                    })
+                )
 
         this.simulate(svg)
     }
@@ -51,7 +66,7 @@ export class Specific extends Graph {
     }
 
     stop() {
-        
+        this.simulation.stop()
     }
 
     ticked() {

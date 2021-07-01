@@ -8,7 +8,15 @@
     </div>
     <div id="top-hud-turn-information">
         <div id="top-hud-turn-information-number" class="card">
-            Nombre de tours restant : {{getRemainingTurnCount()}}
+            <span *ngIf="getRemainingTurnCount() > 0">
+                Nombre de tours restant : {{getRemainingTurnCount()}}
+            </span>
+            <span *ngIf="getRemainingTurnCount() == 0">
+                Dernier tour de jeu.
+            </span>
+            <span *ngIf="getRemainingTurnCount() < 0">
+                Fin de partie !
+            </span>
         </div>
         <div id="top-hud-turn-information-details" class="card">
             Chargement du plateau de jeu ...
@@ -20,7 +28,7 @@
 
 <div id="bottom-hud" class="card">
     <div id="games-action">
-        <button [class]="getMovingNodeClass()" (click)="moveNodeMode()">Déplacer les sommets</button>
+        <button *ngIf='isNodeMoveable()' [class]="getMovingNodeClass()" (click)="moveNodeMode()">Déplacer les sommets</button>
         <button *ngIf="gameMode == 'easy'" (click)="seeWarningZone()">Zone de danger</button>
         <button [disabled]="!gameHasStarted() || !isPlayerTurn()" (click)="validateTurn()">Finir son tour</button>
         <button *ngIf="gameMode !== 'extreme'" [disabled]="isGameActionEmpty() || getTurnCount() === 0" (click)="cancelAction()">Annuler action</button>

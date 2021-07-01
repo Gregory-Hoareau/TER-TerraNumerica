@@ -361,6 +361,10 @@ export class GraphService {
     return this.graph.links;
   }
 
+  getTypology() {
+    return this.graph.typology
+  }
+
   edges(node) {
     return this.graph.edges(node);
   }

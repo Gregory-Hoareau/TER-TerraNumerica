@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { platform } from 'process';
 import { GameService } from 'src/app/_services/game/game.service';
 import { GraphService } from 'src/app/_services/graph/graph.service';
 import { RandomGraphService } from 'src/app/_services/random-graph/random-graph.service';
@@ -71,10 +70,22 @@ export class GameMenuComponent implements OnInit {
   public selectedAi = 'cops'
 
   public paramsNames;
-  public graphParam1: number;
-  public graphParam2: number;
+  /* public graphParam1 = 0;
+  public graphParam2 = 0
   public cops: number = 1;
-  public thiefSpeed: number = 1;
+  public thiefSpeed: number = 1; */
+
+  public config = {
+    'graphParam1': 0,
+    'graphParam2': 0,
+    'copsNumber': 1,
+    'thiefSpeed': 1,
+  }
+
+  public update_action = {
+    increase: 'INCREASE',
+    decrease: 'DECREASE'
+  }
 
   constructor(private graphService: GraphService,
     private gameService: GameService,
@@ -100,10 +111,10 @@ export class GameMenuComponent implements OnInit {
       this.selectedGraphType = localStorage.getItem('graphType');
     }
     if(localStorage.getItem('graphParam1')) {
-      this.graphParam1 = +localStorage.getItem('graphParam1')
+      this.config['graphParam1'] = +localStorage.getItem('graphParam1')
     }
     if(localStorage.getItem('graphParam2')) {
-      this.graphParam2 = +localStorage.getItem('graphParam2')
+      this.config['graphParam2'] = +localStorage.getItem('graphParam2')
     }
     if(localStorage.getItem('opponentType')) {
       this.selectedOpponentType = localStorage.getItem('opponentType')
@@ -115,22 +126,22 @@ export class GameMenuComponent implements OnInit {
       this.gameModeSelected = localStorage.getItem('gameMode')
     }
     if(localStorage.getItem('speed')) {
-      this.thiefSpeed = +localStorage.getItem('speed')
+      this.config['thiefSpeed'] = +localStorage.getItem('speed')
     }
     if(localStorage.getItem('copsNum')) {
-      this.cops = +localStorage.getItem('copsNum')
+      this.config['copsNumber'] = +localStorage.getItem('copsNum')
     }
   }
 
   private setDataToLocalStorage() {
     localStorage.setItem('graphType', this.selectedGraphType)
-    localStorage.setItem('graphParam1', `${this.graphParam1}`)
-    localStorage.setItem('graphParam2', `${this.graphParam2}`)
+    localStorage.setItem('graphParam1', `${this.config['graphParam1']}`)
+    localStorage.setItem('graphParam2', `${this.config['graphParam2']}`)
     localStorage.setItem('opponentType', this.selectedOpponentType)
     localStorage.setItem('selectedAi', this.selectedAi)
     localStorage.setItem('gameMode', this.gameModeSelected)
-    localStorage.setItem('speed', `${this.thiefSpeed}`)
-    localStorage.setItem('copsNum', `${this.cops}`)
+    localStorage.setItem('speed', `${this.config['thiefSpeed']}`)
+    localStorage.setItem('copsNum', `${this.config['copsNumber']}`)
   }
 
   ngAfterContentChecked() {
@@ -149,8 +160,8 @@ export class GameMenuComponent implements OnInit {
   }
 
   updateGraphParams() {
-    this.graphParam1 = this.paramsBoundaries[this.selectedGraphType].param1;
-    this.graphParam2 = this.paramsBoundaries[this.selectedGraphType].param2;
+    this.config['graphParam1'] = this.paramsBoundaries[this.selectedGraphType].param1;
+    this.config['graphParam2'] = this.paramsBoundaries[this.selectedGraphType].param2;
   }
 
   updateParamsName() {
@@ -187,7 +198,7 @@ export class GameMenuComponent implements OnInit {
     if (this.paramSafetyCheck()) {
 
       if (this.graphGeneration) {
-        await this.graphService.generateGraph(this.selectedGraphType, [this.graphParam1, this.graphParam2])
+        await this.graphService.generateGraph(this.selectedGraphType, [this.config['graphParam1'], this.config['graphParam2']])
       }
       // else if (this.graphImportation) {
       //   this.graphService.loadGraphFromFile(this.inputGraphJSONFile);
@@ -213,8 +224,8 @@ export class GameMenuComponent implements OnInit {
         }
       }
       this.gameService.setOpponentType(this.selectedOpponentType);
-      this.gameService.setCopsNumber(this.cops);
-      this.gameService.setThiefSpeed(this.thiefSpeed);
+      this.gameService.setCopsNumber(this.config['copsNumber']);
+      this.gameService.setThiefSpeed(this.config['thiefSpeed']);
       if (this.selectedOpponentType === 'ai') {
         this.gameService.setAiSide(this.selectedAi);
       } else {
@@ -234,8 +245,8 @@ export class GameMenuComponent implements OnInit {
       return true;
     }
     if (this.graphGeneration) {
-      if (!this.graphParam1) this.graphParam1 = 0;
-      if (!this.graphParam2) this.graphParam2 = 0;
+      if (!this.config['graphParam1']) this.config['graphParam1'] = 0;
+      if (!this.config['graphParam2']) this.config['graphParam2'] = 0;
       return true
     }
     return false;
@@ -324,12 +335,14 @@ export class GameMenuComponent implements OnInit {
     let paramValidity = this.copsNumberInputRef.nativeElement.validity.valid;
 
     if (this.param1InputRef && this.paramsNames.length > 0) {
-      paramValidity = paramValidity && this.param1InputRef.nativeElement.validity.valid && this.param1InputRef.nativeElement.value !== ''
+      paramValidity = paramValidity && this.param1InputRef.nativeElement.validity.valid && this.param1InputRef.nativeElement.value !== '';
       if (this.param2InputRef && this.paramsNames.length > 1) {
-        paramValidity = paramValidity && this.param2InputRef.nativeElement.validity.valid && this.param2InputRef.nativeElement.value !== ''
+        paramValidity = paramValidity && this.param2InputRef.nativeElement.validity.valid && this.param2InputRef.nativeElement.value !== '';
       }
-
     }
+
+    paramValidity = paramValidity && this.config['thiefSpeed'] > 0;
+    paramValidity = paramValidity && this.config['copsNumber'] > 0;
 
     return !paramValidity;
   }
@@ -338,11 +351,11 @@ export class GameMenuComponent implements OnInit {
     switch (this.selectedGraphType) {
       case 'grid':
       case 'tore':
-        return (this.graphParam1 * this.graphParam2) - 1
+        return (this.config['graphParam1'] * this.config['graphParam2']) - 1
       case 'cycle':
       case 'tree':
       case 'copsAlwaysWin':
-        return this.graphParam1 - 1;
+        return this.config['graphParam1'] - 1;
       case 'random':
       default:
         return 5;
@@ -354,6 +367,19 @@ export class GameMenuComponent implements OnInit {
       icon: 'info',
       html: this.gameService.rulesHtml()
     })
+  }
+
+  updateNumberFieldValue(field_id: string, config, action: string) {
+    switch (action) {
+      case this.update_action.increase:
+        config[field_id]++;
+        break;
+      case this.update_action.decrease:
+        config[field_id]--;
+        break;
+      default:
+        break;
+    }
   }
 
 }

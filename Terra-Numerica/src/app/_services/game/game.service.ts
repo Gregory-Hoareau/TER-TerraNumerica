@@ -18,11 +18,11 @@ import { WatchingStrategy } from 'src/app/models/Strategy/Cop/WatchingStrategy/w
 import { GridStrategy } from 'src/app/models/Strategy/Cop/GridStrategy/grid-strategy';
 import { OneCopsWinStrategy } from 'src/app/models/Strategy/Cop/OneCopsWinStrategy/one-cops-win-strategy';
 import { StatisticService } from '../statistic/statistic.service';
-import { AdventureService } from '../Adventure/adventure.service';
 import { Grid } from 'src/app/models/Graph/Grid/grid';
 import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
 import { RandomCopsStrategy } from 'src/app/models/Strategy/Cop/RandomCopsStrategy/random-cops-strategy';
 import { WatchingStrategyV2 } from 'src/app/models/Strategy/Cop/WatchingStrategyV2/watching-strategy-v2';
+import { Adventure } from 'src/app/models/Adventure/adventure';
 
 
 @Injectable({
@@ -46,6 +46,7 @@ export class GameService {
   private maxTurnCount: number = 16;
 
   private isAdventure: boolean = false;
+  private adventure: Adventure;
 
   private copsNumber = 0;
   private opponentType = null;
@@ -90,6 +91,10 @@ export class GameService {
     this.isAdventure = adventure;
   }
 
+  setAdventure(adventure) {
+    this.adventure = adventure
+  }
+
   setThiefSpeed(speed) {
     this.thieftSpeed = speed;
     this.graphService.setThiefSpeed(speed)
@@ -104,7 +109,7 @@ export class GameService {
   }
 
   copsArePlaced() {
-    return this.cops_position.filter(p => p).length === this.copsNumber;
+    return this.cops.filter(c => !c.isWaitingPlacement()).length === this.copsNumber;
   }
 
   setCopsNumber(n: number) {
@@ -179,7 +184,7 @@ export class GameService {
   }
 
   getAdventurePlayerRole() {
-    return this
+    return this.adventure.getCurrentLevel().getPlayerRoleName();
   }
 
   setPawns(thiefs, cops) {
@@ -469,9 +474,9 @@ export class GameService {
       } else { // if it's an adventure
         /* console.log('It is the end of a level of the adventure'); */
         const result = await Swal.fire({
-          title: 'Fin du niveau',
+          title: 'Explication',
           icon: 'success',
-          text: 'TEXTE DE FIN DE NIVEAU',
+          html: this.adventure.getMediationInfo().text,
           confirmButtonText: 'Passer au niveau suivant',
         })
         /* console.log(result); */

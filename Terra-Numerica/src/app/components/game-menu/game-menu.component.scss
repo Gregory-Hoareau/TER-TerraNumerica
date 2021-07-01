@@ -20,13 +20,14 @@ label{
 }
 
 .form-field {
-    height: 100%;
+    height: 100%; 
     margin: 0.5em;
-    display: grid;
     gap: 0.5em 0.5em;
-    grid-template-columns: [labels]auto [inputs]auto;
+    display: grid;
+    grid-template-columns: [labels]auto [inputs]auto [minus-btns]auto [plus-btns]auto;
     place-items: stretch;
-    place-content: center;
+    align-items: center;
+
 
     .form-field-labels {
         font-weight: bold;
@@ -35,6 +36,16 @@ label{
 
     .form-field-inputs {
         grid-column: inputs;
+    }
+
+    .form-minus-btn {
+        grid-column: minus-btns;
+        padding: 1em;
+    }
+
+    .form-plus-btn {
+        grid-column: plus-btns;
+        padding: 1em;
     }
 
     input[type=number] {

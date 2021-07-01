@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Adventure } from 'src/app/models/Adventure/adventure';
 import { ADVENTURES } from 'src/app/models/Adventure/adventures.mock';
+import { Mode } from 'src/app/models/Adventure/mode';
 import Swal from 'sweetalert2';
 import { GameService } from '../game/game.service';
 import { GraphService } from '../graph/graph.service';
@@ -23,6 +24,7 @@ export class AdventureService {
   launchAdventure(adventure: Adventure) {
     this.currentAdventure = adventure;
     this.currentAdventure.reset();
+    this.gameService.setAdventure(this.currentAdventure)
     this.gameService.setEndLevelCallback(this.launchNextLevel.bind(this));
     this.launchNextLevel();
   }
@@ -30,9 +32,12 @@ export class AdventureService {
   async launchNextLevel() {
     const extras = await this.configureAdventureNextLevel(this.currentAdventure)
     /* this.currentAdventure.goToNextLevel(); */
+    const role = this.getLevelPlayerRole();
+
+    const mes = `Dans ce niveau vous jouerez le role du camp ${role}. ${role === 'du Voleur' ? `<br>Le voleur à une vitesse de ${this.currentAdventure.getCurrentLevel().getThiefSpeed()}` : ''}`
     if(extras) {
       Swal.fire({
-        text: `Dans ce niveau vous jouerez le role du camp ${this.getLevelPlayerRole()}`
+        html: mes
       })
       this.router.navigate(['/board'], extras);
       return false;
@@ -59,6 +64,14 @@ export class AdventureService {
       }
       return extras;
     }
+  }
+
+  getAdventureMode(): Mode {
+    return this.currentAdventure.getMode();
+  }
+
+  getCurrentLevelMediation() {
+    return this.currentAdventure.getMediationInfo();
   }
 
   getLevelPlayerRole() {

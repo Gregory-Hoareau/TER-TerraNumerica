@@ -20,7 +20,7 @@ export class PawnStateOnTurn implements PawnState {
     dragged(event: any, d: any) {
         const speed = d.role.includes('thief') ? d.gameM.getThiefSpeed() : 1;
         d3.select("."+d.role).attr("cx", event.x).attr("cy", event.y);
-        if(d.graphService.gameMode == "easy"){
+        if(d.graphService.gameMode == "easy" || d.graphService.gameMode == "medium"){
             let edges = this.edges
             d3.selectAll(".circle")
                 .filter(function(nodeData:any){
@@ -55,7 +55,6 @@ export class PawnStateOnTurn implements PawnState {
         let node;
         d3.selectAll(".circle")
             .filter(function(nodeData:any){
-                console.log(nodeData)
                 return edges.includes(nodeData);
             })
             .each((nodeData:any, id:any, elements:any) => {

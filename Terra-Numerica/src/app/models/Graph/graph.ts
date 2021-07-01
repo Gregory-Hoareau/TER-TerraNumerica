@@ -45,7 +45,7 @@ export abstract class Graph {
                 .call(
                     d3.drag()
                     .on('start', (event: DragEvent) => {
-                        console.log('OTHER')
+                        /* console.log('OTHER') */
                         this.dragstarted(event)
                     })
                     .on('drag', (event: DragEvent) => {
@@ -94,22 +94,25 @@ export abstract class Graph {
 
     moveNode(movingCircle, endPosition) {
         const nodeIndex = this.nodes.findIndex(node => this.checkApproximativeCirclePosition(node, movingCircle))
-    
+
         this.links.forEach((link) => {
-            if (link.source.index === nodeIndex) {
+            /* console.log('LINK', link) */
+            if (link.source.index === nodeIndex || link.source === nodeIndex) {
                 const lines = d3.selectAll('line').nodes();
                 for(const l of lines) {
                     const tmp = d3.select(l);
-                    if(tmp.attr('x1') == link.source.x && tmp.attr('y1') == link.source.y) {
+                    if((tmp.attr('x1') == link.source.x && tmp.attr('y1') == link.source.y)
+                        || (tmp.attr('source-index') == link.source && tmp.attr('target-index') == link.target)) {
                         tmp.attr('x1', endPosition.x).attr('y1', endPosition.y)
                         break;
                     }
                 }
-            } else if (link.target.index === nodeIndex) {
+            } else if (link.target.index === nodeIndex || link.target === nodeIndex) {
                 const lines = d3.selectAll('line').nodes();
                 for(const l of lines) {
                     const tmp = d3.select(l);
-                    if(tmp.attr('x2') == link.target.x && tmp.attr('y2') == link.target.y) {
+                    if((tmp.attr('x2') == link.target.x && tmp.attr('y2') == link.target.y)
+                        || (tmp.attr('source-index') == link.source && tmp.attr('target-index') == link.target)) {
                         tmp.attr('x2', endPosition.x).attr('y2', endPosition.y)
                         break;
                     }

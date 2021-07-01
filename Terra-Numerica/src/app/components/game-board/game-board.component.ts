@@ -81,7 +81,7 @@ export class GameBoardComponent implements OnInit {
   moveNodeMode() {
     this.movingNodes = !this.movingNodes;
     this.graphService.movingPermission(this.movingNodes)
-    console.log('HERE', this.movingNodes)
+    /* console.log('HERE', this.movingNodes) */
   }
 
   drawGraph() {
@@ -217,6 +217,10 @@ export class GameBoardComponent implements OnInit {
 
   isPlayerTurn() {
     return this.gameManager.isPlayerTurn();
+  }
+
+  isNodeMoveable() {
+    return !(this.graphService.getTypology() === 'grid' || this.graphService.getTypology() === 'tore')
   }
 
 }
