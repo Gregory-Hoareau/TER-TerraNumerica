@@ -472,14 +472,23 @@ export class GameService {
         })
         return { result: result, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
       } else { // if it's an adventure
-        /* console.log('It is the end of a level of the adventure'); */
-        const result = await Swal.fire({
-          title: 'Explication',
-          icon: 'success',
-          html: this.adventure.getMediationInfo().text,
-          confirmButtonText: 'Passer au niveau suivant',
-        })
-        /* console.log(result); */
+        const mediation = this.adventure.getMediationInfo();
+        let result;
+        if(mediation.img) {
+          result = await Swal.fire({
+            title: 'Explication',
+            imageUrl: mediation.img,
+            html: mediation.text,
+            confirmButtonText: 'Passer au niveau suivant',
+          })
+        } else {
+          result = await Swal.fire({
+            title: 'Explication',
+            html: mediation.text,
+            confirmButtonText: 'Passer au niveau suivant',
+          })
+        }
+        
         return { result: result, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
       }
     } else {

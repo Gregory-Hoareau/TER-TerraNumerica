@@ -8,13 +8,15 @@ export class Adventure {
     private levels: AdventureLevel[];
     private level_index: number = 0;
     private mode: Mode = Mode.CLASSIC;
-    private mediation_key: string = undefined
+    private mediation_key: string = undefined;
+    private picture: string;
 
-    constructor(name: string, mode: Mode, key: string, levels: AdventureLevel[] = []) {
+    constructor(name: string, mode: Mode, key: string, levels: AdventureLevel[] = [], picture_url: string) {
         this.levels = levels;
         this.name = name;
         this.mode = mode;
         this.mediation_key = key;
+        this.picture = picture_url;
     }
 
     addLevel(level: AdventureLevel) { this.levels.push(level); }
