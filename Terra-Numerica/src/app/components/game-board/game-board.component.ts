@@ -163,9 +163,9 @@ export class GameBoardComponent implements OnInit {
       /* console.log('HERE WE ARE') */
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
-      if ( res.wonByPlayer !== undefined || res.result.isConfirmed) {
+      if (res.wonByPlayer !== undefined || res.result.isConfirmed) {
         if(res.isAdventure) {
-          if(res.wonByPlayer === true) {
+          if((res.result && res.result.isConfirmed) || res.wonByPlayer === true) {
             const need_replay = await this.adventureService.goToNextLevel();
             if(need_replay === true) this.replay()
           } else {

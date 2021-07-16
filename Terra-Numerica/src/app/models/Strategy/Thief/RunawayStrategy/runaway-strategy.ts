@@ -17,6 +17,8 @@ export class RunawayStrategy implements IStrategy {
                 this.actual_place = graph.getRandomEdge();
             }
         }
+        console.log('actual_place', this.actual_place);
+        console.log('cops positions', cops_position_slot)
         return this.actual_place;
     }
 

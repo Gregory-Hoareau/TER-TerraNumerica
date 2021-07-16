@@ -41,7 +41,7 @@ const grid: Adventure = new Adventure('Grilles (construction stratégies gagnant
     new AdventureLevel('grid', [9, 9], 5, 1, 'thief', Difficulty.NORMAL),
     new AdventureLevel('grid', [9, 9], 4, 1, 'thief', Difficulty.NORMAL),
     new AdventureLevel('grid', [9, 9], 2, 1, 'thief', Difficulty.NORMAL),
-    new AdventureLevel('grid', [9, 9], 1, 1, 'cops', Difficulty.NORMAL),
+    new AdventureLevel('grid', [9, 9], 1, 1, 'cops', Difficulty.DIFFICILE),
     new AdventureLevel('grid', [9, 9], 2, 2, 'cops', Difficulty.DIFFICILE),
 ], 'assets/menu/graph-img/grid.svg');
 
