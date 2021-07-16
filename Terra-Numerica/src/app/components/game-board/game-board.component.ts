@@ -159,14 +159,21 @@ export class GameBoardComponent implements OnInit {
     this.warningZone = false;
     const res = await this.gameManager.validateTurn();
     /* console.log('RES IS HERE', res) */
-    if (res && res.result !== undefined && res.gameTimer !== undefined && res.isAdventure !== undefined) {
+    if (res && (res.result !== undefined || res.wonByPlayer !== undefined) && res.gameTimer !== undefined && res.isAdventure !== undefined) {
       /* console.log('HERE WE ARE') */
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
-      if (res.result.isConfirmed) {
+      if ( res.wonByPlayer !== undefined || res.result.isConfirmed) {
         if(res.isAdventure) {
-          const need_replay = await this.adventureService.goToNextLevel();
-          if(need_replay === true) this.replay()
+          if(res.wonByPlayer === true) {
+            const need_replay = await this.adventureService.goToNextLevel();
+            if(need_replay === true) this.replay()
+          } else {
+            // TODO - Changer le messager lors de la perte d'une partie
+            Swal.fire('Réssayer', 'Vous n\'avez pas réussi à gagner le niveau.', 'error').then(() => {
+              this.replay()
+            })
+          }
         }
         else this.replay();
       } else if (!res.result.isConfirmed) {

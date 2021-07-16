@@ -79,6 +79,10 @@ export class GameService {
     }
   }
 
+  isGameWinByPlayer() {
+    return this.winnerSide !== this.ai_side
+  }
+
   gameHasStarted() {
     return !this.placingPawns;
   }
@@ -484,6 +488,10 @@ export class GameService {
         })
         return { result: result, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
       } else { // if it's an adventure
+        if(!this.isGameWinByPlayer()) {
+          return { wonByPlayer: false, gameTimer: this.gameTimer, isAdventure: this.isAdventure };
+        }
+
         const mediation = this.adventure.getMediationInfo();
         let result;
         if(mediation.img) {
