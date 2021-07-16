@@ -560,6 +560,7 @@ export class GameService {
     this.placingPawns = true;
     this.placingCops = true;
     this.actionStack = new GameActionStack()
+    this.cops_position = []
     //window.location.reload();
 
     if (this.isAdventure) {
