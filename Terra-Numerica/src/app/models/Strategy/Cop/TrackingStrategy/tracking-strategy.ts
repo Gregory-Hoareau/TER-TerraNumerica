@@ -15,8 +15,9 @@ export class TrackingStrategy implements IStrategy {
     move(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[], speed) {
         let closest;
         let distance = graph.nodes.length;
-        const edges = graph.edges(this.actual_place);
+        let edges = graph.edges(this.actual_place);
         edges.push(this.actual_place);
+        edges = edges.filter(e => !cops_position_slot.some(c => c.index === e.index))
         for(const e of edges) {
             let globalDist = 0;
             for(const t of thiefs_position_slot) {
