@@ -29,23 +29,27 @@ export class Adventure {
         return mediation[this.mediation_key][`step${this.level_index + 1}`]
     }
 
-    goToNextLevel(): void {
-        if(this.level_index < this.levels.length) {
+    async goToNextLevel() {
+        console.log('NOMBRE DE NIVEAU : ' + this.levels.length)
+        console.log('current level index: ' + this.level_index)
+        if(this.level_index < this.levels.length - 1) {
             this.level_index++;
         } else {
-            this.displayEndMessage();
-            this.level_index = 0;
+            return await this.displayEndMessage();
         }
+        console.log('update level index: ' + this.level_index)
     }
 
-    private displayEndMessage() {
+    private async displayEndMessage() {
         /* alert('THIS IS THE END OF THE ADVENTURE'); */
         this.level_index = 0;
-        Swal.fire({
+        const result = await Swal.fire({
             title: 'Fin de d\'aventure.',
             icon: 'success',
             text: `Félicitations vous avez terminée l\'aventure "${this.name}".`
         })
+        console.log('RESULT', result);
+        return result;
     }
 
     getName() {

@@ -164,8 +164,11 @@ export class GameBoardComponent implements OnInit {
       res.gameTimer = Math.trunc(res.gameTimer / 1000);
       this.gameManager.registerStats();
       if (res.result.isConfirmed) {
-        if(res.isAdventure) { this.adventureService.goToNextLevel(); }
-        this.replay();
+        if(res.isAdventure) {
+          const need_replay = await this.adventureService.goToNextLevel();
+          if(need_replay === true) this.replay()
+        }
+        else this.replay();
       } else if (!res.result.isConfirmed) {
         this.gameManager.goBackToMenu();
       }
@@ -220,7 +223,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   isNodeMoveable() {
-    return !(this.graphService.getTypology() === 'grid' || this.graphService.getTypology() === 'tore')
+    return !(this.graphService.getTypology() && (this.graphService.getTypology() === 'grid' || this.graphService.getTypology() === 'tore'))
   }
 
 }

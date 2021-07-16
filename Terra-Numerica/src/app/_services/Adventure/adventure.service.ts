@@ -79,7 +79,12 @@ export class AdventureService {
     return this.currentAdventure.getCurrentLevel().getPlayerRoleName()
   }
 
-  goToNextLevel() {
-    this.currentAdventure.goToNextLevel();
+  async goToNextLevel() {
+    const res = await this.currentAdventure.goToNextLevel();
+    if(res) {
+      this.router.navigate(['/adventure-menu']);
+    } else {
+      return true
+    }
   }
 }

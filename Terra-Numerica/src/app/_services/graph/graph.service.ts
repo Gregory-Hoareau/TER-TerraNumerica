@@ -367,7 +367,7 @@ export class GraphService {
   }
 
   getTypology() {
-    return this.graph.typology
+    return this.graph?.typology
   }
 
   edges(node) {
