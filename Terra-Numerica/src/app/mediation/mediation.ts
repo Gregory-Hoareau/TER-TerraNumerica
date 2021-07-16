@@ -16,8 +16,82 @@ export const mediation = {
             text: "On peut sur une grille, et ceux quelque soit sa taille, gagner avec seulement 2 gendarmes. En effet, il suffit pour cela que l'un des gendarme contrôle la ligne sur laquelle se trouve le voleur tandis que l'autre gendarme contrôle la colonne sur laquelle se trouve le voleur. Pour \"contrôler\" la ligne (respectivement la colonne) du voleur, il faut que le gendarme commence par se placer sur la ligne (respectivement la colonne) sur laquelle est le voleur, puis s'il est déjà sur cette dernière alors il rapproche du voleur.",
             img: 'assets/mediation/control.gif'
         },
-        step5: { // Vitesse 2
+        step5: {
+            text: "To do",
+            img: undefined
+        },
+        step6: { // Vitesse 2
+            text: "To do",
+            img: undefined
+        },
+        /* step6: { // Vitesse 2
             text: "Bien que l'ordinateur ait joué avec la stratégie optimale sur une grille, le voleur a pu gagner. Cela est du au fait qu'une stratégie est \"optimale\" dans une configuration de graphe donnée. La stratégie optimale que vous avez apprise dans ce monde, est optimale sur les grilles avec un voleur ayant une vitesse (nombre de sommet qu'il peut parcourir en 1 tour) de 1. Si on change le type de graphe ou la vitesse du voleur la stratégie optimale change aussi.<br><br>Pensez-vous pouvoir trouver la stratégie optimal pour des grilles avec un voleur à vitesse 2 ?",
+            img: undefined
+        } */
+    },
+    'intro': {
+        step1: { // Path
+            text: 'To do',
+            img: undefined
+        },
+        step2: { // Cycle 1 cops
+            text: 'To do',
+            img: undefined
+        },
+        step3: { // Caterpillar
+            text: 'To do',
+            img: undefined
+        },
+        step4: { // Tree
+            text: 'To do',
+            img: undefined
+        },
+        step5: { // Cycle 2 cops
+            text: 'To do',
+            img: undefined
+        }
+    },
+    'dominant': {
+        step1: { // 2 dominants visible
+            text: 'To do',
+            img: undefined
+        },
+        step2: { // Petersen 2 policiers
+            text: 'To do',
+            img: undefined
+        },
+        step3: { // Petersen 3 policiers
+            text: 'To do',
+            img: undefined
+        },
+        step4: { // 3 dominants visible
+            text: 'To do',
+            img: undefined
+        },
+        step5: { // 3 dominants caché (même graphe que le précédent)
+            text: 'To do',
+            img: undefined
+        }
+    },
+    'separator': {
+        step1: { // 2-arbre 1 policier, voleur vitesse 3
+            text: 'To do',
+            img: undefined
+        },
+        step2: { // 2-arbre 1 policier, voleur vitesse 3
+            text: 'To do',
+            img: undefined
+        },
+        step3: { // 2-arbre 3 policier, voleur vitesse 3
+            text: 'To do',
+            img: undefined
+        },
+        step4: { // 2 arbre réduit (retrait de certaines arrête par rapport à un 2-arbre classique)
+            text: 'To do',
+            img: undefined
+        },
+        step5: { // graphe chordal
+            text: 'To do',
             img: undefined
         }
     }

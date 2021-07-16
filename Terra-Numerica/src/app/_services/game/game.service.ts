@@ -23,6 +23,7 @@ import { Tore } from 'src/app/models/Graph/Grid/Tore/tore';
 import { RandomCopsStrategy } from 'src/app/models/Strategy/Cop/RandomCopsStrategy/random-cops-strategy';
 import { WatchingStrategyV2 } from 'src/app/models/Strategy/Cop/WatchingStrategyV2/watching-strategy-v2';
 import { Adventure } from 'src/app/models/Adventure/adventure';
+import { ScoreService } from '../score/score.service';
 
 
 @Injectable({
@@ -45,6 +46,8 @@ export class GameService {
   private alreadyEnconteredPos: boolean = false;
   private maxTurnCount: number = 16;
 
+  private winnerSide: 'thief' | 'cops';
+
   private isAdventure: boolean = false;
   private adventure: Adventure;
 
@@ -65,7 +68,8 @@ export class GameService {
   private endLevelCallback: () => Promise<void>;
   displayWarningZone: (value: boolean) => void;
 
-  constructor(private router: Router, private graphService: GraphService, private stat: StatisticService) {
+  constructor(private router: Router, private graphService: GraphService, private stat: StatisticService,
+              private scoreService: ScoreService) {
     this.actionStack = new GameActionStack();
     if (localStorage.getItem("cops") !== null) {
       this.copsNumber = parseInt(localStorage.getItem("cops"));
@@ -418,10 +422,16 @@ export class GameService {
     }
     let timerEnd = this.turnCount > this.maxTurnCount;
     let startWatchingThiefWin = this.turnCount > 10
-    if (allThiefCapture) this.winner = 'Les Policiers ont gagné';
-    else if (timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
-    else if (startWatchingThiefWin && this.checkSamePositionAsPreviously()) {
+    if (allThiefCapture) {
+      this.winner = 'Les Policiers ont gagné';
+      this.winnerSide = 'cops';
+    }
+    else {
+      this.winnerSide = 'thief'
+      if (timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
+      else if (startWatchingThiefWin && this.checkSamePositionAsPreviously()) {
       this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
+      }
     }
     return allThiefCapture || timerEnd || startWatchingThiefWin && this.alreadyEnconteredPos;
   }
@@ -458,6 +468,7 @@ export class GameService {
         .style('color', 'blue')
         .text(() => 'C\'est au tour des policiers.');
     }
+
     if (this.checkEnd()) {
       if (!this.isAdventure) { // if it's a free game
         let endTime: any = Date.now();
@@ -466,6 +477,7 @@ export class GameService {
           title: this.winner,
           text: 'Nombre de tours écoulés : ' + this.turnCount + ' Mode de Jeu : ' + this.getGameMode(this.gameMode) + ' Nombre de policiers : ' + this.cops.length + ' Nombre de Voleurs : ' + this.thiefs.length,
           icon: 'success',
+          /* imageUrl: this.scoreService.getScoreImage(this.winnerSide, this.ai_side, this.graphService.getTypology(), this.copsNumber), */
           confirmButtonText: 'Rejouer',
           showCancelButton: true,
           cancelButtonText: 'Retour au Menu'

@@ -31,11 +31,12 @@ export class AdventureService {
 
   async launchNextLevel() {
     const extras = await this.configureAdventureNextLevel(this.currentAdventure)
+    
     /* this.currentAdventure.goToNextLevel(); */
-    const role = this.getLevelPlayerRole();
-
-    const mes = `Dans ce niveau vous jouerez le role du camp ${role}. ${role === 'du Voleur' ? `<br>Le voleur à une vitesse de ${this.currentAdventure.getCurrentLevel().getThiefSpeed()}` : ''}`
     if(extras) {
+      const role = this.getLevelPlayerRole();
+      const mes = `Dans ce niveau vous jouerez le role du camp ${role}. <br>Le voleur à une vitesse de ${this.currentAdventure.getCurrentLevel().getThiefSpeed()}`
+
       Swal.fire({
         html: mes
       })

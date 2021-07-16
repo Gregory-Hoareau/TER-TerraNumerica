@@ -100,10 +100,9 @@ export class GraphService {
         this.graph = this.oneCopsGraph(args[0]);
         break;
       case 'petersen':
-        await this.generatePetersen()
-        break;
       case 'dodecahedron':
-        await this.generateDodecahedron()
+      default:
+        await this.generateFromFile(type);
         break;
     }
   
@@ -297,6 +296,12 @@ export class GraphService {
     /* console.log('FILE',file); */
     await this.loadGraphFromFile(file);
     /* console.log('HERE'); */
+  }
+
+  private async generateFromFile(filename: string) {
+    const blob = await this.downloadAssets(filename);
+    const file = new File([blob], `${filename}.json`);
+    await this.loadGraphFromFile(file);
   }
 
   private downloadAssets(name: string): Promise<Blob> {
