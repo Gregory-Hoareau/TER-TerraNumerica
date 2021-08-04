@@ -434,7 +434,7 @@ export class GameService {
       this.winnerSide = 'thief'
       if (timerEnd) this.winner = 'Le Voleur est vainqueur car le temps est écoulé';
       else if (startWatchingThiefWin && this.checkSamePositionAsPreviously()) {
-      this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
+        this.winner = 'Le Voleur est vainqueur par stratégie gagnante';
       }
     }
     return allThiefCapture || timerEnd || startWatchingThiefWin && this.alreadyEnconteredPos;

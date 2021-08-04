@@ -6,6 +6,14 @@ export class RandomStrategy implements IStrategy {
 
     placement(graph: Graph, cops_position_slot: any[], thiefs_position_slot: any[]) {
         this.actual_place = graph.getRandomEdge();
+        let marked = []
+        while(cops_position_slot.some(c => graph.distance(this.actual_place, c) <= 1)) {
+            marked.push(this.actual_place);
+            if(marked.length >= graph.nodes.length) break;
+            while(marked.includes(this.actual_place)) {
+                this.actual_place = graph.getRandomEdge();
+            }
+        }
         return this.actual_place;
     }
 

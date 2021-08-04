@@ -219,6 +219,10 @@ export abstract class Graph {
     }
 
     distance(n1, n2) {
+        if(n2.index === undefined) { // DO NOT CHANGE TO if(!n2.index) because index use number
+            n2 = {index: +n2}
+        }
+
         let distance = 0;
         let marked = [];
         marked.push(n1.index);

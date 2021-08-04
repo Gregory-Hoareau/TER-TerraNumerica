@@ -167,7 +167,8 @@ export class GameBoardComponent implements OnInit {
         if(res.isAdventure) {
           if((res.result && res.result.isConfirmed) || res.wonByPlayer === true) {
             const need_replay = await this.adventureService.goToNextLevel();
-            if(need_replay === true) this.replay()
+            if(need_replay === true) this.replay();
+            else this.gameManager.reset()
           } else {
             // TODO - Changer le messager lors de la perte d'une partie
             Swal.fire('Réssayer', 'Vous n\'avez pas réussi à gagner le niveau.', 'error').then(() => {

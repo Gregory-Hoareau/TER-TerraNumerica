@@ -12,11 +12,22 @@ export class RunawayStrategy implements IStrategy {
         let marked = []
         while(cops_position_slot.some(c => graph.distance(this.actual_place, c) <= 1)) {
             marked.push(this.actual_place);
-            if(marked.length >= graph.nodes.length) break;
+            if(marked.length >= graph.nodes.length) {
+                console.log('BREAKING');
+                if(cops_position_slot.some(c => graph.distance(this.actual_place, c) === 0)) {
+                    this.actual_place = marked.find(vertex => cops_position_slot.some(c => graph.distance(vertex, c)))
+                }
+                break;
+            }
             while(marked.includes(this.actual_place)) {
                 this.actual_place = graph.getRandomEdge();
             }
         }
+        /* console.log("OUT OF THE LOOP", this.actual_place)
+        console.log("POSITION", cops_position_slot)
+        cops_position_slot.forEach((c) => {
+            console.log(graph.distance(this.actual_place, c))
+        }) */
         return this.actual_place;
     }
 
