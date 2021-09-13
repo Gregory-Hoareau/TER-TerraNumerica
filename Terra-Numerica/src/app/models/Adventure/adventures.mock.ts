@@ -13,7 +13,7 @@ const intro: Adventure = new Adventure('Introduction', Mode.CLASSIC, 'intro', [
 ], 'assets/menu/graph-img/introduction.svg')
 
 // Graphs with dominants
-const dominant: Adventure = new Adventure('Dominant', Mode.CLASSIC, 'dominant', [
+const dominant: Adventure = new Adventure('Dominants', Mode.CLASSIC, 'dominant', [
     new AdventureLevel('visible-dominant', [-1, -1], 2, 1, 'thief', Difficulty.NORMAL),
     new AdventureLevel('petersen', [-1, -1], 2, 1, 'cops', Difficulty.NORMAL),
     new AdventureLevel('petersen', [-1, -1], 3, 1, 'thief', Difficulty.NORMAL),
@@ -32,7 +32,7 @@ const grid: Adventure = new Adventure('Grilles (construction stratégies gagnant
 ], 'assets/menu/graph-img/grid.svg');
 
 // Chordal
-const separator: Adventure = new Adventure('Monde 4', Mode.CLASSIC, 'separator', [
+const separator: Adventure = new Adventure('Séparateur', Mode.CLASSIC, 'separator', [
     new AdventureLevel('2-arbre', [-1, -1], 1, 1, 'thief', Difficulty.NORMAL),
     new AdventureLevel('2-arbre', [-1, -1], 1, 3, 'cops', Difficulty.NORMAL),
     new AdventureLevel('2-arbre', [-1, -1], 3, 2, 'thief', Difficulty.NORMAL),
