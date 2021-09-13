@@ -18,7 +18,7 @@ export const mediation = {
         },
         step5: {
             text: "Sur un grille avec un gendarme, si le voleur se place pas initialement à une distance de plus de 1 du gendarme. Alors, il suffira au voleur de toujours chercher à se placer sur une colonne ou une ligne qui n'est pas contrôler par le gendarme",
-            img: undefined
+            img: 'assets/mediation/world3/1cop.gif'
         },
         step6: { // Vitesse 2
             text: "To do",
@@ -51,19 +51,19 @@ export const mediation = {
     'dominant': {
         step1: { // 2 dominants visible
             text: "Dans un graphe, on peut déterminer un <strong>ensemble dominant*</strong>. Si on a un nombre de gendarme égal au nombre de sommets dans l'ensemble dominant, il nous suffit alors de placer les gendarmes sur les différents sommets de l'ensemble afin qu'au tour suivant, qu'importe où se trouve le voleur, il sera capturer par un des gendarmes.<br><br><strong>*</strong> Ensemble de sommets tel que n'importe quel autre sommet du graphe est voisin d'au moins un des sommets de l'ensemble.",
-            img: undefined
+            img: 'assets/mediation/world2/dominant2.gif'
         },
         step2: { // Petersen 2 policiers
-            text: "Ce graphe s’appelle le graphe de Petersen. Dans ce graphe, quelles que soient les positions initiales des gendarmes, il existe un sommet à distance au moins 2 de chacun des policiers où le voleur peut se placer. Au cours du jeu, quelles que soient les positions des gendarmes, si le voleur est voisin d’au moins un gendarme, il existe toujours un de ses voisins qui est à distance 2 des deux gendarmes. Le voleur peut donc s’échapper indéfiniment.", 
-            img: undefined
+            text: "Ce graphe s’appelle le graphe de Petersen. Dans ce graphe, quelles que soient les positions initiales des gendarmes, il existe au moins un sommet qui n'est pas adjacent à chacun des policiers où le voleur peut se placer. Au cours du jeu, quelles que soient les positions des gendarmes, si le voleur est voisin d’au moins un gendarme, il existe toujours un de ses voisins qui est à distance 2 des deux gendarmes. Le voleur peut donc s’échapper indéfiniment.", 
+            img: 'assets/mediation/world2/petersen2cops.gif'
         },
         step3: { // Petersen 3 policiers
             text: "Ce graphe possède une ensemble dominant de taille 3, avec ce qu'on a vu au premier niveau de ce monde on peut donc en conclure que 3 gendarmes sont suffisants pour assurer la victoire aux gendarmes. De plus, avec ce qu'on a vu au niveau précédent il faut au moins 3 gendarmes pour que les gendarmes puissent gagner.",
-            img: undefined
+            img: 'assets/mediation/world2/petersen3cops.gif'
         },
         step4: { // 3 dominants 
             text: "Dans ce graphe, il y a un ensemble dominant de taille 3.",
-            img: undefined
+            img: 'assets/mediation/world2/hidden_dominant_3.gif'
         },
         step5: { // 3 dominants 
             text: "Dans ce graphe, il y a un ensemble dominant de taille 3.",
