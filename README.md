@@ -1,5 +1,9 @@
 # TER-TerraNumerica
 
+## Lien vers le guide de développement du projet
+
+https://docs.google.com/document/d/1CSqmO-lcdW9TJRSLpBmrxih1b6QwZn76dOac7o0fKQY/edit?usp=sharing
+
 ## Commandes pour lancer le site
 
 Pour lancer le site, vous aurez besoin d'avoir NodeJS installé sur votre machine, pour vérifier s'il est installé exécuté la ligne de commande suivante : `npm -v`.
